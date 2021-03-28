@@ -17,9 +17,15 @@ from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
-    path('register/', include('registernewuser.urls')),
+    path('register', include('registernewuser.urls')),
+    path('regular', include('regulartreatedanimals.urls')),
+    path('clinicalservice', include('clinicalservices.urls')),
+    path('parasite&vaccination', include('vaccineandparasite.urls')),
+    path('admin/', admin.site.urls),
+]
+
+"""
     path('regular/', include('regulartreatedanimals.urls')),
     path('clinicalservice/', include('clinicalservices.urls')),
     path('parasite&vaccination/', include('vaccineandparasite.urls')),
-    path('admin/', admin.site.urls),
-]
+"""
