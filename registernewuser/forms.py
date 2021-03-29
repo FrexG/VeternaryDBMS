@@ -1,5 +1,6 @@
 from django.forms import ModelForm
 from django import forms
+import re
 
 from .models import Customer
 
@@ -24,10 +25,21 @@ class NewCustomerForm(ModelForm):
             'mobile_number': forms.NumberInput(attrs={'class': 'form-control'}),
         }
 
-    def cleaned_case_number(self):
-        case_number = self.cleaned_data.get("case_number")
+    def cleaned_customer_name(self):
+        customer_name = self.cleaned_data["customer_name"]
 
-        if (case_number == ""):
+        match_object = re.findall('[0-9]+', str(customer_name))
+
+        if len(match_object) > 0:
+            raise forms.ValidationError(
+                "Only Letters are allowed in a user name!!")
+
+        return customer_name
+
+    def cleaned_case_number(self):
+        case_number = self.cleaned_data["case_number"]
+
+        if case_number == "":
             raise forms.ValidationError("Case Number can't be left empty")
         for instance in Customer.objects.all():
             if instance.case_number == case_number:
