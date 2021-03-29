@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'registernewuser.apps.RegisternewuserConfig',
+    'regulartreatedanimals.apps.RegulartreatedanimalsConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
