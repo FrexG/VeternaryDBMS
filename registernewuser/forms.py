@@ -23,3 +23,15 @@ class NewCustomerForm(ModelForm):
             'treatment_history': forms.Textarea(attrs={'class': 'form-control'}),
             'mobile_number': forms.NumberInput(attrs={'class': 'form-control'}),
         }
+
+    def cleaned_case_number(self):
+        case_number = self.cleaned_data.get("case_number")
+
+        if (case_number == ""):
+            raise forms.ValidationError("Case Number can't be left empty")
+        for instance in Customer.objects.all():
+            if instance.case_number == case_number:
+                raise forms.ValidationError(
+                    "This case number already exists!!")
+
+        return case_number

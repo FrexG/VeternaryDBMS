@@ -11,3 +11,12 @@ class index(CreateView):
         form = NewCustomerForm()
         context = {"form": form}
         return render(request, 'registernewuser/index.html', context)
+
+    def post(self, request):
+        form = NewCustomerForm(request.POST or None)
+
+        if form.is_valid():
+            form.save()
+
+        context = {"form": form}
+        return render(request, 'registernewuser/index.html', context)
