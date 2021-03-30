@@ -69,16 +69,26 @@ class Service(models.Model):
 
 class Customer(models.Model):
     customer_name = models.CharField(max_length=100)
+
     sub_kebele = models.CharField(max_length=100)
+
     kebele = models.ForeignKey(Kebele, on_delete=models.CASCADE)
-    case_number = models.IntegerField(primary_key=True, null=False)
+
+    case_number = models.PositiveIntegerField(primary_key=True, null=False)
+
     species = models.ForeignKey(Species, on_delete=models.CASCADE)
+
     breed = models.ForeignKey(Breed, on_delete=models.CASCADE)
-    number_of_animals = models.IntegerField()
+
+    number_of_animals = models.PositiveIntegerField()
+
     sex = models.CharField(max_length=10, choices=SEX_CHOICES)
+
     service_date = models.DateField(auto_now=False, auto_now_add=True)
+
     treatment_history = models.TextField(max_length=500, null=True)
-    mobile_number = models.IntegerField()
+
+    mobile_number = models.PositiveIntegerField()
 
     def __str__(self):
         return f'{self.customer_name} : {str(self.case_number)}'

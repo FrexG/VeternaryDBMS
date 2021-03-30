@@ -27,19 +27,36 @@ class TreatedAnimal(models.Model):
 
     clinical_finding = models.TextField(
         verbose_name="Clinical Finding", max_length=200, blank=True)
+
     dx = models.TextField(verbose_name="DX", max_length=100)
-    rx = models.ManyToManyField(Drug, verbose_name="RX")
+
     differential_diag = models.TextField(
         "Differential Diagnosis", max_length=100)
+
     rumen_motility = models.TextField("Rumen Motility", max_length=100)
-
-    quantity = models.IntegerField("Quantity")
-
-    unit = models.ForeignKey(Unit, verbose_name="Unit",
-                             on_delete=models.CASCADE)
 
     service_date = models.DateField(
         "Service Date", auto_now=False, auto_now_add=True)
 
     def __str__(self):
-        return str(self.case_number)
+        return str(f'{self.case_number}: { self.service_date }')
+
+
+class Prescription(models.Model):
+    # Prescrition for the corresponding treatment
+    # A Treatment can have multiple prescription
+
+    rx = models.ForeignKey(Drug, verbose_name="RX", on_delete=models.CASCADE)
+
+    treatment = models.ForeignKey(
+        TreatedAnimal, verbose_name="Treatment", on_delete=models.CASCADE)
+
+    unit = models.ForeignKey(Unit, verbose_name="Unit",
+                             on_delete=models.CASCADE)
+
+    quantity = models.PositiveIntegerField("Quantity")
+
+    duration = models.PositiveIntegerField("Follow Up Duration")
+
+    def __str__(self):
+        return str(f'{self.rx} : {self.treatment}')
