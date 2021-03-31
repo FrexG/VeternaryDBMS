@@ -36,10 +36,17 @@
                         <h4>Drug Prescripton</h4>
                     </div>
                     <div class="card-body">
-                        <div class="form-group" id="prescription-group">                            
-                                {{rx}}
-                                <button class="btn btn-primary btn-md mt-2" id="add">Add</button>
-                                <hr class="my-4">
+                        <div class="form-group" id="prescription-group">
+                            {%csrf_token%}
+                            {{rx_formset.management_form}}
+                            {% for form in rx_formset%}
+                                <div class="rx-form">
+                                    {{form}}
+                                </div>
+                            {%endfor%}                               
+                            <button class="btn btn-primary btn-md mt-2" id="add">Add</button>
+                            <hr class="my-4">
+                                                    
                         </div>                        
                     </div>
                 </div>            

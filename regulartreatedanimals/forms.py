@@ -1,5 +1,6 @@
 from django.forms import ModelForm
 from django import forms
+from django.forms import modelformset_factory
 
 from .models import TreatedAnimal, Prescription
 
@@ -36,3 +37,15 @@ class PrescriptionForm(ModelForm):
             'quantity': forms.NumberInput(attrs={'class': 'form-control'}),
             'duration': forms.NumberInput(attrs={'class': 'form-control'}),
         }
+
+
+widgets = {
+    'rx': forms.Select(attrs={'class': 'form-control'}),
+    'unit': forms.Select(attrs={'class': 'form-control'}),
+    'quantity': forms.NumberInput(attrs={'class': 'form-control'}),
+    'duration': forms.NumberInput(attrs={'class': 'form-control'}),
+    'treatment': forms.NumberInput(attrs={'class': 'form-control'}),
+}
+
+PrescriptionFormSet = modelformset_factory(Prescription, fields="__all__",
+                                           widgets=widgets, extra=0)
