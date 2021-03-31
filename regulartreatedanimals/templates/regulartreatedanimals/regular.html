@@ -5,13 +5,47 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'registernewuser/bootstrap-5.0.0/css/bootstrap.css'%}">
+    <script src="{% static 'registernewuser/bootstrap-5.0.0/js/bootstrap.js' %}"></script>
+    <script src="{% static 'registernewuser/js/app.js' %}"></script>
 </head>
 <body>
-    <form action="">
-        {%csrf_token%}
-        {{form.as_p}}
-
-    </form>
+    <div class="container">
+        <div class="row">
+            <div class="col col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Regular Treatment</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <form action="">
+                                {%csrf_token%}
+                                {{form}}   
+                                <input type="submit" value="Submit" class="btn btn-lg btn-secondary form-control mt-2"> 
+                            </form>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                
+            <div class="col col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Drug Prescripton</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group" id="prescription-group">                            
+                                {{rx}}
+                                <button class="btn btn-primary btn-md mt-2" id="add">Add</button>
+                                <hr class="my-4">
+                        </div>                        
+                    </div>
+                </div>            
+            </div>
+        </div>
+    </div>
    
 </body>
 </html>

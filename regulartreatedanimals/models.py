@@ -60,3 +60,6 @@ class Prescription(models.Model):
 
     def __str__(self):
         return str(f'{self.rx} : {self.treatment}')
+
+    def getRX(self):
+        return self.rx.objects.all()
