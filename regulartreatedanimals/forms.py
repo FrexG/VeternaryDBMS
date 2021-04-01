@@ -44,7 +44,7 @@ widgets = {
     'unit': forms.Select(attrs={'class': 'form-control'}),
     'quantity': forms.NumberInput(attrs={'class': 'form-control'}),
     'duration': forms.NumberInput(attrs={'class': 'form-control'}),
-    'treatment': forms.NumberInput(attrs={'class': 'form-control'}),
+    'treatment': forms.TextInput(attrs={'class': 'form-control'}),
 }
 
 PrescriptionFormSet = modelformset_factory(Prescription, fields="__all__",
