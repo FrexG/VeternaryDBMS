@@ -7,8 +7,8 @@
     <title>Document</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'registernewuser/bootstrap-5.0.0/css/bootstrap.css'%}">
-    <script src="{% static 'registernewuser/bootstrap-5.0.0/js/bootstrap.js' %}"></script>
-    <script src="{% static 'regulartreatedanimals/js/script_regular.js' %}"></script>
+    <script src="{% static 'registernewuser/bootstrap-5.0.0/js/bootstrap.js'%}"></script>
+    <script src="{% static 'regulartreatedanimals/js/script_regular.js'%}"></script>
 </head>
 <body>
     <div class="container">
@@ -20,7 +20,7 @@
                     </div>
                     <div class="card-body">
                         <div class="form-group">
-                            <form action="">
+                            <form action="" method="POST">
                                 {%csrf_token%}
                                 {{form}}   
                                 <input type="submit" value="Submit" class="btn btn-lg btn-secondary form-control mt-2"> 
@@ -36,18 +36,19 @@
                         <h4>Drug Prescripton</h4>
                     </div>
                     <div class="card-body">
-                        <div class="form-group" id="prescription-group">
-                            {%csrf_token%}
-                            {{rx_formset.management_form}}
-                            {% for form in rx_formset%}
-                                <div class="rx-form">
-                                    {{form}}
-                                </div>
-                            {%endfor%}                               
-                            <button class="btn btn-primary btn-md mt-2" id="add">Add</button>
-                            <hr class="my-4">
-                                                    
-                        </div>                        
+                        <form action="" method="POST">
+                            <div class="form-group" id="prescription-group">
+                                {%csrf_token%}
+                                {{rx_formset.management_form}}
+                                {% for form in rx_formset%}
+                                    <div class="rx-form">
+                                        {{form}}
+                                    </div>
+                                {%endfor%}                               
+                                <input type="button" class="btn btn-primary btn-md mt-2" id="add" value="ADD"/>
+                                <hr class="my-4">                       
+                            </div>  
+                        </form>                      
                     </div>
                 </div>            
             </div>

@@ -15,3 +15,20 @@ class index(View):
         context = {'form': form,
                    'rx_formset': rx_formset}
         return render(request, 'regulartreatedanimals/regular.html', context)
+
+    def post(self, request):
+        filledForm = TreatedAnimalsForm(request.POST)
+
+        if filledForm.is_valid():
+            filledForm.save()
+
+            case_number = filledForm.cleaned_data.get("treatment")
+
+            initial_CaseNumber = [{'treatment': case_number}]
+
+            rx_formset = PrescriptionFormSet(initial=initial_CaseNumber)
+
+            context = {'form': filledForm,
+                       'rx_formset': rx_formset}
+
+            return render(request, 'regulartreatedanimals/regular.html', context)
