@@ -22,9 +22,11 @@ class index(View):
         if filledForm.is_valid():
             filledForm.save()
 
-            case_number = filledForm.cleaned_data.get("treatment")
+            case_number = filledForm.cleaned_data.get("case_number")
 
-            initial_CaseNumber = [{'treatment': case_number}]
+            print(case_number.case_number)
+
+            initial_CaseNumber = [{'treatment': case_number.case_number}]
 
             rx_formset = PrescriptionFormSet(initial=initial_CaseNumber)
 

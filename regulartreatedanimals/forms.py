@@ -48,7 +48,4 @@ widgets = {
     'treatment': forms.TextInput(attrs={'class': 'form-control'}),
 }
 
-# PrescriptionFormSet = modelformset_factory(Prescription, fields="__all__",
-#                                           widgets=widgets, extra=1)
-
-PrescriptionFormSet = formset_factory(PrescriptionForm, extra=1)
+PrescriptionFormSet = formset_factory(PrescriptionForm, extra=0)
