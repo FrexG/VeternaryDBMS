@@ -15,7 +15,7 @@
         <div class="row">
             <div class="col col-md-4">
                 <div class="card">
-                    <div class="card-header">
+                    <div class="card-header bg-warning">
                         <h4>Regular Treatment</h4>
                     </div>
                     <div class="card-body">
@@ -23,7 +23,7 @@
                             <form action="" method="POST">
                                 {%csrf_token%}
                                 {{form}}   
-                                <input type="submit" value="Submit" class="btn btn-lg btn-secondary form-control mt-2"> 
+                                <input type="submit" value="Submit" class="btn btn-primary form-control mt-2"> 
                             </form>
                         </div>
                     </div>
@@ -32,11 +32,11 @@
                 
             <div class="col col-md-8">
                 <div class="card">
-                    <div class="card-header">
+                    <div class="card-header bg-warning">
                         <h4>Drug Prescripton</h4>
                     </div>
                     <div class="card-body">
-                        <form action="" method="POST">
+                        <form action="prescribe" method="POST">
                             <div class="form-group" id="prescription-group">
                                 {%csrf_token%}
                                 {{rx_formset.management_form}}
@@ -45,8 +45,9 @@
                                         {{form}}
                                     </div>
                                 {%endfor%}                               
-                                <input type="button" class="btn btn-primary btn-md mt-2" id="add" value="ADD"/>
-                                <hr class="my-4">                       
+                                <input type="button" class="btn btn-secondary btn-md mt-2" id="add" value="Add"/>
+                                <hr class="my-4">   
+                                <input type="submit" class="btn btn-primary form-control" id="prescribe" value="Prescribe"/>                    
                             </div>  
                         </form>                      
                     </div>

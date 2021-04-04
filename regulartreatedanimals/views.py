@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.views import View
 from .forms import TreatedAnimalsForm, PrescriptionForm, PrescriptionFormSet
@@ -20,17 +20,35 @@ class index(View):
         filledForm = TreatedAnimalsForm(request.POST)
 
         if filledForm.is_valid():
-            filledForm.save()
+            treatmentID = filledForm.save()
 
-            case_number = filledForm.cleaned_data.get("case_number")
+            #treatmentID = filledForm.cleaned_data.get("case_number")
 
-            print(case_number.case_number)
+            print(treatmentID)
 
-            initial_CaseNumber = [{'treatment': case_number.case_number}]
+            initial_treatment = [{'treatment': treatmentID}]
 
-            rx_formset = PrescriptionFormSet(initial=initial_CaseNumber)
+            rx_formset = PrescriptionFormSet(initial=initial_treatment)
 
             context = {'form': filledForm,
                        'rx_formset': rx_formset}
 
             return render(request, 'regulartreatedanimals/regular.html', context)
+
+
+class handlePrescription(View):
+
+    def get(self, request):
+        return redirect("/regular")
+
+    def post(self, request):
+        print("Here")
+
+        prescriptionFormSet = PrescriptionFormSet(data=request.POST)
+
+        for formset in prescriptionFormSet:
+            if formset.is_valid():
+                formset.save()
+                print("Valid")
+
+        return redirect("/regular")

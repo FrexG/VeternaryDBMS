@@ -39,7 +39,10 @@ class TreatedAnimal(models.Model):
         "Service Date", auto_now=False, auto_now_add=True)
 
     def __str__(self):
-        return str(f'{self.case_number}: { self.service_date }')
+        return str(f'Treatment for:{self.case_number}')
+
+    def getTreatmentID(self):
+        return self.id
 
 
 class Prescription(models.Model):
