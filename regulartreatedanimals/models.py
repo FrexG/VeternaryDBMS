@@ -17,13 +17,13 @@ class TreatedAnimal(models.Model):
     case_number = models.ForeignKey(
         Customer, verbose_name="Case Number", on_delete=models.CASCADE)
     t0 = models.DecimalField(verbose_name="T0", max_digits=3,
-                             decimal_places=2, blank=True)
+                             decimal_places=2,)
 
     pr = models.DecimalField(verbose_name="PR", max_digits=3,
-                             decimal_places=2, blank=True)
+                             decimal_places=2)
 
     rr = models.DecimalField(verbose_name="RR", max_digits=3,
-                             decimal_places=2, blank=True)
+                             decimal_places=2)
 
     clinical_finding = models.TextField(
         verbose_name="Clinical Finding", max_length=200, blank=True)

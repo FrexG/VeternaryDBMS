@@ -7,13 +7,13 @@ from .forms import TreatedAnimalsForm, PrescriptionForm, PrescriptionFormSet
 
 
 class index(View):
+    rx_formset = PrescriptionFormSet()
 
     def get(self, request):
         form = TreatedAnimalsForm()
-        rx_formset = PrescriptionFormSet()
 
         context = {'form': form,
-                   'rx_formset': rx_formset}
+                   'rx_formset': self.rx_formset}
         return render(request, 'regulartreatedanimals/regular.html', context)
 
     def post(self, request):
@@ -22,17 +22,18 @@ class index(View):
         if filledForm.is_valid():
             treatmentID = filledForm.save()
 
-            #treatmentID = filledForm.cleaned_data.get("case_number")
-
-            print(treatmentID)
-
             initial_treatment = [{'treatment': treatmentID}]
 
-            rx_formset = PrescriptionFormSet(initial=initial_treatment)
+            filled_rx_formset = PrescriptionFormSet(initial=initial_treatment)
 
             context = {'form': filledForm,
-                       'rx_formset': rx_formset}
+                       'rx_formset': filled_rx_formset}
 
+            return render(request, 'regulartreatedanimals/regular.html', context)
+
+        else:
+            context = {'form': filledForm,
+                       'rx_formset': self.rx_formset}
             return render(request, 'regulartreatedanimals/regular.html', context)
 
 
