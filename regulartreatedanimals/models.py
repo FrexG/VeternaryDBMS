@@ -52,7 +52,7 @@ class Prescription(models.Model):
     rx = models.ForeignKey(Drug, verbose_name="RX", on_delete=models.CASCADE)
 
     treatment = models.ForeignKey(
-        TreatedAnimal, verbose_name="Treatment", on_delete=models.CASCADE)
+        TreatedAnimal, verbose_name="Treatment ID", on_delete=models.CASCADE)
 
     unit = models.ForeignKey(Unit, verbose_name="Unit",
                              on_delete=models.CASCADE)
