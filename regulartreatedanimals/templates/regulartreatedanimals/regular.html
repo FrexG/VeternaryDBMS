@@ -1,18 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+{% extends 'registernewuser/home.html' %} {%load static %}
+    {%block title%}Regular Treated Animals{%endblock title%}
     {% load static %}
-    <link rel="stylesheet" href="{% static 'registernewuser/bootstrap-5.0.0/css/bootstrap.css'%}">
-    <script src="{% static 'registernewuser/bootstrap-5.0.0/js/bootstrap.js'%}"></script>
-    <script src="{% static 'regulartreatedanimals/js/script_regular.js'%}"></script>
-</head>
-<body>
-    <div class="container">
-        <div class="row">
+    {%block imports%}
+        <script src="{% static 'regulartreatedanimals/js/script_regular.js'%}"></script>
+    {%endblock imports%}
+
+    {%block content%}
             <div class="col col-md-4">
                 <div class="card">
                     <div class="card-header bg-warning">
@@ -27,8 +20,8 @@
                             </form>
                         </div>
                     </div>
-                    </div>
                 </div>
+            </div>
                 
             <div class="col col-md-8">
                 <div class="card">
@@ -53,8 +46,4 @@
                     </div>
                 </div>            
             </div>
-        </div>
-    </div>
-   
-</body>
-</html>
+       {%endblock content%}

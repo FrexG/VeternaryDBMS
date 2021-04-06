@@ -1,6 +1,28 @@
+.body {
+  background-color: brown;
+}
 .errorlist {
   font-family: monospace;
   font-weight: bold;
   color: crimson;
   font-size: medium;
+}
+
+h3 {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  color: darksalmon;
+  font-weight: bold;
+}
+#body {
+  background-color: blanchedalmond;
+}
+.card-body-bg {
+  background-color: rgb(198, 203, 255);
+}
+.card-header-bg {
+  background-color: rgb(36, 53, 8);
+}
+label {
+  font-family: monospace;
+  color: rgb(121, 32, 0);
 }
