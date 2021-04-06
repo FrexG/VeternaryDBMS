@@ -27,8 +27,9 @@ class TreatedAnimalsForm(ModelForm):
         }
 
     # Add form validation
-    def cleaned_case_number(self):
-        CASE_NUMBER_EXISTS = False
+    def cleaned_case_number(self, *args, **kwargs):
+
+        CASE_NUMBER_EXISTS: bool = False
 
         case_number = self.cleaned_data["case_number"]
 
