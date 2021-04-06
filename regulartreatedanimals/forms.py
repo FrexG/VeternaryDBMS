@@ -35,7 +35,7 @@ class PrescriptionForm(ModelForm):
             'unit': forms.Select(attrs={'class': 'form-control'}),
             'quantity': forms.NumberInput(attrs={'class': 'form-control'}),
             'duration': forms.NumberInput(attrs={'class': 'form-control'}),
-            'treatment': forms.Select(attrs={'class': 'form-control', 'type': 'hidden'}),
+            'treatment': forms.TextInput(attrs={'class': 'form-control', 'type': 'hidden'}),
         }
 
 

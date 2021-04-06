@@ -9,6 +9,7 @@ from .models import Customer
 
 class NewCustomerForm(ModelForm):
     class Meta:
+        textAreaSize = "height: 100px;"
         model = Customer
         fields = "__all__"
 
@@ -21,7 +22,7 @@ class NewCustomerForm(ModelForm):
             'breed': forms.Select(attrs={'class': 'form-control'}),
             'number_of_animals': forms.NumberInput(attrs={'class': 'form-control'}),
             'sex': forms.Select(attrs={'class': 'form-control'}),
-            'treatment_history': forms.Textarea(attrs={'class': 'form-control'}),
+            'treatment_history': forms.Textarea(attrs={'class': 'form-control', 'style': textAreaSize}),
             'mobile_number': forms.NumberInput(attrs={'class': 'form-control'}),
         }
 

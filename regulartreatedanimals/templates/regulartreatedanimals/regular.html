@@ -6,10 +6,10 @@
     {%endblock imports%}
 
     {%block content%}
-            <div class="col col-md-4">
+            <div class="col col-md-6">
                 <div class="card">
                     <div class="card-header bg-warning">
-                        <h4>Regular Treatment</h4>
+                        <h3>Regular Treatment</h3>
                     </div>
                     <div class="card-body">
                         <div class="form-group">
@@ -23,10 +23,10 @@
                 </div>
             </div>
                 
-            <div class="col col-md-8">
+            <div class="col col-md-4">
                 <div class="card">
                     <div class="card-header bg-warning">
-                        <h4>Drug Prescripton</h4>
+                        <h3>Drug Prescripton</h3>
                     </div>
                     <div class="card-body">
                         <form action="prescribe" method="POST">
@@ -34,13 +34,14 @@
                                 {%csrf_token%}
                                 {{rx_formset.management_form}}
                                 {% for form in rx_formset%}
-                                    <div class="rx-form">
+                                    <div class="card-header bg-light rx-form">
                                         {{form}}
-                                    </div>
+                                    </div>   
+                                    <hr>                                 
                                 {%endfor%}                               
-                                <input type="button" class="btn btn-secondary btn-md mt-2" id="add" value="Add"/>
+                                <input type="button" class="btn btn-success btn-md mt-2" id="add" value="Add"/>
                                 <hr class="my-4">   
-                                <input type="submit" class="btn btn-primary form-control" id="prescribe" value="Prescribe"/>                    
+                                <input type="submit" class="btn btn-md btn-primary form-control" id="prescribe" value="Prescribe"/>                    
                             </div>  
                         </form>                      
                     </div>
