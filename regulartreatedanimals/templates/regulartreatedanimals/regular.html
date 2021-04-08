@@ -1,50 +1,56 @@
 {% extends 'registernewuser/home.html' %} {%load static %}
-    {%block title%}Regular Treated Animals{%endblock title%}
-    {% load static %}
-    {%block imports%}
-        <script src="{% static 'regulartreatedanimals/js/script_regular.js'%}"></script>
-    {%endblock imports%}
+ {%block title%}Regular Treated Animals{%endblock title%} {%block imports%}
+<script src="{% static 'regulartreatedanimals/js/script_regular.js'%}"></script>
+{%endblock imports%} {%block content%}
+<div class="col col-md-6">
+  <div class="card">
+    <div class="card-header bg-warning">
+      <h3>Regular Treatment</h3>
+    </div>
+    <div class="card-body">
+      <div class="form-group">
+        <form action="" method="POST">
+          {%csrf_token%} {{form}}
+          <input
+            type="submit"
+            value="Submit"
+            class="btn btn-primary form-control mt-2"
+          />
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 
-    {%block content%}
-            <div class="col col-md-6">
-                <div class="card">
-                    <div class="card-header bg-warning">
-                        <h3>Regular Treatment</h3>
-                    </div>
-                    <div class="card-body">
-                        <div class="form-group">
-                            <form action="" method="POST">
-                                {%csrf_token%}
-                                {{form}}   
-                                <input type="submit" value="Submit" class="btn btn-primary form-control mt-2"> 
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-                
-            <div class="col col-md-4">
-                <div class="card">
-                    <div class="card-header bg-warning">
-                        <h3>Drug Prescripton</h3>
-                    </div>
-                    <div class="card-body">
-                        <form action="prescribe" method="POST">
-                            <div class="form-group" id="prescription-group">
-                                {%csrf_token%}
-                                {{rx_formset.management_form}}
-                                {% for form in rx_formset%}
-                                    <div class="card-header bg-light rx-form">
-                                        {{form}}
-                                    </div>   
-                                    <hr>                                 
-                                {%endfor%}                               
-                                <input type="button" class="btn btn-success btn-md mt-2" id="add" value="Add"/>
-                                <hr class="my-4">   
-                                <input type="submit" class="btn btn-md btn-primary form-control" id="prescribe" value="Prescribe"/>                    
-                            </div>  
-                        </form>                      
-                    </div>
-                </div>            
-            </div>
-       {%endblock content%}
+<div class="col col-md-4">
+  <div class="card">
+    <div class="card-header bg-warning">
+      <h3>Drug Prescripton</h3>
+    </div>
+    <div class="card-body">
+      <form action="prescribe" method="POST">
+        <div class="form-group" id="prescription-group">
+          {%csrf_token%} {{rx_formset.management_form}} 
+          {% for form in rx_formset%}
+          <div class="card-header bg-light rx-form">{{form}}</div>
+          <hr />
+          {%endfor%}
+          <input
+            type="button"
+            class="btn btn-success btn-md mt-2"
+            id="add"
+            value="Add"
+          />
+          <hr class="my-4" />
+          <input
+            type="submit"
+            class="btn btn-md btn-primary form-control"
+            id="prescribe"
+            value="Prescribe"
+          />
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{%endblock content%}
