@@ -7,4 +7,4 @@ from django.views import View
 
 class index(View):
     def get(self, request):
-        return HttpResponse('<h2> Clinical Services Page </h2>')
+        return render(request, 'clinicalservices/index.html')
