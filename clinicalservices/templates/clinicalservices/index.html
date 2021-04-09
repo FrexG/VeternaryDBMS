@@ -8,14 +8,27 @@
     <div class="card-body">
       <div class="form-group font-weight-bold text-secondary text-capitalize">
         <form action="" method="POST">
-          {%csrf_token%}
-          {{form}}
-          {{service_form}}
-          <input
-            type="submit"
-            value="Register"
-            class="btn btn-md btn-primary form-control"
-          />
+          <div class="form-group" id="case-number-container">
+            {%csrf_token%}
+            {{form}}
+            <br>
+            <button type="submit" class="btn btn-sm btn-info">Ok</button>
+          </div> 
+          <h3 class="text-info">Add Services'</h3>
+          <hr>         
+          <div class="form-group" id="service_form">
+            {{service_form}}
+          </div>          
+          <br>
+          <span class="form-group">
+            <input type="button" value="Add" class="btn btn-sm btn-success">
+            <hr>          
+            <input
+              type="submit"
+              value="Save Services"
+              class="btn btn-md btn-primary form-control"
+            />
+          </span>
         </form>
       </div>
     </div>
