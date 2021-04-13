@@ -4,13 +4,12 @@ from django.views import View
 # Import Models and Forms
 
 from .forms import ClinicalServiceForm, ServiceProvidedForm, ServiceProvidedFormSet, AIServiceForm
-
-# Create your views here.
-
 # Clinical Service Home page
 
 
 class index(View):
+    templateURL = 'clinicalservices/index.html'
+
     ai_form = AIServiceForm()
     service_formset = ServiceProvidedFormSet()
 
@@ -21,7 +20,7 @@ class index(View):
                    'service_form': self.service_formset,
                    'ai_form': self.ai_form}
 
-        return render(request, 'clinicalservices/index.html', context)
+        return render(request, self.templateURL, context)
 
     def post(self, request):
         # Process ClinicalServiceForm
@@ -39,9 +38,9 @@ class index(View):
                        'service_form': prefilled_service_type,
                        'ai_form': self.ai_form}
 
-            return render(request, 'clinicalservices/index.html', context)
+            return render(request, self.templateURL, context)
         else:
             context = {'form': serviceFormRequest,
                        'service_form': self.service_formset,
                        'ai_form': self.ai_form}
-            return render(request, 'clinicalservices/index.html', context)
+            return render(request, self.templateURL, context)

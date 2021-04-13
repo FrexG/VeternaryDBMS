@@ -7,6 +7,7 @@ from .forms import TreatedAnimalsForm, PrescriptionForm, PrescriptionFormSet
 
 
 class index(View):
+    templateURL = 'regulartreatedanimals/regular.html'
     rx_formset = PrescriptionFormSet()
 
     def get(self, request):
@@ -14,7 +15,7 @@ class index(View):
 
         context = {'form': form,
                    'rx_formset': self.rx_formset}
-        return render(request, 'regulartreatedanimals/regular.html', context)
+        return render(request, self.templateURL, context)
 
     def post(self, request):
         filledForm = TreatedAnimalsForm(request.POST)
@@ -29,12 +30,12 @@ class index(View):
             context = {'form': filledForm,
                        'rx_formset': filled_rx_formset}
 
-            return render(request, 'regulartreatedanimals/regular.html', context)
+            return render(request, self.templateURL, context)
 
         else:
             context = {'form': filledForm,
                        'rx_formset': self.rx_formset}
-            return render(request, 'regulartreatedanimals/regular.html', context)
+            return render(request, self.templateURL, context)
 
 
 class handlePrescription(View):
