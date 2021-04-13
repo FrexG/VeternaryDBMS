@@ -23,9 +23,3 @@ urlpatterns = [
     path('parasite&vaccination', include('vaccineandparasite.urls')),
     path('admin/', admin.site.urls),
 ]
-
-"""
-    path('regular/', include('regulartreatedanimals.urls')),
-    path('clinicalservice/', include('clinicalservices.urls')),
-    path('parasite&vaccination/', include('vaccineandparasite.urls')),
-"""

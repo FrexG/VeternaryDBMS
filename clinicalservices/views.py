@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, reverse
 from django.http import HttpResponse
 from django.views import View
 # Import Models and Forms
@@ -51,4 +51,7 @@ class ProcessService(View):
     templateURL = 'clinicalservices/index.html'
 
     def get(self, request):
-        return render(request, self.templateURL)
+        return redirect("/clinicalservice")
+
+    def post(self, request):
+        return redirect("/clinicalservice")
