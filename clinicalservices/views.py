@@ -44,3 +44,11 @@ class index(View):
                        'service_form': self.service_formset,
                        'ai_form': self.ai_form}
             return render(request, self.templateURL, context)
+
+
+class ProcessService(View):
+
+    templateURL = 'clinicalservices/index.html'
+
+    def get(self, request):
+        return render(request, self.templateURL)
