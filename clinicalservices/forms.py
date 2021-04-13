@@ -25,4 +25,24 @@ class ServiceProvidedForm(ModelForm):
         }
 
 
-ServiceProvidedFormSet = formset_factory(ServiceProvidedForm, extra=1)
+ServiceProvidedFormSet = formset_factory(ServiceProvidedForm, extra=0)
+
+# AIService Form
+
+
+class AIServiceForm(ModelForm):
+    class Meta:
+        model = AIService
+        fields = "__all__"
+
+        widgets = {
+            'case_number': forms.NumberInput(attrs={'class': 'form-control'}),
+            'service_type': forms.Select(attrs={'class': 'form-control'}),
+            'last_calving_date': forms.DateField(attrs={'class': 'form-control'}),
+            'color': forms.TextInput(attrs={'class': 'form-control'}),
+            'ai_frequency': forms.TextInput(attrs={'class': 'form-control'}),
+            'bull_number': forms.NumberInput(attrs={'class': 'form-control'}),
+            'pd_result': forms.TextInput(attrs={'class': 'form-control'}),
+            'quantity': forms.NumberInput(attrs={'class': 'form-control'})
+
+        }
