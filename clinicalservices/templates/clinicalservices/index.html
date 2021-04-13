@@ -7,7 +7,7 @@
 <div class="col-sm-6 mx-auto">
   <div class="card">
     <div class="card-header bg-warning">
-      <h3>Clinical and AI Service</h3>
+      <h3>Clinical Service</h3>
     </div>
     <div class="card-body">
       <div class="form-group font-weight-bold text-secondary text-capitalize">
@@ -28,7 +28,7 @@
             {% for form in service_form %}
               <div class="card-header bg-light service-form form-control">
                 {{form}}
-              </div>
+              </div>{'class':'form-control'}
             {%endfor%}
           
               <input type="button" value="Add" class="btn btn-sm btn-success m-2" id="add"> 
@@ -43,6 +43,23 @@
       </div>
     </div>
   </div>
+</div>
+<div class="col-sm-6 mx-auto">
+  <div class="card">
+    <div class="card-header bg-warning">
+      <h3>AI Service</h3>
+    </div>
+    <div class="card-body">
+      <div class="form-group font-weight-bold text-secondary text-capitalize">
+        <form action="" method="POST">
+          {%csrf_token%}
+          {{ai_form}}
+          <input type="button" value="Submit AI" class="btn-md btn-primary form-control">
+        </form>
+      </div>
+    </div>
+  </div>
+
 </div>
 
 {% endblock content %}

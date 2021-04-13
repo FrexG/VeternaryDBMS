@@ -38,7 +38,7 @@ class AIServiceForm(ModelForm):
         widgets = {
             'case_number': forms.NumberInput(attrs={'class': 'form-control'}),
             'service_type': forms.Select(attrs={'class': 'form-control'}),
-            'last_calving_date': forms.DateField(attrs={'class': 'form-control'}),
+            'last_calving_date': forms.SelectDateWidget(attrs={'class': 'form-control'}),
             'color': forms.TextInput(attrs={'class': 'form-control'}),
             'ai_frequency': forms.TextInput(attrs={'class': 'form-control'}),
             'bull_number': forms.NumberInput(attrs={'class': 'form-control'}),
