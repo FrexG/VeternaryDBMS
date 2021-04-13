@@ -13,6 +13,9 @@ class ClinicalService(models.Model):
     service_date = models.DateField(
         "Service Date", auto_now=False, auto_now_add=True)
 
+    def __str__(self):
+        return str(self.case_number)
+
 # Artificial Insemination model
 
 
@@ -38,9 +41,11 @@ class AIService(models.Model):
     pd_result = models.CharField(verbose_name="PD Result", max_length=50)
 
     quantity = models.PositiveIntegerField(verbose_name="Quantity")
-
     # Quantity of Services
     quantity = models.PositiveIntegerField("Quantity")
+
+    def __str__(self):
+        return str(self.case_number)
 
 
 class ServiceProvided(models.Model):
@@ -50,3 +55,6 @@ class ServiceProvided(models.Model):
     # Many to One r/n ship with ClinicalService Table
     clinical_service = models.ForeignKey(
         ClinicalService, verbose_name="Service ID", on_delete=models.CASCADE)
+
+    def __str__(self):
+        return str(self.service_type)

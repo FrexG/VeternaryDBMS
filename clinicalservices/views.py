@@ -7,15 +7,41 @@ from .forms import ClinicalServiceForm, ServiceProvidedForm, ServiceProvidedForm
 
 # Create your views here.
 
+# Clinical Service Home page
+
 
 class index(View):
+    ai_form = AIServiceForm()
+    service_formset = ServiceProvidedFormSet()
+
     def get(self, request):
         form = ClinicalServiceForm()
-        service_formset = ServiceProvidedFormSet()
-        ai_form = AIServiceForm()
 
         context = {'form': form,
-                   'service_form': service_formset,
-                   'ai_form': ai_form}
+                   'service_form': self.service_formset,
+                   'ai_form': self.ai_form}
 
         return render(request, 'clinicalservices/index.html', context)
+
+    def post(self, request):
+        # Process ClinicalServiceForm
+        serviceFormRequest = ClinicalServiceForm(request.POST)
+        # Check if it is a valid
+        if serviceFormRequest.is_valid():
+            print("is valid!!")
+            # save the form values to model
+            service_form = serviceFormRequest.save()
+
+            prefilled_service_type = ServiceProvidedFormSet(
+                initial=[{'clinical_service': service_form}])
+
+            context = {'form': serviceFormRequest,
+                       'service_form': prefilled_service_type,
+                       'ai_form': self.ai_form}
+
+            return render(request, 'clinicalservices/index.html', context)
+        else:
+            context = {'form': serviceFormRequest,
+                       'service_form': self.service_formset,
+                       'ai_form': self.ai_form}
+            return render(request, 'clinicalservices/index.html', context)

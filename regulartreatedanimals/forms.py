@@ -63,12 +63,4 @@ class PrescriptionForm(ModelForm):
         }
 
 
-widgets = {
-    'rx': forms.Select(attrs={'class': 'form-control'}),
-    'unit': forms.Select(attrs={'class': 'form-control'}),
-    'quantity': forms.NumberInput(attrs={'class': 'form-control'}),
-    'duration': forms.NumberInput(attrs={'class': 'form-control'}),
-    'treatment': forms.TextInput(attrs={'class': 'form-control', 'type': 'hidden'}),
-}
-
 PrescriptionFormSet = formset_factory(PrescriptionForm, extra=0)
