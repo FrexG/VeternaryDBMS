@@ -43,13 +43,11 @@ class handlePrescription(View):
         return redirect("/regular")
 
     def post(self, request):
-        print("Here")
 
         prescriptionFormSet = PrescriptionFormSet(data=request.POST)
 
         for formset in prescriptionFormSet:
             if formset.is_valid():
                 formset.save()
-                print("Valid")
 
         return redirect("/regular")

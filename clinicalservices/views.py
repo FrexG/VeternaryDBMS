@@ -54,4 +54,11 @@ class ProcessService(View):
         return redirect("/clinicalservice")
 
     def post(self, request):
+        serviceProvidedFormSet = ServiceProvidedFormSet(data=request.POST)
+
+        for formset in serviceProvidedFormSet:
+
+            if formset.is_valid():
+                formset.save()
+
         return redirect("/clinicalservice")

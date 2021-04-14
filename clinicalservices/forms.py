@@ -23,9 +23,22 @@ class ServiceProvidedForm(ModelForm):
             'service_type': forms.Select(attrs={'class': 'form-control'}),
             'clinical_service': forms.TextInput(attrs={'class': 'form-control', 'type': 'hidden'})
         }
+    # Form Validation
+
+    def cleaned_service_type(self, *args, **kwargs):
+
+        service_type = self.cleaned_data.get("service_type")
+        # Check if service_type is filled and is valid
+
+        if service_type == "":
+
+            raise forms.ValidationError("Please, select a customer")
+
+        return service_type
 
 
 ServiceProvidedFormSet = formset_factory(ServiceProvidedForm, extra=0)
+
 
 # AIService Form
 
@@ -46,3 +59,4 @@ class AIServiceForm(ModelForm):
             'quantity': forms.NumberInput(attrs={'class': 'form-control'})
 
         }
+        # validation
