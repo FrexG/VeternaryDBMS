@@ -62,3 +62,11 @@ class ProcessService(View):
                 formset.save()
 
         return redirect("/clinicalservice")
+
+
+class AIServiceView(View):
+    def get(self, request):
+        return redirect('/clinicalservice')
+
+    def post(self, request):
+        return redirect('/clinicalservice')
