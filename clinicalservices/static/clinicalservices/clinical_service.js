@@ -7,9 +7,7 @@ window.onload = () =>{
     const form_container = document.querySelector('#service-group');
     let formNumber = service_form.length - 1; // used for the prefix
     let totalFormNumber = formNumber;
-    let removeBtnArray = new Array();
-
-  
+   
 
     // Listen for click event on "Add" button
     addButton.onclick = () => cloneForm();
@@ -36,14 +34,6 @@ window.onload = () =>{
 
       removeBtn.onclick = () =>{removeElement(newForm,totalFormNumber)};
 
-      let removeBtnObject = {'button':removeBtn,
-                          'id':removeBtn.getAttribute('id'),
-                            'parent':newForm};
-
-      removeBtnArray.push(removeBtnObject);
-
-      //console.log(removeBtnArray);
-
       newForm.innerHTML = newForm.innerHTML.replace(formRegx,`form-${formNumber}-`);  
       newForm.appendChild(removeBtn);     
 
@@ -62,8 +52,7 @@ window.onload = () =>{
       totalForms--;
       // Update the total forms value
       totalFormNumber = totalForms;
+      
       total_form.setAttribute("value",`${totalForms + 1}`);
-
-
     }
 }
