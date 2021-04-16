@@ -12,10 +12,6 @@ window.onload = () =>{
     // Listen for click event on "Add" button
     addButton.onclick = () => cloneForm();
 
-    form_container.onchange = () =>{
-      console.log(removeBtnArray.length);
-    }
-
     const cloneForm = () =>{
       // create a remove button
       let removeBtn = document.createElement('input');
@@ -32,7 +28,7 @@ window.onload = () =>{
       // set id of remove btn to formNumber
       removeBtn.setAttribute('id',`remove-${formNumber}`);
 
-      removeBtn.onclick = () =>{removeElement(newForm,totalFormNumber)};
+      removeBtn.onclick = (e) =>{removeElement(newForm,totalFormNumber,e)};
 
       newForm.innerHTML = newForm.innerHTML.replace(formRegx,`form-${formNumber}-`);  
       newForm.appendChild(removeBtn);     
@@ -45,7 +41,7 @@ window.onload = () =>{
 
     }
 
-    const removeElement = (element,totalForms) =>{
+    const removeElement = (element,totalForms,e) =>{
       // remove the parent element the button belongs to
       element.remove();
       // decrement totalForms
