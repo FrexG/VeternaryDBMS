@@ -28,7 +28,7 @@ window.onload = () =>{
       // set id of remove btn to formNumber
       removeBtn.setAttribute('id',`remove-${formNumber}`);
 
-      removeBtn.onclick = (e) =>{removeElement(newForm,totalFormNumber,e)};
+      removeBtn.onclick = (e) =>{removeElement(newForm,totalFormNumber)};
 
       newForm.innerHTML = newForm.innerHTML.replace(formRegx,`form-${formNumber}-`);  
       newForm.appendChild(removeBtn);     
@@ -38,7 +38,6 @@ window.onload = () =>{
       total_form.setAttribute("value",`${totalFormNumber + 1}`);
       
       return;
-
     }
 
     const removeElement = (element,totalForms,e) =>{
