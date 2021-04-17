@@ -55,18 +55,6 @@ class Drug(models.Model):
     def getDrugName(self): return str(self.drug_type)
 
 
-class Service(models.Model):
-
-    service_type = models.CharField(max_length=100)
-    price = models.DecimalField(
-        max_digits=6, decimal_places=4, default=000000.0000)
-
-    def __str__(self):
-        return self.service_type
-
-    def getServiceName(self): return str(self.service_type)
-
-
 class Customer(models.Model):
     customer_name = models.CharField(max_length=100)
 

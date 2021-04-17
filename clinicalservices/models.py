@@ -1,8 +1,19 @@
 from django.db import models
-
-from registernewuser.models import Customer, Service
+from registernewuser.models import Customer
 
 # MODEL DEFINITION FOR CLINICAL SERVICES
+
+
+class Service(models.Model):
+
+    service_type = models.CharField(max_length=100)
+    price = models.DecimalField(
+        max_digits=6, decimal_places=4, default=000000.0000)
+
+    def __str__(self):
+        return self.service_type
+
+    def getServiceName(self): return str(self.service_type)
 
 
 class ClinicalService(models.Model):
