@@ -70,4 +70,5 @@ class AIServiceView(View):
         return redirect('/clinicalservice')
 
     def post(self, request):
+        AIServiceFormRequest = AIServiceForm(data=request.POST)
         return redirect('/clinicalservice')
