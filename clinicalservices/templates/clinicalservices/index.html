@@ -1,9 +1,9 @@
 {% extends 'registernewuser/home.html' %} {%load static %} 
-{% block title%}Clinical Service{% endblock title %}
+{% block title%}
+Clinical Service{% endblock title %} 
 {%block imports%}
 <script src="{% static 'clinicalservices/clinical_service.js'%}"></script>
-{%endblock imports%}
- {% block content %}
+{%endblock imports%} {% block content %}
 <div class="col-sm-6 mx-auto">
   <div class="card">
     <div class="card-header bg-warning">
@@ -13,32 +13,36 @@
       <div class="form-group font-weight-bold text-secondary text-capitalize">
         <form action="" method="POST">
           <div class="form-group" id="case-number-container">
-            {%csrf_token%}
-            {{form}}
-            <br>
+            {%csrf_token%} {{form}}
+            <br />
             <button type="submit" class="btn btn-sm btn-info">Ok</button>
-          </div> 
+          </div>
         </form>
         <form action="processservice" method="POST">
           <h3 class="text-info">Add Services'</h3>
-          <hr>         
+          <hr />
           <div class="form-group" id="service-group">
-            {%csrf_token%}
+            {%csrf_token%} 
             {{service_form.management_form}}
-            {% for form in service_form %}
-              <div class="card-header bg-light service-form form-control">
-                {{form}}
-              </div>
+             {% for form in service_form %}
+            <div class="card-header bg-light service-form form-control">
+              {{form}}
+            </div>
             {%endfor%}
-          
-              <input type="button" value="Add" class="btn btn-sm btn-success m-2" id="add"> 
-          </div>          
-           
+
+            <input
+              type="button"
+              value="Add"
+              class="btn btn-sm btn-success m-2"
+              id="add"
+            />
+          </div>
+
           <input
-                type="submit"
-                value="Save Services"
-                class="btn btn-md btn-primary form-control"
-              />
+            type="submit"
+            value="Save Services"
+            class="btn btn-md btn-primary form-control"
+          />
         </form>
       </div>
     </div>
@@ -51,15 +55,17 @@
     </div>
     <div class="card-body">
       <div class="form-group font-weight-bold text-secondary text-capitalize">
-        <form action="" method="POST">
-          {%csrf_token%}
-          {{ai_form}}
-          <input type="button" value="Submit AI" class="btn-md btn-primary form-control">
+        <form action="aiservice" method="POST">
+          {%csrf_token%} {{ai_form}}
+          <input
+            type="submit"
+            value="Submit AI"
+            class="btn-md btn-primary form-control"
+          />
         </form>
       </div>
     </div>
   </div>
-
 </div>
 
 {% endblock content %}

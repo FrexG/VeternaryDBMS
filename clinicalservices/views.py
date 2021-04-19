@@ -10,7 +10,6 @@ from .forms import ClinicalServiceForm, ServiceProvidedForm, ServiceProvidedForm
 
 class index(View):
     templateURL = 'clinicalservices/index.html'
-
     ai_form = AIServiceForm()
     service_formset = ServiceProvidedFormSet()
 
@@ -49,10 +48,10 @@ class index(View):
 
 class ProcessService(View):
 
-    templateURL = 'clinicalservices/index.html'
+    templateURL = index().templateURL
 
-    def get(self, request):
-        return redirect("/clinicalservice")
+    form = ClinicalServiceForm()
+    ai_form = AIServiceForm()
 
     def post(self, request):
         serviceProvidedFormSet = ServiceProvidedFormSet(data=request.POST)
@@ -62,12 +61,19 @@ class ProcessService(View):
             if formset.is_valid():
                 formset.save()
 
-        return redirect("/clinicalservice")
+        context = {'form': self.form,
+                   'service_form': serviceProvidedFormSet,
+                   'ai_form': self.ai_form}
+
+        return render(request, self.templateURL, context)
 
 
 class AIServiceView(View):
-    def get(self, request):
-        return redirect('/clinicalservice')
+
+    templateURL = index.templateURL
+
+    form = ClinicalServiceForm()
+    serviceProvidedFormSet = ServiceProvidedFormSet()
 
     def post(self, request):
         AIServiceFormRequest = AIServiceForm(data=request.POST)
@@ -77,4 +83,8 @@ class AIServiceView(View):
             # save model
             AIServiceFormRequest.save()
 
-        return redirect('/clinicalservice')
+        context = {'form': self.form,
+                   'service_form': self.serviceProvidedFormSet,
+                   'ai_form': AIServiceFormRequest}
+
+        return render(request, self.templateURL, context)

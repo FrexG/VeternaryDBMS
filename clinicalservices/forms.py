@@ -59,5 +59,3 @@ class AIServiceForm(ModelForm):
             'quantity': forms.NumberInput(attrs={'class': 'form-control'})
 
         }
-        # validation
-        def cleaned_case_number(self, request):
