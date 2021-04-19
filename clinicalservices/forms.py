@@ -60,3 +60,4 @@ class AIServiceForm(ModelForm):
 
         }
         # validation
+        def cleaned_case_number(self, request):
