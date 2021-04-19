@@ -71,4 +71,10 @@ class AIServiceView(View):
 
     def post(self, request):
         AIServiceFormRequest = AIServiceForm(data=request.POST)
+        # Check for validity of form
+
+        if AIServiceFormRequest.is_valid():
+            # save model
+            AIServiceFormRequest.save()
+
         return redirect('/clinicalservice')
