@@ -27,3 +27,12 @@ label {
   font-family: monospace;
   color: rgb(121, 32, 0);
 }
+.avatar {
+  background-color: wheat;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+}
+.navigator {
+  background-color: red;
+}
