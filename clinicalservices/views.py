@@ -80,8 +80,10 @@ class AIServiceView(View):
         # Check for validity of form
 
         if AIServiceFormRequest.is_valid():
+            print("Is valid called")
             # save model
             AIServiceFormRequest.save()
+            AIServiceFormRequest = AIServiceForm()
 
         context = {'form': self.form,
                    'service_form': self.serviceProvidedFormSet,

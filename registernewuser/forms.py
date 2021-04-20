@@ -26,8 +26,8 @@ class NewCustomerForm(ModelForm):
             'mobile_number': forms.NumberInput(attrs={'class': 'form-control'}),
         }
 
-    def cleaned_customer_name(self):
-        customer_name = self.cleaned_data["customer_name"]
+    def clean_customer_name(self):
+        customer_name = self.cleaned_data.get("customer_name")
 
         match_object = re.findall('[0-9]+', str(customer_name))
 
@@ -37,8 +37,8 @@ class NewCustomerForm(ModelForm):
 
         return customer_name
 
-    def cleaned_case_number(self):
-        case_number = self.cleaned_data["case_number"]
+    def clean_case_number(self):
+        case_number = self.cleaned_data.get("case_number")
 
         if case_number == "":
             raise forms.ValidationError("Case Number can't be left empty")
