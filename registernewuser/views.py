@@ -3,6 +3,8 @@ from django.http import HttpResponse
 from django.views import View
 from .forms import NewCustomerForm
 
+from django.contrib import messages
+
 # Create your views here.
 
 
@@ -17,6 +19,8 @@ class index(View):
 
         if form.is_valid():
             form.save()
+            messages.success(
+                request, f"Succesfully registered user {form.cleaned_data.get('customer_name')}")
 
         context = {"form": form}
         return render(request, 'registernewuser/index.html', context)

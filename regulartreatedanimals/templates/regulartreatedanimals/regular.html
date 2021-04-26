@@ -1,5 +1,5 @@
-{% extends 'registernewuser/home.html' %} {%load static %}
- {%block title%}Regular Treated Animals{%endblock title%} {%block imports%}
+{% extends 'home/home.html' %} {%load static %} {%block title%}Regular Treated
+Animals{%endblock title%} {%block imports%}
 <script src="{% static 'regulartreatedanimals/js/script_regular.js'%}"></script>
 {%endblock imports%} {%block content%}
 <div class="col col-md-6">
@@ -30,8 +30,8 @@
     <div class="card-body">
       <form action="prescribe" method="POST">
         <div class="form-group" id="prescription-group">
-          {%csrf_token%} {{rx_formset.management_form}} 
-          {% for form in rx_formset%}
+          {%csrf_token%} {{rx_formset.management_form}} {% for form in
+          rx_formset%}
           <div class="card-header bg-light rx-form">{{form}}</div>
           <hr />
           {%endfor%}
