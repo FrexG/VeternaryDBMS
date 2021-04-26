@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'home.apps.HomeConfig',
     'registernewuser.apps.RegisternewuserConfig',
     'regulartreatedanimals.apps.RegulartreatedanimalsConfig',
     'clinicalservices.apps.ClinicalservicesConfig',
