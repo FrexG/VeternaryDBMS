@@ -30,8 +30,8 @@ Animals{%endblock title%} {%block imports%}
     <div class="card-body">
       <form action="prescribe" method="POST">
         <div class="form-group" id="prescription-group">
-          {%csrf_token%} {{rx_formset.management_form}} {% for form in
-          rx_formset%}
+          {%csrf_token%} {{rx_formset.management_form}} 
+          {% for form in rx_formset %}
           <div class="card-header bg-light rx-form">{{form}}</div>
           <hr />
           {%endfor%}
