@@ -11,7 +11,7 @@ from .forms import CreateUserForm
 
 class login(View):
     def get(self, request):
-        return HttpResponse("<h1>Login</h1>")
+        return render(request, 'home/login.html')
 
     def post(self, request):
         return HttpResponse("<h1>Login</h1>")
