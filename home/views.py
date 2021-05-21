@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.views import View
-
+from django.contrib import messages
 # import default django user creation form
 from django.contrib.auth.forms import UserCreationForm
 from .forms import CreateUserForm
@@ -31,6 +31,9 @@ class signup(View):
 
         if form.is_valid():
             form.save()
-            return redirect('/login')
+            user = form.cleaned_data.get("username")
+            messages.success(request, f"Account created for {user}")
+
+            return redirect('/')
 
         return render(request, 'home/signup.html', context)

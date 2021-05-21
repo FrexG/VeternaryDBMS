@@ -43,6 +43,11 @@
             <div id="register-link" class="text-right">
               <a href="{% url 'home:signup'%}" class="text-info">Register here</a>
             </div>
+            <span>
+                {%for message in messages%} 
+                    <p>{{message}}</p>
+                {%endfor%}
+            </span>
           </form>
         </div>
       </div>
