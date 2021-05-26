@@ -1,15 +1,15 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.views import View
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 # Import Models and Form
 from .forms import ClinicalServiceForm, ServiceProvidedForm, ServiceProvidedFormSet, AIServiceForm
 
 # Clinical Service Home page
 
 
-@login_required(login_url="/")
-class index(View):
+class index(LoginRequiredMixin, View):
+    login_url = "/"
     templateURL = 'clinicalservices/index.html'
     ai_form = AIServiceForm()
     service_formset = ServiceProvidedFormSet()
@@ -47,7 +47,6 @@ class index(View):
             return render(request, self.templateURL, context)
 
 
-@login_required(login_url="/")
 class ProcessService(View):
 
     templateURL = index().templateURL
@@ -70,7 +69,6 @@ class ProcessService(View):
         return render(request, self.templateURL, context)
 
 
-@login_required(login_url="/")
 class AIServiceView(View):
 
     templateURL = index.templateURL
