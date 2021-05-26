@@ -10,7 +10,7 @@ from .forms import CreateUserForm
 # Create your views here.
 
 
-class login(View):
+class Login(View):
     def get(self, request):
         return render(request, 'home/login.html')
 
@@ -19,10 +19,27 @@ class login(View):
         username = request.POST.get('username')
         password = request.POST.get('password')
 
-        return HttpResponse(f'<h1>{password}</h1>')
+        # authenticate user
+
+        authenticated_user = authenticate(
+            request, username=username, password=password)
+
+        if authenticated_user is not None:
+            login(request, authenticated_user)
+            return redirect('/register')
+        else:
+            messages.info(request, "Incorrect Username or Password")
+
+            return redirect('/')
 
 
-class signup(View):
+class Logout(View):
+    def get(self, request):
+        logout(request)
+        return redirect('/')
+
+
+class Signup(View):
     def get(self, request):
         form = CreateUserForm()
 
