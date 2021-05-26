@@ -1,14 +1,18 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.views import View
 from .forms import NewCustomerForm
 
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 # Create your views here.
 
 
-class index(View):
+class index(LoginRequiredMixin, View):
+    login_url = '/'
+    redirect_field_name = 'redirect_to'
+
     def get(self, request):
         form = NewCustomerForm()
         context = {"form": form}
