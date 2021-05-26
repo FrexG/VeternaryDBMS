@@ -4,6 +4,7 @@ from django.views import View
 from django.contrib import messages
 # import default django user creation form
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import authenticate, login, logout
 from .forms import CreateUserForm
 
 # Create your views here.
@@ -14,7 +15,11 @@ class login(View):
         return render(request, 'home/login.html')
 
     def post(self, request):
-        return HttpResponse("<h1>Login</h1>")
+        # get username
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        return HttpResponse(f'<h1>{password}</h1>')
 
 
 class signup(View):
