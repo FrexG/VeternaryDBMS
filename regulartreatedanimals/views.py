@@ -1,11 +1,14 @@
 from django.shortcuts import render, redirect
 from django.views import View
 from .forms import TreatedAnimalsForm, PrescriptionForm, PrescriptionFormSet
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 # Create your views here.
 
 
-class index(View):
+class index(LoginRequiredMixin, View):
+    login_url = "/"
+
     templateURL = 'regulartreatedanimals/regular.html'
     rx_formset = PrescriptionFormSet()
 
@@ -37,7 +40,8 @@ class index(View):
             return render(request, self.templateURL, context)
 
 
-class handlePrescription(View):
+class handlePrescription(LoginRequiredMixin, View):
+    login_url = "/"
 
     def get(self, request):
         return redirect("/regular")
