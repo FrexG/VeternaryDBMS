@@ -1,7 +1,5 @@
-{% extends 'registernewuser/home.html' %} {%load static %} 
-{% block title%}
-Clinical Service{% endblock title %} 
-{%block imports%}
+{% extends 'home/home.html' %} {%load static %} {% block title%} Clinical
+Service{% endblock title %} {%block imports%}
 <script src="{% static 'clinicalservices/clinical_service.js'%}"></script>
 {%endblock imports%} {% block content %}
 <div class="col-sm-6 mx-auto">
@@ -22,8 +20,7 @@ Clinical Service{% endblock title %}
           <h3 class="text-info">Add Services'</h3>
           <hr />
           <div class="form-group" id="service-group">
-            {%csrf_token%} 
-            {{service_form.management_form}}
+            {%csrf_token%} {{service_form.management_form}}
              {% for form in service_form %}
             <div class="card-header bg-light service-form form-control">
               {{form}}
