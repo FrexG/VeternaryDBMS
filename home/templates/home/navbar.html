@@ -6,7 +6,7 @@
 </style>
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <a class="navbar-brand" href="#">Smart Vet</a>
+  <a class="navbar-brand" href="#"><h2>Smart Vet</h2></a>
   <button
     class="navbar-toggler"
     type="button"
@@ -20,13 +20,21 @@
   </button>
   <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
     <div class="navbar-nav">
-      <a class="nav-link active" href="#"
-        >Home <span class="sr-only">(current)</span></a
+      <a class="nav-link active" href="{% url 'registernewuser:index'%}"
+        >Registration <span class="sr-only">(current)</span></a
       >
-      <a class="nav-link" href="#">Features</a>
-      <a class="nav-link" href="#">Pricing</a>
-      <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true"
-        >Disabled</a
+      <a class="nav-link" href="{% url 'regulartreatedanimals:index'%}"
+        >Treatment</a
+      >
+      <a class="nav-link" href="{% url 'clinicalservices:index'%}"
+        >Clinical Service</a
+      >
+      <a
+        class="nav-link"
+        href="{%url 'vaccineandparasite:index'%}"
+        tabindex="-1"
+        aria-disabled="true"
+        >Vaccination and Parasite Treatment</a
       >
     </div>
   </div>

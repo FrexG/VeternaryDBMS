@@ -5,5 +5,5 @@ from .views import index
 app_name = "registernewuser"
 
 urlpatterns = [
-    path('/', index.as_view()),
+    path('/', index.as_view(), name="index"),
 ]
