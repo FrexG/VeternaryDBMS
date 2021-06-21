@@ -9,9 +9,8 @@
 }
 
 h3 {
-  font-family: monospace;
+  font-family: open sans;
   font-size: x-large;
-  color: rgb(1, 97, 25);
   text-transform: uppercase;
   text-align: center;
   font-weight: bold;
@@ -20,9 +19,6 @@ h3 {
   background-color: blanchedalmond;
 }
 
-.card-header-font {
-  color: rgb(36, 53, 8);
-}
 label {
   font-family: monospace;
   color: rgb(121, 32, 0);

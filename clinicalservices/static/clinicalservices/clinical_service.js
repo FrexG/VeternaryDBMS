@@ -36,8 +36,7 @@ window.onload = () =>{
       form_container.insertBefore(newForm,addButton);
 
       total_form.setAttribute("value",`${totalFormNumber + 1}`);
-      
-      return;
+    
     }
 
     const removeElement = (element,totalForms,e) =>{

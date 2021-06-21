@@ -17,3 +17,17 @@
   #register-link {
   margin-top: -85px;
 }
+.card-header {
+  font-family: open sans;
+  text-align: center;
+}
+.helptext {
+  font-family: open sans;
+  font-size: smaller;
+  color: cadetblue;
+}
+li {
+  font-family: open sans;
+  font-size: smaller;
+  color: cadetblue;
+}

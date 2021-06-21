@@ -1,7 +1,12 @@
 <style>
+  .navbar-brand{
+    font-family: Audiowide;
+  }
   #username {
-    color: white;
-    font-size: large;
+    color:coral;
+    font-size: larger;
+    font-family: Open Sans;
+    font-weight: bold;
   }
 </style>
 
@@ -20,28 +25,27 @@
   </button>
   <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
     <div class="navbar-nav">
-      <a class="nav-link active" href="{% url 'registernewuser:index'%}"
-        >Registration <span class="sr-only">(current)</span></a
-      >
-      <a class="nav-link" href="{% url 'regulartreatedanimals:index'%}"
-        >Treatment</a
-      >
-      <a class="nav-link" href="{% url 'clinicalservices:index'%}"
-        >Clinical Service</a
-      >
+      <a class="nav-link active" href="{% url 'registernewuser:index'%}">
+        <button class="btn btn-secondary">Registration</button></a>
+      <a class="nav-link" href="{% url 'regulartreatedanimals:index'%}">
+      <button class="btn btn-danger">Treatment</button></</a>
+
+      <a class="nav-link" href="{% url 'clinicalservices:index'%}">
+      <button class="btn btn-warning">Clinical Service</button></<a> 
       <a
         class="nav-link"
         href="{%url 'vaccineandparasite:index'%}"
         tabindex="-1"
         aria-disabled="true"
-        >Vaccination and Parasite Treatment</a
+        ><button class="btn btn-light">Vaccine and Parasite</button></</a
       >
+    
     </div>
   </div>
   <span id="username" class="m2">Hello, {{request.user}}</span>
   <span id="logout">
     <a href="{% url 'home:logout' %}">
-      <button class="btn btn-md btn-warning m-2">Logout</button>
+      <button class="btn btn-sm btn-warning m-2">Log out</button>
     </a>
   </span>
 </nav>
