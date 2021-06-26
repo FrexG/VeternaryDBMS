@@ -24,6 +24,9 @@ class ClinicalService(models.Model):
     service_date = models.DateField(
         "Service Date", auto_now=False, auto_now_add=True)
 
+    # Service type
+    service = models.ManyToManyField(Service)
+
     def __str__(self):
         return str(self.case_number)
 
