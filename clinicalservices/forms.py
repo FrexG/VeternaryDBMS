@@ -13,33 +13,8 @@ class ClinicalServiceForm(ModelForm):
 
         widgets = {
             'case_number': forms.NumberInput(attrs={'class': 'form-control'}),
+            'service_type': forms.SelectMultiple()
         }
-
-
-class ServiceProvidedForm(ModelForm):
-    def clean_service_type(self, *args, **kwargs):
-
-        service_type = self.cleaned_data.get("service_type")
-        # Check if service_type is filled and is valid
-
-        if service_type == "":
-
-            raise forms.ValidationError("Please, select a customer")
-
-        return service_type
-
-    class Meta:
-        model = ServiceProvided
-        fields = "__all__"
-
-        widgets = {
-            'service_type': forms.Select(attrs={'class': 'form-control'}),
-            'clinical_service': forms.TextInput(attrs={'class': 'form-control', 'type': 'hidden'})
-        }
-    # Form Validation
-
-
-ServiceProvidedFormSet = formset_factory(ServiceProvidedForm, extra=0)
 
 
 # AIService Form

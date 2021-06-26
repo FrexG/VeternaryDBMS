@@ -16,31 +16,7 @@ Service{% endblock title %} {%block imports%}
             <button type="submit" class="btn btn-sm btn-info">Ok</button>
           </div>
         </form>
-        <form action="processservice" method="POST">
-          <h3 class="text-info">Add Services'</h3>
-          <hr />
-          <div class="form-group" id="service-group">
-            {%csrf_token%} {{service_form.management_form}}
-             {% for form in service_form %}
-            <div class="card-header bg-light service-form form-control">
-              {{form}}
-            </div>
-            {%endfor%}
-
-            <input
-              type="button"
-              value="Add"
-              class="btn btn-sm btn-success m-2"
-              id="add"
-            />
-          </div>
-
-          <input
-            type="submit"
-            value="Save Services"
-            class="btn btn-md btn-primary form-control"
-          />
-        </form>
+       
       </div>
     </div>
   </div>
