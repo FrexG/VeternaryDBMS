@@ -39,7 +39,7 @@ class AIService(models.Model):
         Customer, verbose_name="Case Number", on_delete=models.CASCADE)
     # Service type, this will be prefield by service type = AI
     service_type = models.ForeignKey(
-        Service, verbose_name="Service Type", on_delete=models.CASCADE)
+        Service, verbose_name="Service Type", on_delete=models.CASCADE, default=1)
 
     service_date = models.DateField(
         "Service Date", auto_now=False, auto_now_add=True)
