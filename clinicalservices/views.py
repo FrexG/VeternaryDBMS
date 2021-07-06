@@ -17,7 +17,6 @@ class index(LoginRequiredMixin, View):
         form = ClinicalServiceForm()
 
         context = {'form': form,
-                   'service_form': self.service_formset,
                    'ai_form': self.ai_form}
 
         return render(request, self.templateURL, context)

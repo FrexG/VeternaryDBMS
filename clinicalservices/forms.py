@@ -1,7 +1,7 @@
 from django import forms
 from django.forms import ModelForm, formset_factory
 
-from .models import ClinicalService, AIService, ServiceProvided
+from .models import ClinicalService, AIService
 # regular expression
 import re
 

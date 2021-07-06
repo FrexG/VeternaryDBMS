@@ -60,15 +60,3 @@ class AIService(models.Model):
 
     def __str__(self):
         return str(self.case_number)
-
-
-class ServiceProvided(models.Model):
-    # Services Table
-    service_type = models.ForeignKey(
-        Service, verbose_name="Service Type", on_delete=models.CASCADE)
-    # Many to One r/n ship with ClinicalService Table
-    clinical_service = models.ForeignKey(
-        ClinicalService, verbose_name="Service ID", on_delete=models.CASCADE)
-
-    def __str__(self):
-        return str(self.service_type)
