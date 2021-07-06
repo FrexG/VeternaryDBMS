@@ -42,14 +42,21 @@ class index(LoginRequiredMixin, View):
 
 class AIServiceView(View):
 
-    templateURL = index.templateURL
+    templateURL = 'clinicalservices/index.html'
 
     form = ClinicalServiceForm()
+    ai_form = AIServiceForm()
+
+    def get(self, request):
+        context = {'form': self.form,
+                   'ai_form': self.ai_form}
+
+        return render(request, self.templateURL, context)
 
     def post(self, request):
         AIServiceFormRequest = AIServiceForm(data=request.POST)
         # Check for validity of form
-
+        print("Called")
         if AIServiceFormRequest.is_valid():
             print("Is valid called")
             # save model

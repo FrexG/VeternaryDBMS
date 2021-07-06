@@ -27,7 +27,7 @@ Service{% endblock title %} {%block imports%}
     </div>
     <div class="card-body">
       <div class="form-group font-weight-bold text-secondary text-capitalize">
-        <form action="aiservice" method="POST">
+        <form action="{% url 'clinicalservices:aiservice'%}" method="POST">
           {%csrf_token%} {{ai_form}}
           <input
             type="submit"
