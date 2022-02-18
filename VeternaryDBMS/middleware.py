@@ -5,7 +5,9 @@ from django.shortcuts import redirect
 class GetUserMiddleware:
     VET_ACCESS = ['regular', 'clinicalservice',
                   'parasite&vaccination', 'logout']
+
     CASHIER_ACCESS = ['register', 'logout']
+    
     ADMIN_ACCESS = VET_ACCESS + CASHIER_ACCESS
 
     def __init__(self, get_response):
@@ -16,7 +18,7 @@ class GetUserMiddleware:
         return response
 
     def process_view(self, request, view_func, *args, **kwargs):
-        # get role of each loged in use
+        # get role of each loged in user
 
         if str(request.user) != "AnonymousUser":
             role = Profile.objects.get(user=request.user).role
