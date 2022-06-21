@@ -1,0 +1,11 @@
+{% load static %} 
+
+{% for service in services %}
+<form method="post" action={% url 'cashier:update_service' service.id %}>
+	{% csrf_token %}
+	<em>Name:</em>{{service.case_number.customer_name}}
+	<em>Service Type:</em>{{service.service_type.service_type}}
+	<em>Price:</em>{{service.service_type.price}}<em> birr</em>
+	<input type="submit" value="Update" />
+</form>
+{%endfor%}

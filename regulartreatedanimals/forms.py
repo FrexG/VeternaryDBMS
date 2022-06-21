@@ -1,9 +1,7 @@
 from django.forms import ModelForm
 from django import forms
 from django.forms import modelformset_factory, formset_factory
-
 from .models import TreatedAnimal, Prescription
-from registernewuser.models import Customer
 
 import re
 
@@ -16,7 +14,7 @@ class TreatedAnimalsForm(ModelForm):
         fields = "__all__"
 
         widgets = {
-            'case_number': forms.TextInput(attrs={'class': 'form-control'}),
+            'case_number': forms.Select(attrs={'class': 'form-control'}),
             't0': forms.NumberInput(attrs={'class': 'form-control'}),
             'pr': forms.NumberInput(attrs={'class': 'form-control'}),
             'rr': forms.NumberInput(attrs={'class': 'form-control'}),
@@ -24,17 +22,13 @@ class TreatedAnimalsForm(ModelForm):
             'dx': forms.Textarea(attrs={'class': 'form-control', 'style': textAreaSize}),
             'differential_diag': forms.Textarea(attrs={'class': 'form-control', 'style': textAreaSize}),
             'rumen_motility': forms.Textarea(attrs={'class': 'form-control', 'style': textAreaSize}),
-
         }
 
     # Add form validation
-
-
-class PrescriptionForm(ModelForm):
-
+class PrescriptionForm(ModelForm):       
     class Meta:
         model = Prescription
-        fields = "__all__"
+        exclude = ["paid"]
 
         widgets = {
             'rx': forms.Select(attrs={'class': 'form-control'}),
@@ -43,6 +37,13 @@ class PrescriptionForm(ModelForm):
             'duration': forms.NumberInput(attrs={'class': 'form-control'}),
             'treatment': forms.TextInput(attrs={'class': 'form-control', 'type': 'hidden'}),
         }
+    def clean_quantity(self):
+        quantity = self.cleaned_data.get("quantity")
+        if quantity < 1:
+            raise forms.ValidationError(
+                "Quantity must be greater than 0!!")
+        return quantity
 
 
-PrescriptionFormSet = formset_factory(PrescriptionForm, extra=0)
+#PrescriptionFormSet = formset_factory(PrescriptionForm, extra=0)
+PrescriptionFormSet = modelformset_factory(Prescription,form=PrescriptionForm,extra=1)

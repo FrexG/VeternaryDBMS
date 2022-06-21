@@ -1,6 +1,5 @@
 from django import forms
-from django.forms import ModelForm, formset_factory
-
+from django.forms import ModelForm,modelformset_factory
 from .models import ClinicalService, AIService
 # regular expression
 import re
@@ -9,14 +8,30 @@ import re
 class ClinicalServiceForm(ModelForm):
     class Meta:
         model = ClinicalService
-        fields = "__all__"
+        exclude = ["paid"]
 
         widgets = {
-            'case_number': forms.NumberInput(attrs={'class': 'form-control'}),
-            'service_type': forms.SelectMultiple()
+            'case_number': forms.Select(attrs={'class': 'form-control'}),
+            'service_type': forms.Select()
         }
 
+    def clean(self):
+        super(ClinicalServiceForm, self).clean()
+    
+        print("cleaning case number")
+        service_type = self.cleaned_data.get("service_type")
+        
 
+        # check if case number is  not empty
+        if service_type == None:
+            raise forms.ValidationError(
+                "Please select a service type!!")
+        return self.cleaned_data
+        
+
+        
+
+ClinicalServiceFormset = modelformset_factory(ClinicalService,form=ClinicalServiceForm,extra=1)
 # AIService Form
 
 

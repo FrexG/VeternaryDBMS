@@ -22,9 +22,9 @@ class index(LoginRequiredMixin, View):
         form = NewCustomerForm(request.POST)
 
         if form.is_valid():
-            form.save()
+            obj = form.save()
             messages.success(
-                request, f"Succesfully registered user {form.cleaned_data.get('customer_name')}")
+                request, f"User:{form.cleaned_data.get('customer_name')} Case Num:{obj.pk}")
 
         context = {"form": form}
         return render(request, 'registernewuser/index.html', context)

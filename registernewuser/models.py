@@ -1,4 +1,5 @@
 from django.db import models
+
 from datetime import date
 # Create your models here.
 
@@ -47,7 +48,7 @@ class Vaccine(models.Model):
 class Drug(models.Model):
     drug_type = models.CharField(max_length=100)
     price = models.DecimalField(
-        max_digits=6, decimal_places=4, default=000000.0000)
+        max_digits=10, decimal_places=4, default=000000.0000)
 
     def __str__(self):
         return self.drug_type
@@ -62,7 +63,7 @@ class Customer(models.Model):
 
     kebele = models.ForeignKey(Kebele, on_delete=models.CASCADE)
 
-    case_number = models.PositiveIntegerField(primary_key=True, null=False)
+    case_number = models.AutoField(primary_key=True, null=False)
 
     species = models.ForeignKey(Species, on_delete=models.CASCADE)
 
@@ -79,10 +80,10 @@ class Customer(models.Model):
     mobile_number = models.PositiveIntegerField()
 
     def __str__(self):
-        return f'{self.customer_name} : {str(self.case_number)}'
+        return str(f"{self.case_number}:{self.customer_name}")
 
-    def getCaseNumber(self): return case_number
+    def getCaseNumber(self): return self.case_number
 
-    def getSex(self): return sex
+    def getSex(self): return self.sex
 
-    def getServiceDate(self): return service_date
+    def getServiceDate(self): return self.service_date

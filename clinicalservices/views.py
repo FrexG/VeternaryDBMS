@@ -1,9 +1,10 @@
+import re
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 # Import Models and Form
-from .forms import ClinicalServiceForm, AIServiceForm
+from .forms import ClinicalServiceForm, AIServiceForm,ClinicalServiceFormset
 
 # Clinical Service Home page
 
@@ -12,33 +13,41 @@ class index(LoginRequiredMixin, View):
     login_url = "/"
     templateURL = 'clinicalservices/index.html'
     ai_form = AIServiceForm()
+    form = ClinicalServiceFormset()
 
     def get(self, request):
-        form = ClinicalServiceForm()
-
-        context = {'form': form,
+        context = {'form': self.form,
                    'ai_form': self.ai_form}
 
         return render(request, self.templateURL, context)
 
     def post(self, request):
         # Process ClinicalServiceForm
-        serviceFormRequest = ClinicalServiceForm(request.POST)
+        serviceFormset = ClinicalServiceFormset(request.POST)
         # Check if it is a valid
-        if serviceFormRequest.is_valid():
-            print("is valid!!")
-            # save the form values to model
-            service_form = serviceFormRequest.save()
+        if serviceFormset.is_valid():
+            # Save the data
+            serviceFormset.save()
+            # Redirect to the index page
+            return redirect('/clinicalservice')
+        # If not valid, return the form with errors
+        context = {'form': serviceFormset,
+                   'ai_form': self.ai_form}
+        return render(request, self.templateURL, context)
+        """
+        for formset in serviceFormset:
+            if formset.is_valid():
+                # save the form values to model
+                service_form = formset.save()
+            else:
+                # return the form with errors
+                context = {'form': serviceFormset,
+                           'ai_form': self.ai_form}
+                return render(request, self.templateURL, context)
 
-            context = {'form': serviceFormRequest,
-                       'ai_form': self.ai_form}
-
-            return render(request, self.templateURL, context)
-        else:
-            context = {'form': serviceFormRequest,
-                       'ai_form': self.ai_form}
-            return render(request, self.templateURL, context)
-
+        return redirect("/clinicalservice")
+        """
+        
 
 class AIServiceView(View):
 

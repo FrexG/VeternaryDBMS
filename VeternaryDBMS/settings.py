@@ -32,10 +32,12 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'home.apps.HomeConfig',
-    'registernewuser.apps.RegisternewuserConfig',
-    'regulartreatedanimals.apps.RegulartreatedanimalsConfig',
-    'clinicalservices.apps.ClinicalservicesConfig',
+    'home',
+    'registernewuser',
+    'regulartreatedanimals',
+    'clinicalservices',
+    'parasitetreatment',
+    'cashier',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -50,7 +52,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'VeternaryDBMS.middleware.GetUserMiddleware',
+    #'VeternaryDBMS.middleware.GetUserMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
@@ -124,3 +126,4 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'

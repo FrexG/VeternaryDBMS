@@ -11,11 +11,12 @@ class index(LoginRequiredMixin, View):
 
     templateURL = 'regulartreatedanimals/regular.html'
     rx_formset = PrescriptionFormSet()
+    form = TreatedAnimalsForm()
 
     def get(self, request):
-        form = TreatedAnimalsForm()
+        
 
-        context = {'form': form,
+        context = {'form': self.form,
                    'rx_formset': self.rx_formset}
         return render(request, self.templateURL, context)
 
@@ -50,8 +51,8 @@ class handlePrescription(LoginRequiredMixin, View):
 
         prescriptionFormSet = PrescriptionFormSet(data=request.POST)
 
-        for formset in prescriptionFormSet:
-            if formset.is_valid():
-                formset.save()
+        if prescriptionFormSet.is_valid():
+            prescriptionFormSet.save()
+            return redirect("/regular")
 
         return redirect("/regular")

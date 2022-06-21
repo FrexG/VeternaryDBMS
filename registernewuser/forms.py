@@ -20,18 +20,6 @@ class NewCustomerForm(ModelForm):
 
         return customer_name
 
-    def clean_case_number(self):
-        case_number = self.cleaned_data.get("case_number")
-
-        if case_number == "":
-            raise forms.ValidationError("Case Number can't be left empty")
-        for instance in Customer.objects.all():
-            if instance.case_number == case_number:
-                raise forms.ValidationError(
-                    "This case number already exists!!")
-
-        return case_number
-
     class Meta:
         textAreaSize = "height: 100px;"
         model = Customer
@@ -41,7 +29,7 @@ class NewCustomerForm(ModelForm):
             'customer_name': forms.TextInput(attrs={'class': 'form-control'}),
             'sub_kebele': forms.TextInput(attrs={'class': 'form-control'}),
             'kebele': forms.Select(attrs={'class': 'form-control'}),
-            'case_number': forms.NumberInput(attrs={'class': 'form-control'}),
+            'case_number': forms.Select(attrs={'class': 'form-control'}),
             'species': forms.Select(attrs={'class': 'form-control'}),
             'breed': forms.Select(attrs={'class': 'form-control'}),
             'number_of_animals': forms.NumberInput(attrs={'class': 'form-control'}),

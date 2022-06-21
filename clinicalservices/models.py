@@ -18,14 +18,17 @@ class Service(models.Model):
 
 class ClinicalService(models.Model):
     # Fields for ClinicalService table
+    id = models.AutoField(primary_key=True)
     case_number = models.ForeignKey(
         Customer, verbose_name="Case Number", on_delete=models.CASCADE)
     # refernce to user id will be added later
     service_date = models.DateField(
-        "Service Date", auto_now=False, auto_now_add=True)
+        "Service Date", auto_now_add=True)
 
     # Service type
-    service = models.ManyToManyField(Service)
+    service_type = models.ForeignKey(Service,on_delete=models.PROTECT)
+
+    paid = models.BooleanField(null=False,default=False)
 
     def __str__(self):
         return str(self.case_number)

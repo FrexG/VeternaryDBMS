@@ -1,5 +1,4 @@
 from django.db import models
-
 # Import tables from registernewuser app
 from registernewuser.models import Customer, Drug, Vaccine
 
@@ -7,11 +6,9 @@ from registernewuser.models import Customer, Drug, Vaccine
 
 
 class Unit(models.Model):
-    unit_name = models.TextField("Unit Name", max_length=50)
-
-    def __str__(self):
+    unit_name = models.CharField(max_length=100,null=False)
+    def __str__(self) -> str:
         return str(self.unit_name)
-
 
 class TreatedAnimal(models.Model):
     case_number = models.ForeignKey(
@@ -60,6 +57,8 @@ class Prescription(models.Model):
     quantity = models.PositiveIntegerField("Quantity")
 
     duration = models.PositiveIntegerField("Follow Up Duration")
+
+    paid = models.BooleanField(null=False, default=False)
 
     def __str__(self):
         return str(f'{self.rx} : {self.treatment}')
