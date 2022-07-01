@@ -1,0 +1,51 @@
+#body {
+	background-color: blanchedalmond;
+	margin: 0;
+	padding: 0;
+	font-family: monospace;
+	font-size: medium;
+	height: 100%;
+	width: 100%;
+}
+#sidebar-wrapper {
+	padding: 10px;
+	width: fit-content;
+	font-family: monospace;
+	height: 100%;
+}
+#summary {
+	height: 40vh;
+}
+#cntx_disease {
+	height: 40vh;
+}
+a:hover {
+	font-style: italic;
+	color: teal;
+}
+a:focus {
+	font-style: italic;
+	background-color: teal;
+}
+.chart_canvas {
+	box-shadow: 0 0 10px #000;
+	border-radius: 5%;
+}
+.card {
+	height: fit-content;
+}
+.card-body {
+	text-align: center;
+	font-size: 1rem;
+	font-family: monospace;
+}
+.card-header {
+	font-size: 0.7rem;
+	font-family: monospace;
+	text-align: center;
+}
+.card-footer {
+	text-align: center;
+	font-size: 0.8rem;
+	font-family: monospace;
+}

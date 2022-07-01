@@ -19,7 +19,7 @@ class TreatedAnimalsForm(ModelForm):
             'pr': forms.NumberInput(attrs={'class': 'form-control'}),
             'rr': forms.NumberInput(attrs={'class': 'form-control'}),
             'clinical_finding': forms.Textarea(attrs={'class': 'form-control', 'style': textAreaSize}),
-            'dx': forms.Textarea(attrs={'class': 'form-control', 'style': textAreaSize}),
+            'dx': forms.SelectMultiple(attrs={'class': 'form-control'}),
             'differential_diag': forms.Textarea(attrs={'class': 'form-control', 'style': textAreaSize}),
             'rumen_motility': forms.Textarea(attrs={'class': 'form-control', 'style': textAreaSize}),
         }
@@ -35,7 +35,8 @@ class PrescriptionForm(ModelForm):
             'unit': forms.Select(attrs={'class': 'form-control'}),
             'quantity': forms.NumberInput(attrs={'class': 'form-control'}),
             'duration': forms.NumberInput(attrs={'class': 'form-control'}),
-            'treatment': forms.TextInput(attrs={'class': 'form-control', 'type': 'hidden'}),
+            'treatment': forms.Select(attrs={'class': 'form-control'}),
+            'total': forms.NumberInput(attrs={'class': 'form-control','type': 'hidden'}),
         }
     def clean_quantity(self):
         quantity = self.cleaned_data.get("quantity")
@@ -44,6 +45,14 @@ class PrescriptionForm(ModelForm):
                 "Quantity must be greater than 0!!")
         return quantity
 
-
-#PrescriptionFormSet = formset_factory(PrescriptionForm, extra=0)
-PrescriptionFormSet = modelformset_factory(Prescription,form=PrescriptionForm,extra=1)
+    def clean_total(self):
+        quantity = self.cleaned_data.get("quantity")
+        print(f"Quantity: {quantity}")
+        rx_price = self.cleaned_data.get("rx").price
+        print(f"RX Price: {rx_price}")
+        total = quantity * rx_price
+        print(f"Total: {total}")
+        return total
+        
+PrescriptionFormSet = formset_factory(PrescriptionForm,extra=0)
+#PrescriptionFormSet = modelformset_factory(Prescription,form=PrescriptionForm,extra=1)

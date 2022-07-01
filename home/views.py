@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from django.views import View
 from django.contrib import messages
 # import default django user creation form
+from .models import Profile
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login, logout
 from .forms import CreateUserForm
@@ -25,6 +26,12 @@ class Login(View):
 
         if authenticated_user is not None:
             login(request, authenticated_user)
+
+            if Profile.objects.get(user=authenticated_user).role == 'Vet':
+                return redirect('/regular')
+            elif Profile.objects.get(user=authenticated_user).role == 'Cashier':
+                return redirect('/cashier')
+
             return redirect('/register')
         else:
             messages.info(request, "Incorrect Username or Password")

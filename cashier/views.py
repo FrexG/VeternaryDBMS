@@ -6,6 +6,8 @@ from django.views.generic.edit import UpdateView
 
 # import models
 from clinicalservices.models import ClinicalService
+from regulartreatedanimals.models import Prescription
+from parasitetreatment.models import ParasitePrescription
 # Create your views here.
 
 class Index(LoginRequiredMixin,View):
@@ -14,7 +16,18 @@ class Index(LoginRequiredMixin,View):
 
     def get(self,request):
         clinical_services = ClinicalService.objects.filter(paid=False)
-        return render(request,template_name=self.templateURL,context={"services":clinical_services})
+        prescription = Prescription.objects.filter(paid = False)
+        parasite_prescription = ParasitePrescription.objects.filter(paid = False)
+
+        print(f"Count: {prescription.count()}")
+        #print(parasite_prescription[0].treatment)
+
+        context={"services":clinical_services,
+                "parasite_prescriptions":parasite_prescription,
+                "prescriptions":prescription
+                }
+
+        return render(request,template_name=self.templateURL,context=context)
 
 class UpdateService(LoginRequiredMixin,View):
     def get(self,request):
@@ -25,3 +38,45 @@ class UpdateService(LoginRequiredMixin,View):
 
         return redirect("/cashier")
 
+class DeleteService(LoginRequiredMixin,View):
+    def get(self,request):
+        return redirect("cashier/")
+
+    def post(self,request,pk):
+        ClinicalService.objects.get(id = pk).delete()
+        return redirect("/cashier")
+
+class UpdatePrescription(LoginRequiredMixin,View):
+    def get(self,request):
+        return redirect("cashier/")
+
+    def post(self,request,pk):
+        Prescription.objects.filter(id = pk).update(paid=True)
+
+        return redirect("/cashier")
+
+class DeletePrescription(LoginRequiredMixin,View):
+    def get(self,request):
+        return redirect("cashier/")
+
+    def post(self,request,pk):
+        Prescription.objects.get(id = pk).delete()
+        return redirect("/cashier")
+
+
+class UpdateParasitePrescription(LoginRequiredMixin,View):
+    def get(self,request):
+        return redirect("cashier/")
+
+    def post(self,request,pk):
+        ParasitePrescription.objects.filter(id = pk).update(paid=True)
+
+        return redirect("/cashier")
+        
+class DeleteParasitePrescription(LoginRequiredMixin,View):
+    def get(self,request):
+        return redirect("cashier/")
+
+    def post(self,request,pk):
+        ParasitePrescription.objects.get(id = pk).delete()
+        return redirect("/cashier")

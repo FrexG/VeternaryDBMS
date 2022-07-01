@@ -1,0 +1,31 @@
+{% load static %}
+<div id="sidebar-wrapper" class="bg-dark">
+	<ul class="list-group">
+		<a
+			href="{% url 'dashboard:regular_treatment_summary' %}"
+			class="list-group-item mb-5"
+			id="sidebar-regular-treatment-summary"
+		>
+			Regular Treatment
+		</a>
+		<a
+			href="{% url 'dashboard:clinical_service_summary' %}"
+			class="list-group-item mb-5"
+			id="sidebar-clinical-servie-summary"
+			>Clinical Service</a
+		>
+		<a
+			href="{% url 'dashboard:parasite_treatment_summary' %}"
+			class="list-group-item mb-5"
+			id="sidebar-parasite-treatment-summary"
+			>Parasite Treatment</a
+		>
+		<a href="#" class="list-group-item mb-5" id="sidebar-vaccination-summary"
+			>Vaccination</a
+		>
+		<a href="#" class="list-group-item mb-5" id="sidebar-ai-summary"
+			>Artificial Insemination</a
+		>
+	</ul>
+</div>
+<!-- /#wrapper -->

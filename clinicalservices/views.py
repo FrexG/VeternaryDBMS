@@ -1,5 +1,5 @@
 import re
-from django.shortcuts import render, redirect
+from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -24,21 +24,16 @@ class index(LoginRequiredMixin, View):
     def post(self, request):
         # Process ClinicalServiceForm
         serviceFormset = ClinicalServiceFormset(request.POST)
-        # Check if it is a valid
-        if serviceFormset.is_valid():
-            # Save the data
-            serviceFormset.save()
-            # Redirect to the index page
-            return redirect('/clinicalservice')
-        # If not valid, return the form with errors
-        context = {'form': serviceFormset,
-                   'ai_form': self.ai_form}
-        return render(request, self.templateURL, context)
-        """
+        # Set initial valuus for formset case_holder
+         
         for formset in serviceFormset:
             if formset.is_valid():
                 # save the form values to model
-                service_form = formset.save()
+                service_form = formset.save(commit=False)
+                # set the case_holder to the current user
+                service_form.case_holder = request.user
+                # save the form
+                service_form.save()
             else:
                 # return the form with errors
                 context = {'form': serviceFormset,
@@ -46,7 +41,6 @@ class index(LoginRequiredMixin, View):
                 return render(request, self.templateURL, context)
 
         return redirect("/clinicalservice")
-        """
         
 
 class AIServiceView(View):
@@ -65,11 +59,13 @@ class AIServiceView(View):
     def post(self, request):
         AIServiceFormRequest = AIServiceForm(data=request.POST)
         # Check for validity of form
-        print("Called")
         if AIServiceFormRequest.is_valid():
             print("Is valid called")
             # save model
-            AIServiceFormRequest.save()
+            ai_form = AIServiceFormRequest.save(commit=False)
+            ai_form.case_holder = request.user
+            ai_form.save()
+
             AIServiceFormRequest = AIServiceForm()
 
         context = {'form': self.form,

@@ -22,7 +22,7 @@ class Breed(models.Model):
     def __str__(self):
         return self.breed_name
 
-    def getBreedName(self): return str(breed_name)
+    def getBreedName(self): return str(self.breed_name)
 
 
 class Species(models.Model):
@@ -87,3 +87,4 @@ class Customer(models.Model):
     def getSex(self): return self.sex
 
     def getServiceDate(self): return self.service_date
+

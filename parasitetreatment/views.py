@@ -1,12 +1,11 @@
 from django.shortcuts import render, redirect
 from django.views import View
 from .forms import ParasiteTreatmentForm
-from regulartreatedanimals.forms import PrescriptionFormSet
+from .forms import PrescriptionFormSet
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 # Create your views here.
-
 
 class index(LoginRequiredMixin, View):
     login_url = "/"
@@ -27,7 +26,7 @@ class index(LoginRequiredMixin, View):
         if filledForm.is_valid():
             treatmentID = filledForm.save()
 
-            initial_treatment = [{'treatment': treatmentID}]
+            initial_treatment = [{'treatment': treatmentID,"duration":1}]
 
             filled_rx_formset = PrescriptionFormSet(initial=initial_treatment)
 
@@ -54,6 +53,7 @@ class handlePrescription(LoginRequiredMixin, View):
 
         for formset in prescriptionFormSet:
             if formset.is_valid():
+                print("It is valid")
                 formset.save()
 
         return redirect("/parasitetreatment")

@@ -6,7 +6,7 @@ class GetUserMiddleware:
     VET_ACCESS = ['regular', 'clinicalservice',
                   'parasite&vaccination', 'logout']
 
-    CASHIER_ACCESS = ['register', 'logout']
+    CASHIER_ACCESS = ['logout','cashier']
     
     ADMIN_ACCESS = VET_ACCESS + CASHIER_ACCESS
 
@@ -29,5 +29,8 @@ class GetUserMiddleware:
                 return redirect("/regular")
             # If user is logged in as a Cashier
             if str(role) == 'Cashier' and path not in self.CASHIER_ACCESS:
-                return redirect("/register")
+                return redirect("/cashier")  
             # grant the admin access to all pages
+        
+
+
