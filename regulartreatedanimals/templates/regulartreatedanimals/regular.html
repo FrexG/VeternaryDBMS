@@ -2,14 +2,50 @@
 Animals{%endblock title%} {%block imports%}
 <script src="{% static 'regulartreatedanimals/js/script_regular.js'%}"></script>
 {%endblock imports%} {%block content%}
-<div class="col col-md-6">
+<div class="col col-md-4">
+	<div class="row mx-auto">
+		<form
+			action="{% url 'regulartreatedanimals:search_treatment_history' %}"
+			method="POST"
+		>
+			{%csrf_token%}{{search_form}}
+
+			<input
+				type="submit"
+				value="Search History"
+				class="btn btn-sm btn-primary mt-2 mb-2 form-control"
+			/>
+		</form>
+	</div>
+	<!--prettier-ignore-->
+	{% if treatment_history %}
+	<div class="row mx-auto">
+		<table class="table table-striped">
+			<tr>
+				<th>Treatment Date</th>
+				<th>Clinical Finding</th>
+				<th>Diff.Diag</th>
+			</tr>
+			{% for treatment in treatment_history %}
+			<tr>
+				<td>{{treatment.service_date}}</td>
+				<td>{{treatment.clinical_finding}}</td>
+				<td>{{treatment.differential_diag}}</td>
+			</tr>
+			{% endfor %}
+		</table>
+	</div>
+	{% endif %}
+	<!-- prettier-ignore-attribute -->
+</div>
+<div class="col col-md-4">
 	<div class="card">
 		<div class="card-header bg-warning">
 			<h3>Regular Treatment</h3>
 		</div>
 		<div class="card-body">
 			<div class="form-group">
-				<form action="" method="POST">
+				<form action="{% url 'regulartreatedanimals:index' %}" method="POST">
 					{%csrf_token%} {{form}}
 					<input
 						type="submit"
@@ -28,13 +64,15 @@ Animals{%endblock title%} {%block imports%}
 			<h3>Drug Prescripton</h3>
 		</div>
 		<div class="card-body">
-			<form action={% url 'regulartreatedanimals:prescribe' %} method="POST">
+			<form action="{% url 'regulartreatedanimals:prescribe' %}" method="POST">
 				<div class="form-group" id="prescription-group">
-					{%csrf_token%} {{rx_formset.management_form}} 
-          {% for form in rx_formset %}
+					{%csrf_token%} {{rx_formset.management_form}}
+					<!--prettier-ignore-->
+					{% for form in rx_formset %}
 					<div class="card-header bg-light rx-form">{{form}}</div>
 					<hr />
 					{%endfor%}
+					<!-- prettier-ignore-attribute -->
 					<input
 						type="button"
 						class="btn btn-success btn-md mt-2"

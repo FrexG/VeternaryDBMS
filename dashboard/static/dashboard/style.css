@@ -8,10 +8,11 @@
 	width: 100%;
 }
 #sidebar-wrapper {
-	padding: 10px;
+	padding: 0px;
 	width: fit-content;
 	font-family: monospace;
 	height: 100%;
+	background-color: blanchedalmond;
 }
 #summary {
 	height: 40vh;
@@ -21,12 +22,9 @@
 }
 a:hover {
 	font-style: italic;
-	color: teal;
+	color: tomato;
 }
-a:focus {
-	font-style: italic;
-	background-color: teal;
-}
+
 .chart_canvas {
 	box-shadow: 0 0 10px #000;
 	border-radius: 5%;

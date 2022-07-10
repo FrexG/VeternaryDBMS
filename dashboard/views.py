@@ -9,6 +9,7 @@ from clinicalservices.models import ClinicalService,AIService,Service
 from parasitetreatment.models import ParasiteTreatment,ParasitePrescription
 from regulartreatedanimals.models import TreatedAnimal,Disease,Prescription
 from registernewuser.models import Kebele,Species,Customer
+from vaccination.models import Vaccination,Vaccine
 from .forms import DateRangeFrom,CaseHolderForm,ServieTypeForm,TreatmentTypeForm
 # Create your views here.
 
@@ -282,3 +283,127 @@ class ParasiteTreatmentTypes(LoginRequiredMixin,View):
                         else:
                             disease_count[disease.disease_name] = 1
         return list(disease_count.keys()),list(disease_count.values())
+class VaccinationSummary(LoginRequiredMixin,View):
+    login_url =  "/"
+    templateUrl = "dashboard/vaccination_summary.html"
+    dateForm = DateRangeFrom()
+
+    def get(self,request):
+        vaccinationObj = Vaccination.objects.all()
+        distByKebele = self.getDistByKebele(Kebele.objects.all(),vaccinationObj)
+    
+        context = {"vaccinationObj":vaccinationObj,
+                    "dateForm":self.dateForm,
+                    "totalVaccinations":vaccinationObj.count(),
+                    "totalPrice":self.getPrice(vaccinationObj),
+                    "distByKebele":distByKebele}
+
+        return render(request,self.templateUrl,context)
+
+    def post(self,request):
+        dateForm = DateRangeFrom(request.POST)
+        start_date = dateForm['start_date'].value()
+        end_date = dateForm['end_date'].value()
+
+        vaccinationObj = Vaccination.objects.filter(service_date__gte=start_date,service_date__lte=end_date)
+
+        distByKebele = self.getDistByKebele(Kebele.objects.all(),vaccinationObj)
+
+        context = {"vaccinationObj":vaccinationObj,
+                    "dateForm":dateForm,
+                    "totalVaccination":vaccinationObj.count(),
+                    "totalPrice":self.getPrice(vaccinationObj),
+                    "distByKebele":distByKebele}
+
+        return render(request,self.templateUrl,context)
+    
+    def getDistByKebele(self,kebeles=None,vaccinationObj=None):
+        distByKebele = {}
+        for kebele in kebeles:
+            for t in  vaccinationObj:
+                if t.getKebele() == kebele:
+                    if kebele.name in distByKebele:
+                        distByKebele[kebele.name] += 1
+                    else:
+                        distByKebele[kebele.name] = 1
+        return distByKebele
+
+    def getPrice(self,vaccinationObj):
+        totalPrice = 0
+        for v in vaccinationObj:
+            for vaccine in v.vaccine_id.all():
+                totalPrice += vaccine.getPrice()
+        return totalPrice
+
+class VaccinationTypes(LoginRequiredMixin,View):
+    vaccines = Vaccine.objects.all()
+    vaccinations = Vaccination.objects.all()
+    def get(self,request):
+        vaccine_names,count = self.getVaccinationPrevalence()
+        data = {
+            "vaccination_types":vaccine_names,
+            "vaccination_count":count,
+        }
+
+        return JsonResponse(data)
+
+    def getVaccinationPrevalence(self):
+        vaccine_count = {}
+        for vaccine in self.vaccines:
+            for vaccination in self.vaccinations:
+                for v in vaccination.vaccine_id.all():
+                    
+                    if v == vaccine:
+                        if v.vaccine_type in vaccine_count:
+                            vaccine_count[v.vaccine_type] += 1
+                        else:
+                            vaccine_count[v.vaccine_type] = 1
+
+        return list(vaccine_count.keys()),list(vaccine_count.values())
+
+class ArtificialInseminationSummary(LoginRequiredMixin,View):
+    login_url =  "/"
+    templateUrl = "dashboard/ai_summary.html"
+   
+    def get(self,request):
+        dateForm = DateRangeFrom()
+        ai_services = AIService.objects.all()
+        distByKebele = self.getDistByKebele(Kebele.objects.all(),ai_services)
+
+        context = {"ai_services":ai_services,
+                    "dateForm":dateForm,
+                    "totalAIServices":ai_services.count(),
+                    "totalPrice":self.getPrice(ai_services),
+                    "distByKebele":distByKebele}
+        return render(request,self.templateUrl,context)
+
+    def post(self,request):
+        dateForm = DateRangeFrom(request.POST)
+        start_date = dateForm['start_date'].value()
+        end_date = dateForm['end_date'].value()
+        ai_services = AIService.objects.filter(service_date__gte=start_date,service_date__lte=end_date)
+        distByKebele = self.getDistByKebele(Kebele.objects.all(),ai_services)
+
+        context = {"ai_services":ai_services,
+                    "dateForm":dateForm,
+                    "totalAIServices":ai_services.count(),
+                    "totalPrice":self.getPrice(ai_services),
+                    "distByKebele":distByKebele}
+        return render(request,self.templateUrl,context)
+
+    def getDistByKebele(self,kebeles=None,ai_services=None):
+        distByKebele = {}
+        for kebele in kebeles:
+            for t in  ai_services:
+                if t.getKebele() == kebele:
+                    if kebele.name in distByKebele:
+                        distByKebele[kebele.name] += 1
+                    else:
+                        distByKebele[kebele.name] = 1
+        return distByKebele
+
+    def getPrice(self,ai_services):
+        totalPrice = 0
+        for v in ai_services:
+            totalPrice += v.getPrice()
+        return totalPrice

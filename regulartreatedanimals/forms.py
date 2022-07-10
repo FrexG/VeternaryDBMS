@@ -2,6 +2,7 @@ from django.forms import ModelForm
 from django import forms
 from django.forms import modelformset_factory, formset_factory
 from .models import TreatedAnimal, Prescription
+from registernewuser.models import Customer
 
 import re
 
@@ -55,4 +56,12 @@ class PrescriptionForm(ModelForm):
         return total
         
 PrescriptionFormSet = formset_factory(PrescriptionForm,extra=0)
-#PrescriptionFormSet = modelformset_factory(Prescription,form=PrescriptionForm,extra=1)
+
+class SearchTreatmentHistoryForm(ModelForm):
+    class Meta:
+        model = TreatedAnimal
+        fields = ["case_number"]
+        widgets = {
+            'case_number': forms.Select(attrs={'class': 'form-control'}),
+        }
+

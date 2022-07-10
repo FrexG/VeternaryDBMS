@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'parasitetreatment',
     'cashier',
     'dashboard',
+    'vaccination',
+    'pharmacy',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

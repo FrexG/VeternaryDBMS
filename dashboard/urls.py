@@ -10,4 +10,7 @@ urlpatterns = [
     path('clinical_service_types/',ClinicalServiceTypes.as_view(),name="clinical_service_types"),
     path('parasite_treatment_summary/',ParasiteTreatmentSummary.as_view(),name="parasite_treatment_summary"),
     path('parasite_treatment_types/',ParasiteTreatmentTypes.as_view(),name="parasite_treatment_types"),
+    path('vaccination_summary/',VaccinationSummary.as_view(),name="vaccination_summary"),
+    path('vaccination_types/',VaccinationTypes.as_view(),name="vaccination_types"),
+    path('artificial_insemination_summary/',ArtificialInseminationSummary.as_view(),name="artificial_insemination_summary"),
 ]

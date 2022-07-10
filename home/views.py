@@ -31,6 +31,8 @@ class Login(View):
                 return redirect('/regular')
             elif Profile.objects.get(user=authenticated_user).role == 'Cashier':
                 return redirect('/cashier')
+            elif Profile.objects.get(user=authenticated_user).role == 'Pharmacist':
+                return redirect('/pharmacy')
 
             return redirect('/register')
         else:

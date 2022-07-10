@@ -76,3 +76,6 @@ class AIService(models.Model):
 
     def getKebele(self):
         return self.case_number.kebele
+        
+    def getPrice(self):
+        return self.price

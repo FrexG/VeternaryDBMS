@@ -1,6 +1,6 @@
 from django.db import models
 # Import tables from registernewuser app
-from registernewuser.models import Customer, Drug, Vaccine
+from registernewuser.models import Customer, Drug
 
 # Model definition for regular treated animals app
 
@@ -66,7 +66,7 @@ class Prescription(models.Model):
         max_digits=8, decimal_places=4, default=000000.0000)
 
     paid = models.BooleanField(null=False, default=False)
-
+    delivered = models.BooleanField(null=False, default=False)
     date = models.DateField(auto_now_add=True)
 
 

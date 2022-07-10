@@ -1,6 +1,14 @@
 <!--prettier-ignore-->
 {% extends 'dashboard/main.html' %} {% load static %} {% block title %}
-Dashboard {%endblock title %} {% block customImport%}
+Dashboard {%endblock title %} 
+{% block navstyle %}
+<style>
+	#sidebar-clinical-service-summary {
+		background-color: teal;
+		color: white;
+	}
+</style>
+{% endblock navstyle %} {% block customImport%}
 <script src="{% static 'dashboard/cs_dashboard.js'%}"></script>
 {% endblock customImport %} {% block content %}
 <!-- prettier-ignore-attribute -->

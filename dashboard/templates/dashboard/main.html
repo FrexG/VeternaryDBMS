@@ -8,7 +8,7 @@
 		{%load static %} {% block imports%} {%endblock imports%}
 
 		<title>{% block title %}{%endblock title%}</title>
-
+		{%block navstyle %}{% endblock navstyle%}
 		<link
 			rel="stylesheet"
 			type="text/css"
@@ -33,7 +33,7 @@
 		{%include 'dashboard/navbar.html'%}
 		<div class="container-fluid">
 			<div class="row">
-				<div class="col-md-2 bg-dark">{%include 'dashboard/sidebar.html'%}</div>
+				<div class="col-md-2">{%include 'dashboard/sidebar.html'%}</div>
 				<div class="col-md-10">{% block content %} {% endblock content %}</div>
 			</div>
 		</div>

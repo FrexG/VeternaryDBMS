@@ -1,7 +1,15 @@
 <!--prettier-ignore-->
 {% extends 'dashboard/main.html' %} {% load static %} {% block title %}
-Dashboard {%endblock title %} {% block customImport%} 
-{% endblock customImport %} {% block content %}
+Dashboard {%endblock title %} 
+{% block navstyle %}
+<style>
+	#sidebar-regular-treatment-summary {
+		background-color: teal;
+		color: white;
+	}
+</style>
+{% endblock navstyle %} {% block customImport%} {% endblock customImport %}
+{%block content %}
 <!-- prettier-ignore-attribute -->
 
 <div class="row m-2">

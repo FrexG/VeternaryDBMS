@@ -2,9 +2,10 @@ from django.shortcuts import render, redirect
 from django.views import View
 from .forms import ParasiteTreatmentForm
 from .forms import PrescriptionFormSet
+from .models import ParasiteTreatment
 
 from django.contrib.auth.mixins import LoginRequiredMixin
-
+from regulartreatedanimals.forms import SearchTreatmentHistoryForm
 # Create your views here.
 
 class index(LoginRequiredMixin, View):
@@ -12,12 +13,16 @@ class index(LoginRequiredMixin, View):
 
     templateURL = 'parasitetreatment/treatment.html'
     rx_formset = PrescriptionFormSet()
+    search_form = SearchTreatmentHistoryForm()
 
     def get(self, request):
         form = ParasiteTreatmentForm(initial={'case_holder': request.user})
 
-        context = {'form': form,
-                   'rx_formset': self.rx_formset}
+        context = {
+            'search_form':self.search_form,
+            'form': form,
+            'rx_formset': self.rx_formset}
+
         return render(request, self.templateURL, context)
 
     def post(self, request):
@@ -30,14 +35,17 @@ class index(LoginRequiredMixin, View):
 
             filled_rx_formset = PrescriptionFormSet(initial=initial_treatment)
 
-            context = {'form': filledForm,
+            context = {'search_form':self.search_form,
+                        'form': filledForm,
                        'rx_formset': filled_rx_formset}
 
             return render(request, self.templateURL, context)
 
         else:
-            context = {'form': filledForm,
-                       'rx_formset': self.rx_formset}
+            context = {
+                'search_form':self.search_form,
+                'form': filledForm,
+                'rx_formset': self.rx_formset}
             return render(request, self.templateURL, context)
 
 
@@ -56,4 +64,28 @@ class handlePrescription(LoginRequiredMixin, View):
                 print("It is valid")
                 formset.save()
 
+        return redirect("/parasitetreatment")
+        
+class SearchParasiteTreatmentHistory(LoginRequiredMixin,View):
+    login_url = "/"
+    templateURL = 'parasitetreatment/treatment.html'
+    rx_formset = PrescriptionFormSet()
+    form = ParasiteTreatmentForm
+    search_form = SearchTreatmentHistoryForm()
+    
+    def get(self,request):
+        return redirect("/regular")
+
+    def post(self,request):
+        search_form = SearchTreatmentHistoryForm(request.POST)
+        if search_form.is_valid():
+            case_number = search_form["case_number"].value()
+            treatment_history = ParasiteTreatment.objects.filter(case_number=case_number)
+      
+            context = {'treatment_history': treatment_history,
+                        'search_form':self.search_form,
+                        'form': self.form,
+                        'rx_formset': self.rx_formset}
+
+            return render(request, self.templateURL, context)
         return redirect("/parasitetreatment")

@@ -1,6 +1,6 @@
 {% load static %}
-<div id="sidebar-wrapper" class="bg-dark">
-	<ul class="list-group">
+<div id="sidebar-wrapper">
+	<ul class="list-group m-0 p-0">
 		<a
 			href="{% url 'dashboard:regular_treatment_summary' %}"
 			class="list-group-item mb-5"
@@ -11,7 +11,7 @@
 		<a
 			href="{% url 'dashboard:clinical_service_summary' %}"
 			class="list-group-item mb-5"
-			id="sidebar-clinical-servie-summary"
+			id="sidebar-clinical-service-summary"
 			>Clinical Service</a
 		>
 		<a
@@ -20,10 +20,16 @@
 			id="sidebar-parasite-treatment-summary"
 			>Parasite Treatment</a
 		>
-		<a href="#" class="list-group-item mb-5" id="sidebar-vaccination-summary"
+		<a
+			href="{% url 'dashboard:vaccination_summary' %}"
+			class="list-group-item mb-5"
+			id="sidebar-vaccination-summary"
 			>Vaccination</a
 		>
-		<a href="#" class="list-group-item mb-5" id="sidebar-ai-summary"
+		<a
+			href="{% url 'dashboard:artificial_insemination_summary' %}"
+			class="list-group-item mb-5"
+			id="sidebar-ai-summary"
 			>Artificial Insemination</a
 		>
 	</ul>

@@ -1,6 +1,8 @@
+from encodings import search_function
 from django.shortcuts import render, redirect
 from django.views import View
-from .forms import TreatedAnimalsForm,PrescriptionFormSet
+from .models import TreatedAnimal
+from .forms import TreatedAnimalsForm,PrescriptionFormSet,SearchTreatmentHistoryForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 # Create your views here.
@@ -12,10 +14,13 @@ class index(LoginRequiredMixin, View):
     templateURL = 'regulartreatedanimals/regular.html'
     rx_formset = PrescriptionFormSet()
     form = TreatedAnimalsForm()
+    search_form = SearchTreatmentHistoryForm()
 
     def get(self, request):  
-        context = {'form': self.form,
+        context = {'search_form': self.search_form,
+                    'form': self.form,
                    'rx_formset': self.rx_formset}
+
         return render(request, self.templateURL, context)
 
     def post(self, request):
@@ -28,13 +33,15 @@ class index(LoginRequiredMixin, View):
 
             filled_rx_formset = PrescriptionFormSet(initial=initial_treatment)
 
-            context = {'form': filledForm,
+            context = {'search_form':self.search_form,
+                        'form': filledForm,
                        'rx_formset': filled_rx_formset}
 
             return render(request, self.templateURL, context)
 
         else:
-            context = {'form': filledForm,
+            context = {'search_form':self.search_form,
+                        'form': filledForm,
                        'rx_formset': self.rx_formset}
             return render(request, self.templateURL, context)
 
@@ -53,3 +60,28 @@ class handlePrescription(LoginRequiredMixin, View):
                 formset.save()
                 
         return redirect("/regular")
+        
+class SearchTreatmentHistory(LoginRequiredMixin,View):
+    login_url = "/"
+    templateURL = 'regulartreatedanimals/regular.html'
+    rx_formset = PrescriptionFormSet()
+    form = TreatedAnimalsForm()
+    search_form = SearchTreatmentHistoryForm()
+    
+    def get(self,request):
+        return redirect("/regular")
+
+    def post(self,request):
+        search_form = SearchTreatmentHistoryForm(request.POST)
+        if search_form.is_valid():
+            case_number = search_form["case_number"].value()
+            treatment_history = TreatedAnimal.objects.filter(case_number=case_number)
+      
+            context = {'treatment_history': treatment_history,
+                        'search_form':self.search_form,
+                        'form': self.form,
+                        'rx_formset': self.rx_formset}
+
+            return render(request, self.templateURL, context)
+        return redirect("/regular")
+

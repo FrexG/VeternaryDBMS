@@ -24,5 +24,7 @@ urlpatterns = [
     path('parasitetreatment/', include('parasitetreatment.urls')),
     path('cashier/',include('cashier.urls')),
     path('dashboard/',include('dashboard.urls')),
+    path('vaccination/',include('vaccination.urls')),
+    path('pharmacy/',include('pharmacy.urls')),
     path('admin/', admin.site.urls),
 ]

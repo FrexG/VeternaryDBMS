@@ -33,18 +33,6 @@ class Species(models.Model):
 
     def getSpeciesName(self): return str(self.species_type)
 
-
-class Vaccine(models.Model):
-    vaccine_type = models.CharField(max_length=100)
-    price = models.DecimalField(
-        max_digits=6, decimal_places=4, default=000000.0000)
-
-    def __str__(self):
-        return self.vaccine_type
-
-    def getVaccineName(self): return str(self.vaccine_type)
-
-
 class Drug(models.Model):
     drug_type = models.CharField(max_length=100)
     price = models.DecimalField(
@@ -74,8 +62,6 @@ class Customer(models.Model):
     sex = models.CharField(max_length=10, choices=SEX_CHOICES)
 
     service_date = models.DateField(auto_now=False, auto_now_add=True)
-
-    treatment_history = models.TextField(max_length=500, null=True)
 
     mobile_number = models.PositiveIntegerField()
 
