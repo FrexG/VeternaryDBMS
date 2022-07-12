@@ -5,8 +5,6 @@ import re
 from .models import Customer
 
 # Create ModelForm from Customer
-
-
 class NewCustomerForm(ModelForm):
 
     def clean_customer_name(self):
