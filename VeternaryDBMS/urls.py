@@ -26,5 +26,8 @@ urlpatterns = [
     path('dashboard/',include('dashboard.urls')),
     path('vaccination/',include('vaccination.urls')),
     path('pharmacy/',include('pharmacy.urls')),
+    path('drug_in_out/',include('drug_in_out.urls')),
+    path('equipment_in_out/',include('equipment_in_out.urls')),
+    path('vaccine_in_out/',include('vaccine_in_out.urls')),
     path('admin/', admin.site.urls),
 ]

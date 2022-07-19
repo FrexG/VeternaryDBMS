@@ -35,3 +35,9 @@ li {
 	font-size: smaller;
 	color: cadetblue;
 }
+.errorlist li {
+	font-family: monospace;
+	font-size: medium;
+	background-color: red;
+	color: white;
+}

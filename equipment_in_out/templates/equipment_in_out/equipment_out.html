@@ -1,0 +1,43 @@
+{% extends 'home/home.html' %} {%load static %} {% block title%} Equipment Out
+{%endblock title %} {% block content %}
+<div class="col-sm-6 mx-auto">
+	<div class="card">
+		<div class="card-header bg-warning">
+			<h3>Equipment Out Form</h3>
+		</div>
+		<div class="card-body">
+			<form action="" method="POST">
+				<div
+					class="form-group font-weight-bold text-secondary text-capitaliz"
+					id="service-group"
+				>
+					{%csrf_token%} {{equipment_out_form}}
+
+					<button type="submit" class="btn btn-md btn-info form-control">
+						Submit
+					</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<div class="col-sm-6 mx-auto">
+	<div class="card">
+		<div class="card-header bg-warning">
+			<h3>Equiment Out Cash Deposit</h3>
+		</div>
+		<div class="card-body">
+			<div class="form-group font-weight-bold text-secondary text-capitalize">
+				<form action="equipmentoutcashdeposit" method="POST">
+					{%csrf_token%} {{equipment_cash_deposit_form}}
+					<input
+						type="submit"
+						value="Deposit"
+						class="btn-md btn-primary form-control"
+					/>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock content %}
