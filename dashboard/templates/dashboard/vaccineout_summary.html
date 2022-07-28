@@ -1,0 +1,98 @@
+<!--prettier-ignore-->
+{% extends 'dashboard/main.html' %}
+{% load static %} {% block title %} Dashboard {%endblock title %}
+{% block navstyle %}
+<style>
+	#sidebar-vaccineout-summary {
+		background-color: tomato;
+		color: white;
+	}
+</style>
+{% endblock navstyle %} {% block customImport%}
+<script src="{% static 'dashboard/pt_dashboard.js'%}"></script>
+{% endblock customImport %} {% block content %}
+<!-- prettier-ignore-attribute -->
+
+<div class="row m-2">
+	<form action="" method="POST">
+		{%csrf_token%} {{dateForm}}{{drug_typeForm}}{{drug_destinationForm}}
+		<input type="submit" value="Filter" class="btn btn-sm btn-primary" />
+	</form>
+</div>
+<hr />
+<div class="row overflow-auto m-2" id="summary">
+	<div class="col-md-12 card">
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th scope="col">Vaccine</th>
+					<th scope="col">Destination</th>
+					<th scope="col">Receiver</th>
+					<th scope="col">Unit Price</th>
+					<th scope="col">Quantity</th>
+					<th scope="col">Total</th>
+					<th scope="col">Batch No.</th>
+					<th scope="col">Approved by</th>
+				</tr>
+			</thead>
+			{% for row in out_vaccines %}
+			<tr>
+				<td>{{row.vaccine.vaccine_type}}</td>
+				<td>{{row.destination}}</td>
+				<td>{{row.receiver}}</td>
+				<td>{{row.unit_price}}</td>
+				<td>{{row.quantity}}</td>
+				<td>{{row.total}}</td>
+				<td>{{row.batch_number}}</td>
+				<td>{{row.approved_by}}</td>
+			</tr>
+			{% endfor %}
+		</table>
+	</div>
+</div>
+<div class="row overflow-auto m-2">
+	<div class="col-md-3 col-sm-12">
+		<div class="card">
+			<div class="card-header">
+				<h5 class="card-title">Total Amount</h5>
+			</div>
+			<div class="card-body">
+				<p class="card-text">{{total_price}} Birr</p>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-3 col-sm-12">
+		<div class="card">
+			<div class="card-header">
+				<h5 class="card-title">Deposited/Remaining</h5>
+			</div>
+			<div class="card-body">
+				<p class="card-text">{{total_deposit}}/{{remaining_cash}} Birr</p>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-6 col-sm-12">
+		<div class="card">
+			<div class="card-header">
+				<h5 class="card-title">Destinations</h5>
+			</div>
+			<div class="card-body">
+				<table class="table table-striped m-2">
+					<thead>
+						<tr>
+							<th scope="col">Destination</th>
+							<th scope="col">Number</th>
+						</tr>
+					</thead>
+					{% for key,value in vaccine_destinations.items %}
+					<tr>
+						<td>{{key}}</td>
+						<td>{{value}}</td>
+					</tr>
+					{%endfor%}
+				</table>
+			</div>
+		</div>
+	</div>
+	{% endblock content %}
+</div>

@@ -4,7 +4,7 @@
 {% block navstyle %}
 <style>
 	#sidebar-vaccination-summary {
-		background-color: teal;
+		background-color: tomato;
 		color: white;
 	}
 </style>
@@ -21,7 +21,7 @@
 </div>
 <hr />
 <div class="row overflow-auto m-2" id="summary">
-	<div class="col-md-10">
+	<div class="col-md-10 card">
 		<table class="table table-striped">
 			<thead>
 				<tr>
@@ -74,7 +74,7 @@
 		<canvas class="chart_canvas card" id="cntx_vaccination"></canvas>
 	</div>
 
-	<div class="col-md-4 col-sm-12">
+	<div class="col-md-4 col-sm-12 card">
 		<h5 class="text-center">Kebele Distribution</h5>
 		<table class="table table-striped m-2">
 			{% for key,value in distByKebele.items %}

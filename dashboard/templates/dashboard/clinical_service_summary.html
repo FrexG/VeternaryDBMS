@@ -4,7 +4,7 @@ Dashboard {%endblock title %}
 {% block navstyle %}
 <style>
 	#sidebar-clinical-service-summary {
-		background-color: teal;
+		background-color: tomato;
 		color: white;
 	}
 </style>
@@ -21,36 +21,37 @@ Dashboard {%endblock title %}
 </div>
 <hr />
 <div class="row overflow-auto m-2" id="summary">
-	<table class="table table-striped">
-		<thead>
+	<div class="col-md-12 card">
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th scope="col">Cust Name</th>
+					<th scope="col">Service type</th>
+					<th scope="col">Case Holder</th>
+					<th scope="col">Paid</th>
+					<th scope="col">Date</th>
+				</tr>
+			</thead>
+			{% for row in clinicalServicesObj %}
 			<tr>
-				<th scope="col">Cust Name</th>
-				<th scope="col">Service type</th>
-				<th scope="col">Case Holder</th>
-				<th scope="col">Paid</th>
-				<th scope="col">Date</th>
+				<td>{{row.case_number.customer_name}}</td>
+				<td>{{row.service_type.service_type}}</td>
+				<td>{{row.case_holder.username}}</td>
+				<td>{{row.paid}}</td>
+				<td>{{row.service_date}}</td>
 			</tr>
-		</thead>
-		{% for row in clinicalServicesObj %}
-		<tr>
-			<td>{{row.case_number.customer_name}}</td>
-			<td>{{row.service_type.service_type}}</td>
-			<td>{{row.case_holder.username}}</td>
-			<td>{{row.paid}}</td>
-			<td>{{row.service_date}}</td>
-		</tr>
-		{% endfor %}
-	</table>
-	<h1></h1>
+			{% endfor %}
+		</table>
+	</div>
 </div>
 <div class="row m-2">
 	{% if totalClinicalServices %}
 	<div class="col-md-4 col-sm-12">
 		<div class="card m-5">
+			<div class="card-header">
+				<h5 class="card-title">Total Amount</h5>
+			</div>
 			<div class="card-body">
-				<div class="card-header">
-					<h5 class="card-title">Total Amount</h5>
-				</div>
 				{%for key,value in totalPrice.items%}
 				<p class="card-text">{{value}} Birr</p>
 				{%endfor%}
@@ -66,7 +67,7 @@ Dashboard {%endblock title %}
 		<canvas class="chart_canvas card" id="cntx_clinical_services"></canvas>
 	</div>
 	{% endif %}
-	<div class="col-md-4 col-sm-12">
+	<div class="col-md-4 col-sm-12 card">
 		<h5 class="text-center">Service by Kebele</h5>
 		<table class="table table-striped m-2">
 			{% for key,value in distByKebele.items %}

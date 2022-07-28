@@ -4,13 +4,22 @@ from django.views import View
 from django.core import serializers
 from django.http import JsonResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
+from matplotlib.style import context
+from datetime import datetime
+# custom utility fucncs
+from utils.utils import getPrice,getExpiringItems,getItembyDestination
 # Import all models from all apps
 from clinicalservices.models import ClinicalService,AIService,Service
 from parasitetreatment.models import ParasiteTreatment,ParasitePrescription
 from regulartreatedanimals.models import TreatedAnimal,Disease,Prescription
 from registernewuser.models import Kebele,Species,Customer
 from vaccination.models import Vaccination,Vaccine
-from .forms import DateRangeFrom,CaseHolderForm,ServieTypeForm,TreatmentTypeForm
+# Import from stock models
+from drug_in_out.models import DrugIn,DrugOut, DrugOutCashDeposit
+from vaccine_in_out.models import VaccineIn,VaccineOut,VaccineOutCashDeposit
+from equipment_in_out.models import ClinicalEquipmentIn,ClinicalEquipmentOut,ClinicalEquipmentCashDeposit
+# forms
+from .forms import *
 # Create your views here.
 
 class Index(LoginRequiredMixin,View):
@@ -256,7 +265,6 @@ class ParasiteTreatmentSummary(LoginRequiredMixin,View):
                 if pp.treatment == p:
                     totalPrice += pp.getPrice()
         return totalPrice
-
 class ParasiteTreatmentTypes(LoginRequiredMixin,View):
     diseases = Disease.objects.all()
     parasite_treatment = ParasiteTreatment.objects.all()
@@ -334,7 +342,6 @@ class VaccinationSummary(LoginRequiredMixin,View):
             for vaccine in v.vaccine_id.all():
                 totalPrice += vaccine.getPrice()
         return totalPrice
-
 class VaccinationTypes(LoginRequiredMixin,View):
     vaccines = Vaccine.objects.all()
     vaccinations = Vaccination.objects.all()
@@ -360,7 +367,6 @@ class VaccinationTypes(LoginRequiredMixin,View):
                             vaccine_count[v.vaccine_type] = 1
 
         return list(vaccine_count.keys()),list(vaccine_count.values())
-
 class ArtificialInseminationSummary(LoginRequiredMixin,View):
     login_url =  "/"
     templateUrl = "dashboard/ai_summary.html"
@@ -407,3 +413,311 @@ class ArtificialInseminationSummary(LoginRequiredMixin,View):
         for v in ai_services:
             totalPrice += v.getPrice()
         return totalPrice
+class DrugInSummary(LoginRequiredMixin,View):
+    login_url =  "/"
+    templateUrl = "dashboard/drugin_summary.html"
+    def get(self,request):
+        dateForm = DateRangeFrom()
+        drug_typeForm = DrugTypeForm()
+        drug_sourceForm = DrugSourceForm()
+        in_drugs = DrugIn.objects.all()
+        # get total price for all in drugs
+        total = getPrice(in_drugs)
+        # context
+        context = {
+            'in_drugs':in_drugs,
+            'total_price':total,
+            'dateForm':dateForm,
+            'drug_typeForm':drug_typeForm,
+            'drug_sourceForm':drug_sourceForm,
+            'expiringDrugs':getExpiringItems(in_drugs)
+        }
+        return render(request,self.templateUrl,context)
+    def post(self,request):
+        dateForm = DateRangeFrom(request.POST)
+        drug_typeForm = DrugTypeForm(request.POST)
+        drug_sourceForm = DrugSourceForm(request.POST)
+        # values
+        start_date = dateForm['start_date'].value()
+        end_date = dateForm['end_date'].value()
+        drug_type = drug_typeForm["drug"].value()
+        drug_source = drug_sourceForm["source"].value()
+        in_drugs = DrugIn.objects.filter(date_received__gte=start_date,date_received__lte=end_date,drug=drug_type,source=drug_source)
+        # get total price for all in drugs
+        total = getPrice(in_drugs)
+        # context
+        context = {
+            'in_drugs':in_drugs,
+            'total_price':total,
+            'dateForm':dateForm,
+            'drug_typeForm':drug_typeForm,
+            'drug_sourceForm':drug_sourceForm,
+            'expiringDrugs':getExpiringItems(in_drugs)
+        }
+        return render(request,self.templateUrl,context)
+
+class DrugOutSummary(LoginRequiredMixin,View):
+    login_url =  "/"
+    templateUrl = "dashboard/drugout_summary.html"
+    def get(self,request):
+        dateForm = DateRangeFrom()
+        drug_typeForm = DrugTypeForm()
+        drug_destinationForm = DrugDestinationForm()
+        out_drugs = DrugOut.objects.all()
+        deposited_cash = DrugOutCashDeposit.objects.all()
+        # get total price for all in drugs
+        total = getPrice(out_drugs)
+        # get total deposited cash
+        total_deposit = deposited_cash.aggregate(amount_sum = Sum('amount')).get('amount_sum')
+        if total_deposit == None:
+            total_deposit = 0
+        remaining_cash = total- total_deposit
+        # context
+        context = {
+            'out_drugs':out_drugs,
+            'total_price':total,
+            'total_deposit':total_deposit,
+            'remaining_cash':remaining_cash,
+            'dateForm':dateForm,
+            'drug_typeForm':drug_typeForm,
+            'drug_destinationForm':drug_destinationForm,
+            'drug_destinations':getItembyDestination(out_drugs)
+        }
+        return render(request,self.templateUrl,context)
+    def post(self,request):
+        dateForm = DateRangeFrom(request.POST)
+        drug_typeForm = DrugTypeForm(request.POST)
+        drug_destinationForm = DrugDestinationForm(request.POST)
+        # values
+        start_date = dateForm['start_date'].value()
+        end_date = dateForm['end_date'].value()
+        drug_type = drug_typeForm["drug"].value()
+        drug_destination = drug_destinationForm["destination"].value()
+        out_drugs = DrugOut.objects.filter(date_received__gte=start_date,date_received__lte=end_date,drug=drug_type,destination=drug_destination)
+        deposited_cash = DrugOutCashDeposit.objects.filter(date_paid__gte=start_date,date_paid__lte=end_date)
+        # get total price for all in drugs
+        total = getPrice(out_drugs)
+        # get total deposited cash
+        total_deposit = deposited_cash.aggregate(amount_sum = Sum('amount')).get('amount_sum')
+        if total_deposit == None:
+            total_deposit = 0
+        remaining_cash = total - total_deposit
+        # context
+        context = {
+           'out_drugs':out_drugs,
+            'total_price':total,
+            'total_deposit':total_deposit,
+            'remaining_cash':remaining_cash,
+            'dateForm':dateForm,
+            'drug_typeForm':drug_typeForm,
+            'drug_destinationForm':drug_destinationForm,
+            'drug_destinations':getItembyDestination(out_drugs)
+        }
+        return render(request,self.templateUrl,context)
+       
+class EquipmentInSummary(LoginRequiredMixin,View):
+    login_url =  "/"
+    templateUrl = "dashboard/equipmentin_summary.html"
+    def get(self,request):
+        dateForm = DateRangeFrom()
+        equipment_typeForm = EquipmentTypeForm()
+        equipment_sourceForm = EquipmentSourceForm()
+        in_equipments = ClinicalEquipmentIn.objects.all()
+        # get total price for all in drugs
+        total = getPrice(in_equipments)
+        # context
+        context = {
+            'in_equipments':in_equipments,
+            'total_price':total,
+            'dateForm':dateForm,
+            'equipment_typeForm':equipment_typeForm,
+            'equipment_sourceForm':equipment_sourceForm,
+            'expiring_equipment':getExpiringItems(in_equipments)
+        }
+        return render(request,self.templateUrl,context)
+    def post(self,request):
+        dateForm = DateRangeFrom(request.POST)
+        equipment_typeForm = EquipmentTypeForm()
+        equipment_sourceForm = EquipmentSourceForm()
+        # values
+        start_date = dateForm['start_date'].value()
+        end_date = dateForm['end_date'].value()
+        equipment_type = equipment_typeForm["equipment"].value()
+        equipment_source = equipment_sourceForm["source"].value()
+   
+        in_equipments = ClinicalEquipmentIn.objects.filter(date_received__gte=start_date,date_received__lte=end_date,equipment=equipment_type,source=equipment_source)
+        # get total price for all in drugs
+        total = getPrice(in_equipments)
+        # context
+        context = {
+            'in_equipments':in_equipments,
+            'total_price':total,
+            'dateForm':dateForm,
+            'equipment_typeForm':equipment_typeForm,
+            'equipment_sourceForm':equipment_sourceForm,
+            'expiring_equipment':getExpiringItems(in_equipments)
+        }
+        return render(request,self.templateUrl,context)
+
+class EquipmentOutSummary(LoginRequiredMixin,View):
+    login_url =  "/"
+    templateUrl = "dashboard/equipmentout_summary.html"
+    def get(self,request):
+        dateForm = DateRangeFrom()
+        equipment_typeForm = EquipmentTypeForm()
+        equipment_destinationForm = EquipmentDestinationForm()
+        out_equipments = ClinicalEquipmentOut.objects.all()
+        deposited_cash = ClinicalEquipmentCashDeposit.objects.all()
+        # get total price for all in drugs
+        total = getPrice(out_equipments)
+        # get total deposited cash
+        total_deposit = deposited_cash.aggregate(amount_sum = Sum('amount')).get('amount_sum')
+        if total_deposit == None:
+            total_deposit = 0
+        remaining_cash = total- total_deposit
+        # context
+        context = {
+            'out_equipments':out_equipments,
+            'total_price':total,
+            'total_deposit':total_deposit,
+            'remaining_cash':remaining_cash,
+            'dateForm':dateForm,
+            'equipment_typeForm':equipment_typeForm,
+            'equipment_destinationForm':equipment_destinationForm,
+            'equipment_destinations':getItembyDestination(out_equipments)
+        }
+        return render(request,self.templateUrl,context)
+    def post(self,request):
+        dateForm = DateRangeFrom(request.POST)
+        equipment_typeForm = EquipmentTypeForm()
+        equipment_destinationForm = EquipmentDestinationForm()
+        # values
+        start_date = dateForm['start_date'].value()
+        end_date = dateForm['end_date'].value()
+        equipment_type = equipment_typeForm["drug"].value()
+        equipment_destination = equipment_destinationForm["destination"].value()
+        out_equipments = ClinicalEquipmentOut.objects.filter(date_received__gte=start_date,date_received__lte=end_date,drug=equipment_type,destination=equipment_destination)
+        # get total price for all in drugs
+        total = getPrice(out_equipments)
+
+        deposited_cash = ClinicalEquipmentCashDeposit.objects.filter(date_paid__gte=start_date,date_paid__lte=end_date)
+        
+        # get total deposited cash
+        total_deposit = deposited_cash.aggregate(amount_sum = Sum('amount')).get('amount_sum')
+        if total_deposit == None:
+            total_deposit = 0
+        remaining_cash = total- total_deposit
+        # context
+        context = {
+            'out_equipments':out_equipments,
+            'total_price':total,
+            'total_deposit':total_deposit,
+            'remaining_cash':remaining_cash,
+            'dateForm':dateForm,
+            'equipment_typeForm':equipment_typeForm,
+            'equipment_destinationForm':equipment_destinationForm,
+            'equipment_destinations':getItembyDestination(out_equipments)
+        }
+        return render(request,self.templateUrl,context)
+
+class VaccineInSummary(LoginRequiredMixin,View):
+    login_url =  "/"
+    templateUrl = "dashboard/vaccinein_summary.html"
+    def get(self,request):
+        dateForm = DateRangeFrom()
+        vaccine_typeForm = VaccineTypeForm()
+        vaccine_sourceForm = VaccineSourceForm()
+        in_vaccine = VaccineIn.objects.all()
+        # get total price for all in drugs
+        total = getPrice(in_vaccine)
+        # context
+        context = {
+            'in_drugs':in_vaccine,
+            'total_price':total,
+            'dateForm':dateForm,
+            'vaccine_typeForm':vaccine_typeForm,
+            'vaccine_sourceForm':vaccine_sourceForm,
+            'expiringVaccines':getExpiringItems(in_vaccine)
+        }
+        return render(request,self.templateUrl,context)
+    def post(self,request):
+        dateForm = DateRangeFrom(request.POST)
+        vaccine_typeForm = VaccineTypeForm(request.POST)
+        vaccine_sourceForm = VaccineSourceForm(request.POST)
+        # values
+        start_date = dateForm['start_date'].value()
+        end_date = dateForm['end_date'].value()
+        vaccine_type = vaccine_typeForm["vaccine"].value()
+        vaccine_source = vaccine_sourceForm["source"].value()
+        in_vaccine = VaccineIn.objects.filter(date_received__gte=start_date,date_received__lte=end_date,vaccine=vaccine_type,source=vaccine_source)
+        # get total price for all in drugs
+        total = getPrice(in_vaccine)
+        # context
+        context = {
+            'in_drugs':in_vaccine,
+            'total_price':total,
+            'dateForm':dateForm,
+            'vaccine_typeForm':vaccine_typeForm,
+            'vaccine_sourceForm':vaccine_sourceForm,
+            'expiringVaccines':getExpiringItems(in_vaccine)
+        }
+        return render(request,self.templateUrl,context)
+class VaccineOutSummary(LoginRequiredMixin,View):
+    login_url =  "/"
+    templateUrl = "dashboard/vaccineout_summary.html"
+    def get(self,request):
+        dateForm = DateRangeFrom()
+        vaccine_typeForm = VaccineTypeForm()
+        vaccine_destinationForm = VaccineDestinationForm()
+        out_vaccines = VaccineOut.objects.all()
+        deposited_cash = VaccineOutCashDeposit.objects.all()
+        # get total price for all in drugs
+        total = getPrice(out_vaccines)
+        # get total deposited cash
+        total_deposit = deposited_cash.aggregate(amount_sum = Sum('amount')).get('amount_sum')
+        if total_deposit == None:
+            total_deposit = 0
+        remaining_cash = total- total_deposit
+        # context
+        context = {
+            'out_vaccines':out_vaccines,
+            'total_price':total,
+            'total_deposit':total_deposit,
+            'remaining_cash':remaining_cash,
+            'dateForm':dateForm,
+            'vaccine_typeForm':vaccine_typeForm,
+            'vaccine_destinationForm':vaccine_destinationForm,
+            'vaccine_destinations':getItembyDestination(out_vaccines)
+        }
+        return render(request,self.templateUrl,context)
+    def post(self,request):
+        dateForm = DateRangeFrom()
+        vaccine_typeForm = VaccineTypeForm()
+        vaccine_destinationForm = VaccineDestinationForm()
+        # values
+        start_date = dateForm['start_date'].value()
+        end_date = dateForm['end_date'].value()
+        vaccine_type = vaccine_typeForm["vaccine"].value()
+        vaccine_destination = vaccine_destinationForm["destination"].value()
+
+        out_vaccines = VaccineOut.objects.filter(date_received__gte=start_date,date_received__lte=end_date,drug=vaccine_type,destination=vaccine_destination)
+        deposited_cash = DrugOutCashDeposit.objects.filter(date_paid__gte=start_date,date_paid__lte=end_date)
+        # get total price for all in drugs
+        total = getPrice(out_vaccines)
+        # get total deposited cash
+        total_deposit = deposited_cash.aggregate(amount_sum = Sum('amount')).get('amount_sum')
+        if total_deposit == None:
+            total_deposit = 0
+        remaining_cash = total - total_deposit
+        # context
+        context = {
+           'out_vaccines':out_vaccines,
+            'total_price':total,
+            'total_deposit':total_deposit,
+            'remaining_cash':remaining_cash,
+            'dateForm':dateForm,
+            'vaccine_typeForm':vaccine_typeForm,
+            'vaccine_destinationForm':vaccine_destinationForm,
+            'vaccine_destinations':getItembyDestination(out_vaccines)
+        }
+        return render(request,self.templateUrl,context)

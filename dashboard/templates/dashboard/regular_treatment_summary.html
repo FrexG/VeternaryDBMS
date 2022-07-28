@@ -4,7 +4,7 @@ Dashboard {%endblock title %}
 {% block navstyle %}
 <style>
 	#sidebar-regular-treatment-summary {
-		background-color: teal;
+		background-color: tomato;
 		color: white;
 	}
 </style>
@@ -20,50 +20,51 @@ Dashboard {%endblock title %}
 </div>
 <hr />
 <div class="row overflow-auto m-2" id="summary">
-	<table class="table table-striped">
-		<thead>
+	<div class="col-md-12 card">
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th scope="col">Cust Name</th>
+					<th scope="col">T0</th>
+					<th scope="col">PR</th>
+					<th scope="col">RR</th>
+					<th scope="col">Clinical Finding</th>
+					<th scope="col">DX</th>
+					<th scope="col">Diff.Diag</th>
+					<th scope="col">Rumen Motility</th>
+					<th scope="col">Date</th>
+				</tr>
+			</thead>
+			{% for row in treatedAnimalsObj %}
 			<tr>
-				<th scope="col">Cust Name</th>
-				<th scope="col">T0</th>
-				<th scope="col">PR</th>
-				<th scope="col">RR</th>
-				<th scope="col">Clinical Finding</th>
-				<th scope="col">DX</th>
-				<th scope="col">Diff.Diag</th>
-				<th scope="col">Rumen Motility</th>
-				<th scope="col">Date</th>
+				<td>{{row.case_number.customer_name}}</td>
+				<td>{{row.t0}}</td>
+				<td>{{row.pr}}</td>
+				<td>{{row.rr}}</td>
+				<td>{{row.clinical_finding}}</td>
+				<td>{%for dx in row.dx.all%}{{dx.disease_name}},{%endfor%}</td>
+				<td>{{row.differential_diag}}</td>
+				<td>{{row.rumen_motility}}</td>
+				<td>{{row.service_date}}</td>
 			</tr>
-		</thead>
-		{% for row in treatedAnimalsObj %}
-		<tr>
-			<td>{{row.case_number.customer_name}}</td>
-			<td>{{row.t0}}</td>
-			<td>{{row.pr}}</td>
-			<td>{{row.rr}}</td>
-			<td>{{row.clinical_finding}}</td>
-			<td>{%for dx in row.dx.all%}{{dx.disease_name}},{%endfor%}</td>
-			<td>{{row.differential_diag}}</td>
-			<td>{{row.rumen_motility}}</td>
-			<td>{{row.service_date}}</td>
-		</tr>
-		{% endfor %}
-	</table>
-	<h1></h1>
+			{% endfor %}
+		</table>
+	</div>
 </div>
 <div class="row m-2">
 	{% if totalTreatedAnimals %}
 	<div class="col-md-6 col-sm-12">
 		<div class="card m-5">
+			<div class="card-header">
+				<h5 class="card-title">Total</h5>
+			</div>
 			<div class="card-body">
-				<div class="card-header">
-					<h5 class="card-title">Total</h5>
-				</div>
 				<p class="card-text">{{totalTreatedAnimals}}</p>
 			</div>
 		</div>
 	</div>
 	{% endif %}
-	<div class="col-md-6 col-sm-12">
+	<div class="col-md-6 col-sm-12 card">
 		<table class="table table-striped m-5">
 			{% for key,value in distByKebele.items %}
 			<tr>

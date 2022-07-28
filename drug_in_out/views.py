@@ -1,5 +1,8 @@
+import io
 from contextlib import redirect_stdout
 from django.shortcuts import render,redirect
+from django.http import HttpResponse
+from utils.printout import printout
 # import view
 from django.views import View
 from matplotlib.style import context
@@ -18,7 +21,8 @@ class DrugInView(View):
         drug_in_form = DrugInForm(request.POST)
         if drug_in_form.is_valid():
             drug_in_form.save()
-            return redirect('drug_in_out:drugin')
+            #return redirect('drug_in_out:drug_in')
+            return printout(request)
         else:
             context = {
             'drug_in_form': drug_in_form,
