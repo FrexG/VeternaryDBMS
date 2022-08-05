@@ -1,12 +1,13 @@
 # create a form for the dashboard
+from dataclasses import field
 from django import forms
-from matplotlib import widgets
 from clinicalservices.models import ClinicalService
 from parasitetreatment.models import ParasiteTreatment
 from drug_in_out.models import DrugIn,DrugOut
 from equipment_in_out.models import ClinicalEquipmentIn,ClinicalEquipmentOut
 from vaccine_in_out.models import VaccineIn,VaccineOut
-
+from receipt_in_out.models import ReceiptIn,ReceiptOut
+from registernewuser.models import Kebele
 # Drug In Out forms
 class DrugTypeForm(forms.ModelForm):
     class Meta:
@@ -22,12 +23,12 @@ class DrugSourceForm(forms.ModelForm):
         widgets = {
             'source': forms.Select(),
         }
-class DrugDestinationForm(forms.ModelForm):
+class DrugReceiverForm(forms.ModelForm):
     class Meta:
         model = DrugOut
-        fields = ['destination']
+        fields = ['receiver']
         widgets = {
-            'destination': forms.Select(),
+            'receiver': forms.Select(),
         }
 # Equipment In Out forms
 class EquipmentTypeForm(forms.ModelForm):
@@ -44,12 +45,12 @@ class EquipmentSourceForm(forms.ModelForm):
         widgets = {
             'source': forms.Select(),
         }
-class EquipmentDestinationForm(forms.ModelForm):
+class EquipmentReceiverForm(forms.ModelForm):
     class Meta:
         model = ClinicalEquipmentOut
-        fields = ['destination']
+        fields = ['receiver']
         widgets = {
-            'destination': forms.Select(),
+            'receiver': forms.Select(),
         }
 # Vaccine In Out forms
 class VaccineTypeForm(forms.ModelForm):
@@ -66,12 +67,12 @@ class VaccineSourceForm(forms.ModelForm):
         widgets = {
             'source': forms.Select(),
         }
-class VaccineDestinationForm(forms.ModelForm):
+class VaccineReceiverForm(forms.ModelForm):
     class Meta:
         model = VaccineOut
-        fields = ['destination']
+        fields = ['receiver']
         widgets = {
-            'destination': forms.Select(),
+            'receiver': forms.Select(),
         }
         
 class DateRangeFrom(forms.Form):
@@ -100,3 +101,22 @@ class TreatmentTypeForm(forms.ModelForm):
         widgets = {
             'treatment_type': forms.Select(attrs={'id':'treatment_type'})
         }
+class ReceiptTypeForm(forms.ModelForm):
+    class Meta:
+        model = ReceiptIn
+        fields = ["receipt_type"]
+
+        widgets = {
+            'receipt_type' : forms.Select(attrs={'id':'receipt_type'})
+         }
+class KebeleTypeForm(forms.ModelForm):
+    class Meta:
+        model = ReceiptOut
+        fields = ["kebele"]
+
+        widgets = {
+            'kebele' : forms.Select(attrs={'id':'kebele'})
+         } 
+class StockSelectForm(forms.Form):
+    stock_type = forms.ChoiceField(choices=[('Drug','Drug'),('Equipment','Equipment'),('Vaccine','Vaccine')],
+                                    widget=forms.Select(attrs={'id':'stock_type'}))

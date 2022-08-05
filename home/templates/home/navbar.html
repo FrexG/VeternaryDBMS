@@ -39,51 +39,20 @@
 				aria-disabled="true"
 				><button class="btn btn-sm btn-primary">Vaccination</button></a
 			>
-			<div class="dropdown nav-link">
-				<button
-					type="button"
-					class="btn-sm btn-primary dropdown-toggle"
-					data-bs-toggle="dropdown"
-				>
-					Stock
-				</button>
-				<ul class="dropdown-menu">
-					<li>
-						<a class="dropdown-item" href="{%url 'drug_in_out:drugin'%}"
-							>Drug In</a
-						>
-					</li>
-					<li>
-						<a class="dropdown-item" href="{%url 'drug_in_out:drugout'%}"
-							>Drug Out</a
-						>
-					</li>
-					<li>
-						<a
-							class="dropdown-item"
-							href="{%url 'equipment_in_out:equipmentin'%}"
-							>Equipment In</a
-						>
-					</li>
-					<li>
-						<a
-							class="dropdown-item"
-							href="{%url 'equipment_in_out:equipmentout'%}"
-							>Equipment Out</a
-						>
-					</li>
-					<li>
-						<a class="dropdown-item" href="{%url 'vaccine_in_out:vaccinein'%}"
-							>Vaccine In</a
-						>
-					</li>
-					<li>
-						<a class="dropdown-item" href="{%url 'vaccine_in_out:vaccineout'%}"
-							>Vaccine Out</a
-						>
-					</li>
-				</ul>
-			</div>
+			<a
+				class="nav-link"
+				href="{%url 'abattoir_exam:index'%}"
+				tabindex="-1"
+				aria-disabled="true"
+				><button class="btn btn-sm btn-primary">Abattoir</button></a
+			>
+			<a
+				class="nav-link"
+				href="{%url 'lab_exam:index'%}"
+				tabindex="-1"
+				aria-disabled="true"
+				><button class="btn btn-sm btn-secondary">Lab Exam</button></a
+			>
 		</div>
 	</div>
 	<span id="username" class="m2 text-md text-light"

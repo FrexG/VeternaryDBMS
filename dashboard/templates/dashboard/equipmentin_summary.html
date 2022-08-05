@@ -13,7 +13,7 @@
 {% endblock customImport %} {% block content %}
 <!-- prettier-ignore-attribute -->
 
-<div class="row m-2">
+<div class="row m-2 overflow-auto">
 	<form action="" method="POST">
 		{%csrf_token%} {{dateForm}}{{equipment_typeForm}}{{equipment_sourceForm}}
 		<input type="submit" value="Filter" class="btn btn-sm btn-primary" />
@@ -24,7 +24,7 @@
 	<div class="col-md-12 card">
 		<table class="table table-striped">
 			<thead>
-				<tr>
+				<tr class="table-dark">
 					<th scope="col">Equipment</th>
 					<th scope="col">Source</th>
 					<th scope="col">Quantity</th>
@@ -50,7 +50,7 @@
 		</table>
 	</div>
 </div>
-<div class="row overflow-auto m-2">
+<div class="row overflow-auto m-2" id="summary-additional">
 	<div class="col-md-4 col-sm-12">
 		<div class="card">
 			<div class="card-header">
@@ -69,7 +69,7 @@
 			<div class="card-body">
 				<table class="table table-striped m-2">
 					<thead>
-						<tr>
+						<tr class="table-dark">
 							<th scope="col">Equipment</th>
 							<th scope="col">Batch No.</th>
 							<th scope="col">In date</th>

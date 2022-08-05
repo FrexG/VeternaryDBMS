@@ -29,5 +29,9 @@ urlpatterns = [
     path('drug_in_out/',include('drug_in_out.urls')),
     path('equipment_in_out/',include('equipment_in_out.urls')),
     path('vaccine_in_out/',include('vaccine_in_out.urls')),
+    path('abattoir_exam/',include('abattoir_exam.urls')),
+    path('lab_exam/',include('lab_exam.urls')),
+    path('receipt_in_out/',include('receipt_in_out.urls')),
+    path('stock/',include('stock.urls')),
     path('admin/', admin.site.urls),
 ]

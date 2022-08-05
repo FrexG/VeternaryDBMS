@@ -1,6 +1,6 @@
 from statistics import mode
 from django.db import models
-from regulartreatedanimals.models import Unit
+
 # import drug and vaccine models
 from registernewuser.models import Drug
 from vaccination.models import Vaccine
@@ -10,7 +10,7 @@ class ClinicalEquipment(models.Model):
     # create a field for the name of the clinical equipment
     name = models.CharField(max_length=100)
     # create a field for the description of the clinical equipment
-    unit = models.ForeignKey(Unit, on_delete=models.CASCADE,null=True)
+    unit = models.CharField(max_length=100,default="PCS")
     description = models.CharField(max_length=100)
 
     def __str__(self) -> str:

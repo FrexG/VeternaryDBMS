@@ -1,0 +1,34 @@
+{% extends 'stock/stock_home.html' %} {%load static %}  {% block title %}Generate Printout{% endblock title %}
+{% block content %}
+<div class="col-sm-6 mx-auto">
+  <div class="card ">
+    <div class="card-header bg-dark">
+      <h3 class="text-light">
+        Generate Printout
+      </h3>
+    </div>
+    <div class="card-body">
+      <div class="form-group font-weight-bold text-secondary text-capitalize">
+        <form action="" method="POST">
+          {% csrf_token %} 
+          {{date_form}}{{select_prinout_form}}{{select_kebele_form}}
+          <input
+            type="submit"
+            value="Generate"
+            class="btn btn-md btn-primary form-control"
+          />
+        </form>
+        <span class"form-control">
+          <i class="text-success">
+            {% for message in messages%}
+              {{message}}
+            {% endfor %}
+            </i>
+        </span>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}

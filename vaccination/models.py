@@ -1,26 +1,31 @@
 from django.db import models
 from registernewuser.models import Customer
-from regulartreatedanimals.models import Unit,Disease
+from regulartreatedanimals.models import Disease
 from django.contrib.auth.models import User
 
 # Create your models here.
 class Vaccine(models.Model):
     vaccine_type = models.CharField(max_length=100)
-    price = models.DecimalField(
-        max_digits=6, decimal_places=4, default=000000.0000)
+    dis_price = models.DecimalField(
+        max_digits=8, decimal_places=2, default=000000.00)
+        
+    stock_price = models.DecimalField(
+        max_digits=8, decimal_places=2, default=000000.00)
 
     def __str__(self):
         return self.vaccine_type
 
     def getVaccineName(self): return str(self.vaccine_type)
-    def getPrice(self):return self.price
+
+    def getStockPrice(self):return self.stock_price
+
+    def getDispenceryPrice(self):return self.dis_price
 
 class Vaccination(models.Model):
     case_number = models.ForeignKey(Customer,on_delete=models.PROTECT)
     vaccine_id = models.ManyToManyField(Vaccine)
     vaccine_batch_num = models.CharField(max_length=100,null=False)
     quantity = models.IntegerField(default=0,null=False)
-    unit = models.ForeignKey(Unit,on_delete=models.PROTECT)
     dx = models.ManyToManyField(Disease,verbose_name="Dx",blank=True)
     service_date = models.DateField(auto_now_add=True)
 

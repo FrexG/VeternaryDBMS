@@ -1,0 +1,61 @@
+<!--prettier-ignore-->
+{% extends 'dashboard/main.html' %}
+{% load static %} {% block title %} Dashboard {%endblock title %}
+{% block navstyle %}
+<style>
+	#sidebar-stock-summary {
+		background-color: tomato;
+		color: white;
+	}
+</style>
+{% endblock navstyle %} {% block content %}
+<!-- prettier-ignore-attribute -->
+
+<div class="row m-2">
+	<form action="" method="POST">
+		{%csrf_token%} {{stock_select_form}}
+		<input type="submit" value="submit" class="btn btn-sm btn-primary" />
+	</form>
+</div>
+<hr />
+<div class="row overflow-auto m-2" id="summary">
+	<div class="col-md-10 card">
+		<table class="table table-striped">
+			<thead>
+				<tr class="table-dark">
+					<th scope="col">Item</th>
+					<th scope="col">Amount in Number</th>
+					<th scope="col">Amount in Cash</th>
+				</tr>
+			</thead>
+			<!--prettier-ignore-->
+			{% for row in stock %}
+			<tr>
+				{% if stock_type == "Drug"%}
+				<td>{{row.drug.drug_type}}</td>
+				<td>{{row.quantity}}</td>
+				<td>{% widthratio row.quantity 1 row.drug.stock_price%}</td>
+				{% endif %} {% if stock_type == "Equipment"%}
+				<td>{{row.equipment.name}}</td>
+				<td>{{row.quantity}}</td>
+				{% endif %} {% if stock_type == "Vaccine"%}
+
+				<td>{{row.vaccine.vaccine_type}}</td>
+				<td>{{row.quantity}}</td>
+				<td>{% widthratio row.quantity 1 row.vaccine.stock_price%}</td>
+				{% endif %}
+				<!-- prettier-ignore-attribute -->
+			</tr>
+
+			{% endfor %}
+		</table>
+	</div>
+</div>
+
+<div class="row overflow-auto m-2" id="summary">
+	<div class="col-md-10 card">
+		<div class="card-header">Total</div>
+		<div class="card-body">{{total}} birr</div>
+	</div>
+</div>
+{% endblock content %}

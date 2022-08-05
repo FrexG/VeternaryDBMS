@@ -1,10 +1,11 @@
 from contextlib import redirect_stdout
 from django.shortcuts import render,redirect
+from utils.printout import printout
 # import view
 from django.views import View
-from matplotlib.style import context
 from .models import *
 from .forms import *
+from datetime import datetime
 
 # Create your views here.
 class VaccineInView(View):
@@ -17,7 +18,7 @@ class VaccineInView(View):
     def post(self, request):
         vaccine_in_form = VaccineInForm(request.POST)
         if vaccine_in_form.is_valid():
-            vaccine_in_form.save()
+            obj = vaccine_in_form.save()
             return redirect('vaccine_in_out:vaccinein')
         else:
             context = {
@@ -37,9 +38,8 @@ class VaccineOutView(View):
     def post(self, request):
         vaccine_out_form = VaccineOutForm(request.POST)
         if vaccine_out_form.is_valid():
-            vaccine_out_form.save()
-            return redirect('vaccine_in_out:vaccineout')
-        
+            obj = vaccine_out_form.save()
+            return redirect('vaccine_in_out:vaccineout')  
         else:
             context = {
             'vaccine_out_form': vaccine_out_form,
@@ -48,10 +48,17 @@ class VaccineOutView(View):
             return render(request,context=context,template_name='vaccine_in_out/vaccine_out.html')
 
 class VaccineOutCashDeposit(View):
+    vaccine_out_form = VaccineOutForm()
     def post(self, request):
         vaccine_cash_deposit_form = VaccineOutCashDepositForm(request.POST)
         if vaccine_cash_deposit_form.is_valid():
             vaccine_cash_deposit_form.save()
             return redirect('vaccine_in_out:vaccineout')
         else:
-            return render(request,template_name='vaccine_in_out/vaccine_out.html')
+            context = {
+            'vaccine_out_form': self.vaccine_out_form,
+            'vaccine_cash_deposit_form': self.vaccine_cash_deposit_form
+            }
+            return render(request,context=context,template_name='vaccine_in_out/vaccine_out.html')
+
+ 

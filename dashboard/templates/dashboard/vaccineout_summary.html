@@ -15,7 +15,7 @@
 
 <div class="row m-2">
 	<form action="" method="POST">
-		{%csrf_token%} {{dateForm}}{{drug_typeForm}}{{drug_destinationForm}}
+		{%csrf_token%} {{dateForm}}{{vaccine_typeForm}}{{vaccine_receiverForm}}
 		<input type="submit" value="Filter" class="btn btn-sm btn-primary" />
 	</form>
 </div>
@@ -24,13 +24,14 @@
 	<div class="col-md-12 card">
 		<table class="table table-striped">
 			<thead>
-				<tr>
+				<tr class="table-dark">
 					<th scope="col">Vaccine</th>
 					<th scope="col">Destination</th>
 					<th scope="col">Receiver</th>
 					<th scope="col">Unit Price</th>
 					<th scope="col">Quantity</th>
 					<th scope="col">Total</th>
+					<th scope="col">Batch No.</th>
 					<th scope="col">Batch No.</th>
 					<th scope="col">Approved by</th>
 				</tr>
@@ -44,14 +45,15 @@
 				<td>{{row.quantity}}</td>
 				<td>{{row.total}}</td>
 				<td>{{row.batch_number}}</td>
+				<td>{{row.date}}</td>
 				<td>{{row.approved_by}}</td>
 			</tr>
 			{% endfor %}
 		</table>
 	</div>
 </div>
-<div class="row overflow-auto m-2">
-	<div class="col-md-3 col-sm-12">
+<div class="row overflow-auto m-2" id="summary-additional">
+	<div class="col-md-2 col-sm-12">
 		<div class="card">
 			<div class="card-header">
 				<h5 class="card-title">Total Amount</h5>
@@ -61,7 +63,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="col-md-3 col-sm-12">
+	<div class="col-md-2 col-sm-12">
 		<div class="card">
 			<div class="card-header">
 				<h5 class="card-title">Deposited/Remaining</h5>
@@ -71,23 +73,35 @@
 			</div>
 		</div>
 	</div>
-	<div class="col-md-6 col-sm-12">
+	<div class="col-md-8 col-sm-12">
 		<div class="card">
 			<div class="card-header">
-				<h5 class="card-title">Destinations</h5>
+				<h5 class="card-title">Audit</h5>
 			</div>
 			<div class="card-body">
 				<table class="table table-striped m-2">
 					<thead>
-						<tr>
-							<th scope="col">Destination</th>
-							<th scope="col">Number</th>
+						<tr class="table-dark">
+							<th scope="col">Vaccine Id</th>
+							<th scope="col">Batch No.</th>
+							<th scope="col">Kebele</th>
+							<th scope="col">Date</th>
+							<th scope="col">Bank Slip No.</th>
+							<th scope="col">Deposited Amount</th>
+							<th scope="col">Remaining</th>
+							<th scope="col">Confirmed by.</th>
 						</tr>
 					</thead>
-					{% for key,value in vaccine_destinations.items %}
+					{% for vaccine_deposit in vaccine_cash_deposit %}
 					<tr>
-						<td>{{key}}</td>
-						<td>{{value}}</td>
+						<td>{{vaccine_deposit.payment_for.vaccine}}</td>
+						<td>{{vaccine_deposit.payment_for.batch_number}}</td>
+						<td>{{vaccine_deposit.payment_for.receiver}}</td>
+						<td>{{vaccine_deposit.date_paid}}</td>
+						<td>{{vaccine_deposit.bank_slip_number}}</td>
+						<td>{{vaccine_deposit.amount}}</td>
+						<td>{{vaccine_deposit.remaining_amount}}</td>
+						<td>{{vaccine_deposit.confirmed_by}}</td>
 					</tr>
 					{%endfor%}
 				</table>

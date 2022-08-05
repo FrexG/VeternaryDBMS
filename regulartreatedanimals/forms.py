@@ -19,6 +19,7 @@ class TreatedAnimalsForm(ModelForm):
             't0': forms.NumberInput(attrs={'class': 'form-control'}),
             'pr': forms.NumberInput(attrs={'class': 'form-control'}),
             'rr': forms.NumberInput(attrs={'class': 'form-control'}),
+            'case_holder': forms.Select(attrs={'class': 'form-control'}),
             'clinical_finding': forms.Textarea(attrs={'class': 'form-control', 'style': textAreaSize}),
             'dx': forms.SelectMultiple(attrs={'class': 'form-control'}),
             'differential_diag': forms.Textarea(attrs={'class': 'form-control', 'style': textAreaSize}),
@@ -29,16 +30,23 @@ class TreatedAnimalsForm(ModelForm):
 class PrescriptionForm(ModelForm):       
     class Meta:
         model = Prescription
-        exclude = ["paid"]
+        exclude = ["paid","delivered"]
 
         widgets = {
             'rx': forms.Select(attrs={'class': 'form-control'}),
-            'unit': forms.Select(attrs={'class': 'form-control'}),
-            'quantity': forms.NumberInput(attrs={'class': 'form-control'}),
-            'duration': forms.NumberInput(attrs={'class': 'form-control'}),
+            'quantity': forms.NumberInput(attrs={'class': 'form-control','required':'True'}),
+            'duration': forms.NumberInput(attrs={'class': 'form-control','required':'True'}),
             'treatment': forms.Select(attrs={'class': 'form-control'}),
             'total': forms.NumberInput(attrs={'class': 'form-control','type': 'hidden'}),
         }
+    
+    def clean_rx(self):
+        rx = self.cleaned_data.get("rx")
+        print(f"rx = {rx}")
+        if rx is None:
+            raise forms.ValidationError("RX must be selected!!")
+        return rx
+
     def clean_quantity(self):
         quantity = self.cleaned_data.get("quantity")
         if quantity < 1:
@@ -49,7 +57,7 @@ class PrescriptionForm(ModelForm):
     def clean_total(self):
         quantity = self.cleaned_data.get("quantity")
         print(f"Quantity: {quantity}")
-        rx_price = self.cleaned_data.get("rx").price
+        rx_price = self.cleaned_data.get("rx").dis_price
         print(f"RX Price: {rx_price}")
         total = quantity * rx_price
         print(f"Total: {total}")

@@ -60,7 +60,7 @@ class VaccineInForm(forms.ModelForm):
 class VaccineOutForm(forms.ModelForm):
     # calcualte total from unit price and quantity
     def clean_total(self):
-        unit_price = self.cleaned_data.get("unit_price")
+        unit_price = self.cleaned_data.get("vaccine").stock_price
         quantity = self.cleaned_data.get("quantity")
         if quantity is None:
             quantity = 0
@@ -95,18 +95,50 @@ class VaccineOutForm(forms.ModelForm):
             'approved_by' : forms.Select(attrs={'class': 'form-control'}),
             'store_man' : forms.TextInput(attrs={'class':'form-control'}),
             'quantity' : forms.NumberInput(attrs={'class': 'form-control'}),
-            'unit_price' : forms.NumberInput(attrs={'class': 'form-control'}),
+            #'unit_price' : forms.NumberInput(attrs={'class': 'form-control'}),
             'total':forms.NumberInput(attrs={'class':'from-contrl','type':'hidden'}),
             'batch_number' : forms.TextInput(attrs={'class': 'form-control'}),
             'remark' : forms.Textarea(attrs={'class': 'form-control'}),
         }
 # create a drugOutCashDeposit form
 class VaccineOutCashDepositForm(forms.ModelForm):
+    def clean_amount(self):
+        # all previous payments for this equipment
+        previous_payments = VaccineOutCashDeposit.objects.filter(payment_for=self.cleaned_data.get("payment_for"))
+        # total amount of previous payments
+        previous_deposited_amount = 0
+        for payment in previous_payments:
+            previous_deposited_amount = previous_deposited_amount + payment.amount
+        # current payment amount
+        current_payment_amount = self.cleaned_data.get("amount")
+        # Initial total amount of the equipment
+        total_amount = self.cleaned_data.get("payment_for").total
+        # check if the current payment amount is greater than the total amount of previous payments
+        if current_payment_amount + previous_deposited_amount > total_amount:
+            print(f"The amount you entered is greater than {total_amount - previous_deposited_amount} birr")
+            raise forms.ValidationError(f"The amount you entered is greater than {total_amount - previous_deposited_amount} birr")
+
+        if current_payment_amount <= 0:
+            raise forms.ValidationError("Amount cannot be negative or zero")
+        return current_payment_amount
+
     def clean_remaining_amount(self):
-        amount = self.cleaned_data.get("amount")
-        total_amount = self.cleaned_data.get("payment_for")
-        remaining_amount = total_amount - amount
+        # all previous payments for this equipment
+        previous_payments = VaccineOutCashDeposit.objects.filter(payment_for=self.cleaned_data.get("payment_for"))
+        # total amount of previous payments
+        previous_deposited_amount = 0
+        for payment in previous_payments:
+            previous_deposited_amount = previous_deposited_amount + payment.amount
+        # current payment amount
+        deposited_amount = self.cleaned_data.get("amount")
+        # Initial total amount of the equipment
+        total_amount = self.cleaned_data.get("payment_for").total
+   
+        if deposited_amount == None:
+            deposited_amount = 0
+        remaining_amount = (total_amount - previous_deposited_amount) - deposited_amount
         return remaining_amount
+
 
     class Meta:
         model = VaccineOutCashDeposit

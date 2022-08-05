@@ -24,7 +24,7 @@
 	<div class="col-md-10 card">
 		<table class="table table-striped">
 			<thead>
-				<tr>
+				<tr class="table-dark">
 					<th scope="col">Cust Name</th>
 					<th scope="col">Treatment type</th>
 					<th scope="col">Case holder</th>
@@ -59,23 +59,29 @@
 		</div>
 	</div>
 </div>
-<div class="row m-2">
+<div class="row overflow-auto m-2" id="summary-additional">
 	<div class="col-md-2 col-sm-12">
 		<canvas class="chart_canvas card" id="cntx_parasite_treatment"></canvas>
 	</div>
 	<div class="col-md-8 col-sm-12">
 		<canvas class="chart_canvas card" id="cntx_disease_prevalence"></canvas>
 	</div>
-	<div class="col-md-2 col-sm-12 card">
-		<h5 class="text-center">Kebele Distribution</h5>
-		<table class="table table-striped m-2">
-			{% for key,value in distByKebele.items %}
-			<tr>
-				<td>{{key}}</td>
-				<td>{{value}}</td>
-			</tr>
-			{%endfor%}
-		</table>
+	<div class="col-md-2 col-sm-12">
+		<div class="card">
+			<div class="card-header">
+				<h5 class="card-title">Kebele Distribution</h5>
+			</div>
+			<div class="card-body">
+				<table class="table table-striped">
+					{% for key,value in distByKebele.items %}
+					<tr>
+						<td>{{key}}</td>
+						<td>{{value}}</td>
+					</tr>
+					{%endfor%}
+				</table>
+			</div>
+		</div>
 	</div>
 </div>
 {% endblock content %}

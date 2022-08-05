@@ -35,3 +35,7 @@ class NewCustomerForm(ModelForm):
             'treatment_history': forms.Textarea(attrs={'class': 'form-control', 'style': textAreaSize}),
             'mobile_number': forms.NumberInput(attrs={'class': 'form-control'}),
         }
+# Search customer form
+class SearchForm(forms.Form):
+    customer_name = forms.CharField(max_length = 100,label="Customer Name:",widget=forms.TextInput(attrs={'class':'form-control'}))
+    mobile_number = forms.IntegerField(widget=forms.NumberInput(attrs={'class': 'form-control'}))

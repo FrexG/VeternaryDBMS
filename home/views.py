@@ -6,7 +6,7 @@ from django.contrib import messages
 from .models import Profile
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login, logout
-from .forms import CreateUserForm
+from .forms import CreateUserForm,UserRoleForm
 # Create your views here.
 
 
@@ -33,13 +33,16 @@ class Login(View):
                 return redirect('/cashier')
             elif Profile.objects.get(user=authenticated_user).role == 'Pharmacist':
                 return redirect('/pharmacy')
+            elif Profile.objects.get(user=authenticated_user).role == 'Stock_Keeper':
+                return redirect('/drug_in_out')
+            elif Profile.objects.get(user=authenticated_user).role == 'Admin':
+                return redirect('/dashboard')
 
-            return redirect('/register')
+            #return redirect('/register')
         else:
             messages.info(request, "Incorrect Username or Password")
 
             return redirect('/')
-
 
 class Logout(View):
     def get(self, request):
@@ -50,18 +53,29 @@ class Logout(View):
 class Signup(View):
     def get(self, request):
         form = CreateUserForm()
+        role_form = UserRoleForm()
 
-        context = {'form': form}
+
+        context = {'form': form,
+                   'role_form': role_form}
 
         return render(request, 'home/signup.html', context)
 
     def post(self, request):
         form = CreateUserForm(request.POST)
-        context = {'form': form}
+        role_form = UserRoleForm(request.POST)
+
+        # get role
+        role = role_form['role'].value()
+
+        context = {'form': form,
+                   'role_form': role_form}
 
         if form.is_valid():
-            form.save()
+            obj = form.save()
             user = form.cleaned_data.get("username")
+            # assign role to user
+            Profile.objects.create(user=obj, role=role)
             messages.success(request, f"Account created for {user}")
 
             return redirect('/')

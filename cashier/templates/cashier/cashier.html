@@ -129,11 +129,12 @@
 									<td>
 										{{prescription.rx.drug_type}}
 									</td>
-									<td>
-										{{prescription.rx.price}}
-									</td>
+									
 									<td>
 										{{prescription.unit.unit_name}}
+									</td>
+									<td>
+										{{prescription.rx.dis_price}}
 									</td>
 									<td>
 										{{prescription.quantity}}
@@ -190,7 +191,7 @@
 										{{prescription.unit.unit_name}}
 									</td>
 									<td>
-										{{prescription.rx.price}}
+										{{prescription.rx.dis_price}}
 									</td>
 									
 									<td>
@@ -205,6 +206,56 @@
 
 									<td>
 										<input class="btn btn-sm btn-danger parasite-btn" type="button" value="Cancel" id="parasite_{{prescription.id}}">
+									</td>
+								</tr>
+							</form>
+						{% endfor %}
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row m-2">
+			<div class="col">
+				<div class="card">
+					<div class="card-header bg-dark">
+						<div class="card-title text-light">Lab Exam</div>
+					</div>	
+					<div class="card-body">
+						<table class="table table-striped">
+							<thead>
+								<tr>
+								  <th scope="col">Cust Name</th>
+								  <th scope="col">Lab Technique</th>
+								  <th scope="col">Unit Price (birr)</th>
+								  <th scope="col">Total (birr)</th>
+								  <th></th>
+								</tr>
+							</thead>
+		
+						{% for exam in lab_exam %}
+							<form method="post" action={% url 'cashier:update_lab_exam' exam.id %}>
+								{% csrf_token %}
+								<tr>	
+									<td>
+										{{exam.customer.customer_name}}
+									</td>
+									<td>
+										{{exam.lab_technique.lab_technique}}
+									</td>
+									<td>
+										{{exam.lab_technique.price}}
+									</td>
+							
+									<td>
+										{{exam.lab_technique.price}}
+									</td>
+									<td>
+										<input class="btn btn-sm btn-success" type="submit" value="Confirm">
+									</td>
+
+									<td>
+										<input class="btn btn-sm btn-danger lab-exam-btn" type="button" value="Cancel" id="exam_{{exam.id}}">
 									</td>
 								</tr>
 							</form>

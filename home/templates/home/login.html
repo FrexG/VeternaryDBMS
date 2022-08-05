@@ -71,10 +71,10 @@
                         />
                       </br>
                       </div>
-                      <div id="register-link" class="text-right form-control">
+                      {% comment %} <div id="register-link" class="text-right form-control">
                         <a href="{% url 'home:signup'%}" class="text-info">
                           Register here</a>
-                      </div>
+                      </div> {% endcomment %}
                       <span>
                           {%for message in messages%} 
                               <p>{{message}}</p>

@@ -1,5 +1,5 @@
-{% extends 'home/home.html' %} {%load static %} {% block title%} Vaccine Out
-{%endblock title %} {% block content %}
+{% extends 'stock/stock_home.html' %} {%load static %} {% block title%} Vaccine
+Out {%endblock title %} {% block content %}
 <div class="col-sm-6 mx-auto">
 	<div class="card">
 		<div class="card-header bg-warning">
@@ -13,9 +13,9 @@
 				>
 					{%csrf_token%} {{vaccine_out_form}}
 
-					<button type="submit" class="btn btn-md btn-info form-control">
-						Submit
-					</button>
+					<div class="form-control">
+						<input type="submit" value="Save" class="btn btn-md btn-primary" />
+					</div>
 				</div>
 			</form>
 		</div>

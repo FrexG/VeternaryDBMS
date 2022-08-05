@@ -22,13 +22,13 @@ class ClinicalService(models.Model):
     id = models.AutoField(primary_key=True)
 
     case_number = models.ForeignKey(
-        Customer, verbose_name="Case Number", on_delete=models.CASCADE)
+        Customer, verbose_name="Case Number", on_delete=models.CASCADE,null=False)
     # refernce to user id will be added later
     service_date = models.DateField(
         "Service Date", auto_now_add=True)
 
     # Service type
-    service_type = models.ForeignKey(Service,on_delete=models.PROTECT)
+    service_type = models.ForeignKey(Service,on_delete=models.PROTECT,null=False)
 
     case_holder = models.ForeignKey(User,on_delete=models.PROTECT,null=True)
 
@@ -46,7 +46,7 @@ class ClinicalService(models.Model):
 class AIService(models.Model):
 
     case_number = models.ForeignKey(
-        Customer, verbose_name="Case Number", on_delete=models.CASCADE)
+        Customer, verbose_name="Case Number", on_delete=models.CASCADE,null=False)
     # Service type, this will be prefield by service type = AI
     price = models.DecimalField(
         max_digits=6, decimal_places=2, default=10.0000)

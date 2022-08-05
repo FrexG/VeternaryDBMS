@@ -23,9 +23,12 @@ class VaccineIn(models.Model):
     unit_price = models.DecimalField(max_digits=8,decimal_places=2,default=000000.00)
     total = models.DecimalField(max_digits=8,decimal_places=2,default=000000.00)
     batch_number = models.CharField(max_length=100,null=False)
-    date_received = models.DateField(auto_now=False,auto_now_add=True)
+    date = models.DateField(auto_now=False,auto_now_add=True)
     expiration_data = models.DateField(auto_now=False,auto_now_add=False)
     remark = models.CharField(max_length=200,null=True)
+
+    def __str__(self):
+        return self.vaccine.getVaccineName()+"_"+str(self.batch_number)
 
 class VaccineOut(models.Model):
     DESTINATION = [
@@ -41,10 +44,14 @@ class VaccineOut(models.Model):
     approved_by = models.ForeignKey(User,on_delete=models.PROTECT,related_name="vaccine_approved_by")
     store_man = models.CharField(max_length=100)
     quantity = models.PositiveIntegerField()
-    unit_price = models.DecimalField(max_digits=8,decimal_places=2,default=000000.00)
+    #unit_price = models.DecimalField(max_digits=8,decimal_places=2,default=000000.00)
     total = models.DecimalField(max_digits=8,decimal_places=2,default=000000.00)
     batch_number = models.CharField(max_length=100,null=False)
+    date = models.DateField(auto_now=False,auto_now_add=True)
     remark = models.CharField(max_length=200,null=True)
+
+    def __str__(self):
+        return self.vaccine.vaccine_type + "-" + self.receiver.name + "-"+self.batch_number
 
 class VaccineOutCashDeposit(models.Model):
     payment_for = models.ForeignKey(VaccineOut,on_delete=models.PROTECT)

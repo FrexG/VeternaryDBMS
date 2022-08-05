@@ -2,6 +2,7 @@
 from django import forms
 from .models import DrugIn,DrugOut,DrugOutCashDeposit
 from stock.models import DrugStock
+
 class DrugInForm(forms.ModelForm):
     # calcualte total from unit price and quantity
     def clean_total(self):
@@ -58,7 +59,7 @@ class DrugInForm(forms.ModelForm):
 class DrugOutForm(forms.ModelForm):
     # calcualte total from unit price and quantity
     def clean_total(self):
-        unit_price = self.cleaned_data.get("unit_price")
+        unit_price = self.cleaned_data.get("drug").stock_price
         quantity = self.cleaned_data.get("quantity")
         if quantity is None:
             quantity = 0
@@ -97,17 +98,47 @@ class DrugOutForm(forms.ModelForm):
             'store_man' : forms.TextInput(attrs={'class':'form-control'}),
             'quantity' : forms.NumberInput(attrs={'class': 'form-control'}),
              'total' : forms.NumberInput(attrs={'class': 'form-control','type':'hidden'}),
-            'unit_price' : forms.NumberInput(attrs={'class': 'form-control'}),
+            #'unit_price' : forms.NumberInput(attrs={'class': 'form-control'}),
             'batch_number' : forms.TextInput(attrs={'class': 'form-control'}),
             'remark' : forms.Textarea(attrs={'class': 'form-control'}),
         }
 # create a drugOutCashDeposit form
 class DrugOutCashDepositForm(forms.ModelForm):
-    def clean_remaining_amount(self):
-        amount = self.cleaned_data.get("amount")
+    def clean_amount(self):
+        # all previous payments for this equipment
+        previous_payments = DrugOutCashDeposit.objects.filter(payment_for=self.cleaned_data.get("payment_for"))
+        # total amount of previous payments
+        previous_deposited_amount = 0
+        for payment in previous_payments:
+            previous_deposited_amount = previous_deposited_amount + payment.amount
+        # current payment amount
+        current_payment_amount = self.cleaned_data.get("amount")
+        # Initial total amount of the equipment
         total_amount = self.cleaned_data.get("payment_for").total
-        print(amount,total_amount)
-        remaining_amount = total_amount - amount
+        # check if the current payment amount is greater than the total amount of previous payments
+        if current_payment_amount + previous_deposited_amount > total_amount:
+            print(f"The amount you entered is greater than {total_amount - previous_deposited_amount} birr")
+            raise forms.ValidationError(f"The amount you entered is greater than {total_amount - previous_deposited_amount} birr")
+
+        if current_payment_amount <= 0:
+            raise forms.ValidationError("Amount cannot be negative or zero")
+        return current_payment_amount
+
+    def clean_remaining_amount(self):
+        # all previous payments for this equipment
+        previous_payments = DrugOutCashDeposit.objects.filter(payment_for=self.cleaned_data.get("payment_for"))
+        # total amount of previous payments
+        previous_deposited_amount = 0
+        for payment in previous_payments:
+            previous_deposited_amount = previous_deposited_amount + payment.amount
+        # current payment amount
+        deposited_amount = self.cleaned_data.get("amount")
+        # Initial total amount of the equipment
+        total_amount = self.cleaned_data.get("payment_for").total
+   
+        if deposited_amount == None:
+            deposited_amount = 0
+        remaining_amount = (total_amount - previous_deposited_amount) - deposited_amount
         return remaining_amount
 
     class Meta:

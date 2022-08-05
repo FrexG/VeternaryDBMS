@@ -1,6 +1,64 @@
 {% extends 'home/home.html' %} {%load static %}  {% block title %}Register{% endblock title %}
 {% block content %}
-<div class="col-sm-6 mx-auto">
+<div class="col-sm-4 mx-auto">
+  <div class="card ">
+    <div class="card-header bg-dark">
+      <h3 class="text-light">
+        Search Customer
+      </h3>
+    </div>
+    <div class="card-body">
+      <div class="form-group font-weight-bold text-secondary text-capitalize">
+        <form action="search_customer" method="POST">
+          {% csrf_token %} 
+          {{search_form}}
+          <input
+            type="submit"
+            value="Search"
+            class="btn btn-md btn-primary form-control"
+          />
+        </form>
+        <span class"form-control">
+          <i class="text-success">
+            {% for message in messages%}
+              {{message}}
+            {% endfor %}
+            </i>
+        </span>
+      </div>
+    </div>
+  </div>
+  {% if customer_by_name or customer_by_mobile%}
+  <table class="table">
+    <thead>
+      <tr class="table-dark">
+        <th scope="col">Cust Name</th>
+				<th scope="col">Case Num</th>
+        <th scope="col">Mobile</th>
+      </tr>
+    </thead>
+    {% if customer_by_name %}
+      {% for row in customer_by_name%}
+      <tr>
+        <td>{{row.customer_name}}</td>
+        <td>{{row.case_number}}</td>
+        <td>{{row.mobile_number}}</td>
+      </tr>
+      {%endfor%}
+    {%endif%}
+    {% if customer_by_mobile %}
+      {% for row in customer_by_mobile%}
+      <tr>
+        <td>{{row.customer_name}}</td>
+        <td>{{row.case_number}}</td>
+        <td>{{row.mobile_number}}</td>
+      </tr>
+      {%endfor%}
+    {%endif%}  
+  </table>
+  {%endif%}
+</div>
+<div class="col-sm-8 mx-auto">
   <div class="card ">
     <div class="card-header bg-dark">
       <h3 class="text-light">

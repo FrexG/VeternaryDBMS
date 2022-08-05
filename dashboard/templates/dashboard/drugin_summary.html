@@ -23,7 +23,7 @@
 	<div class="col-md-12 card">
 		<table class="table table-striped">
 			<thead>
-				<tr>
+				<tr class="table-dark">
 					<th scope="col">Drug</th>
 					<th scope="col">Source</th>
 					<th scope="col">Quantity</th>
@@ -42,14 +42,14 @@
 				<td>{{row.unit_price}}</td>
 				<td>{{row.total}}</td>
 				<td>{{row.batch_number}}</td>
-				<td>{{row.date_received}}</td>
+				<td>{{row.date}}</td>
 				<td>{{row.expiration_data}}</td>
 			</tr>
 			{% endfor %}
 		</table>
 	</div>
 </div>
-<div class="row overflow-auto m-2">
+<div class="row overflow-auto m-2" id="summary-additional">
 	<div class="col-md-4 col-sm-12">
 		<div class="card">
 			<div class="card-header">
@@ -60,7 +60,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="col-md-8 col-sm-12">
+	<div class="col-md-8 col-sm-12 overflow-auto">
 		<div class="card">
 			<div class="card-header">
 				<h5 class="card-title">Expired/ring drugs</h5>
@@ -68,10 +68,11 @@
 			<div class="card-body">
 				<table class="table table-striped m-2">
 					<thead>
-						<tr>
+						<tr class="table-dark">
 							<th scope="col">Drug</th>
 							<th scope="col">Batch No.</th>
 							<th scope="col">In date</th>
+							<th scope="col">Exp.date</th>
 							<th scope="col">Remaining days</th>
 						</tr>
 					</thead>
@@ -79,7 +80,8 @@
 					<tr>
 						<td>{{key.drug}}</td>
 						<td>{{key.batch_number}}</td>
-						<td>{{key.date_received}}</td>
+						<td>{{key.date}}</td>
+						<td>{{key.expiration_data}}</td>
 						<td>{{value}}</td>
 					</tr>
 					{%endfor%}

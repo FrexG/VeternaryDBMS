@@ -60,6 +60,7 @@ class handlePrescription(LoginRequiredMixin, View):
         prescriptionFormSet = PrescriptionFormSet(data=request.POST)
 
         for formset in prescriptionFormSet:
+        #   print("Here")
             if formset.is_valid():
                 print("It is valid")
                 formset.save()

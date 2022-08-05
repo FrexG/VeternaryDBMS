@@ -27,10 +27,22 @@
 			>Vaccination</a
 		>
 		<a
+			href="{% url 'dashboard:abattoir_exam_summary' %}"
+			class="list-group-item mb-2"
+			id="sidebar-abattoir-exam-summary"
+			>Abattoir Exam</a
+		>
+		<a
 			href="{% url 'dashboard:artificial_insemination_summary' %}"
 			class="list-group-item mb-2"
 			id="sidebar-ai-summary"
 			>Artificial Insemination</a
+		>
+		<a
+			href="{% url 'dashboard:lab_exam_summary' %}"
+			class="list-group-item mb-2"
+			id="sidebar-lab-exam-summary"
+			>Lab Exam</a
 		>
 		<a
 			href="{% url 'dashboard:drug_in_summary' %}"
@@ -67,6 +79,24 @@
 			class="list-group-item mb-2"
 			id="sidebar-vaccineout-summary"
 			>Vaccine Out</a
+		>
+		<a
+			href="{% url 'dashboard:receipt_in_summary' %}"
+			class="list-group-item mb-2"
+			id="sidebar-receiptin-summary"
+			>Receipt In</a
+		>
+		<a
+			href="{% url 'dashboard:receipt_out_summary' %}"
+			class="list-group-item mb-2"
+			id="sidebar-receiptout-summary"
+			>Receipt Out</a
+		>
+		<a
+			href="{% url 'dashboard:stock_summary' %}"
+			class="list-group-item mb-2"
+			id="sidebar-stock-summary"
+			>Stock</a
 		>
 	</ul>
 </div>

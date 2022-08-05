@@ -24,7 +24,7 @@ Dashboard {%endblock title %}
 	<div class="col-md-12 card">
 		<table class="table table-striped">
 			<thead>
-				<tr>
+				<tr class="table-dark">
 					<th scope="col">Cust Name</th>
 					<th scope="col">Service type</th>
 					<th scope="col">Case Holder</th>
@@ -44,7 +44,7 @@ Dashboard {%endblock title %}
 		</table>
 	</div>
 </div>
-<div class="row m-2">
+<div class="row overflow-auto m-2" id="summary-additional">
 	{% if totalClinicalServices %}
 	<div class="col-md-4 col-sm-12">
 		<div class="card m-5">

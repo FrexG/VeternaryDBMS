@@ -3,9 +3,9 @@ from contextlib import redirect_stdout
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from utils.printout import printout
+from datetime import datetime
 # import view
 from django.views import View
-from matplotlib.style import context
 from .models import *
 from .forms import *
 
@@ -21,8 +21,7 @@ class DrugInView(View):
         drug_in_form = DrugInForm(request.POST)
         if drug_in_form.is_valid():
             drug_in_form.save()
-            #return redirect('drug_in_out:drug_in')
-            return printout(request)
+            return redirect('drug_in_out:drugin')
         else:
             context = {
             'drug_in_form': drug_in_form,
@@ -41,9 +40,8 @@ class DrugOutView(View):
     def post(self, request):
         drug_out_form = DrugOutForm(request.POST)
         if drug_out_form.is_valid():
-            drug_out_form.save()
+            obj = drug_out_form.save()
             return redirect('drug_in_out:drugout')
-        
         else:
             context = {
             'drug_out_form': drug_out_form,
@@ -52,10 +50,15 @@ class DrugOutView(View):
             return render(request,context=context,template_name='drug_in_out/drug_out.html')
 
 class DrugOutCashDeposit(View):
+    drug_out_form = DrugOutForm()
     def post(self, request):
         drug_cash_deposit_form = DrugOutCashDepositForm(request.POST)
         if drug_cash_deposit_form.is_valid():
             drug_cash_deposit_form.save()
             return redirect('drug_in_out:drugout')
         else:
-            return render(request,template_name='drug_in_out/drug_out.html')
+            context = {
+            'drug_out_form': self.drug_out_form,
+            'drug_cash_deposit_form': drug_cash_deposit_form
+            }   
+            return render(request,context=context,template_name='drug_in_out/drug_out.html')

@@ -24,13 +24,15 @@ Animals{%endblock title%} {%block imports%}
 			<tr>
 				<th>Treatment Date</th>
 				<th>Clinical Finding</th>
-				<th>Diff.Diag</th>
+				<th>DX</th>
+				<th>Case holder</th>
 			</tr>
 			{% for treatment in treatment_history %}
 			<tr>
 				<td>{{treatment.service_date}}</td>
 				<td>{{treatment.clinical_finding}}</td>
-				<td>{{treatment.differential_diag}}</td>
+				<td>{% for dx in treatment.dx.all %} {{dx.disease_name}} {%endfor%}</td>
+				<td>{{treatment.case_holder.username}}</td>
 			</tr>
 			{% endfor %}
 		</table>

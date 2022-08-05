@@ -19,14 +19,15 @@
 			href="{% static 'registernewuser/bootstrap-5.0.0/css/bootstrap.css'%}"
 		/>
 		<script src="{% static 'registernewuser/bootstrap-5.0.0/js/bootstrap.js'%}"></script>
-		{% block customImport %}{% endblock customImport %}
-
+		{% block customImport %}{% endblock customImport %} {% comment %}
 		<script
 			src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.8.0/chart.min.js"
 			integrity="sha512-sW/w8s4RWTdFFSduOTGtk4isV1+190E/GghVffMA9XczdJ2MDzSzLEubKAs5h0wzgSJOQTRYyaz73L3d6RtJSg=="
 			crossorigin="anonymous"
 			referrerpolicy="no-referrer"
 		></script>
+		{% endcomment %}
+		<script src="{% static 'dashboard/package/dist/chart.min.js' %}"></script>
 		<script src="{% static 'dashboard/dashboard_nav.js'%}"></script>
 	</head>
 	<body id="body">

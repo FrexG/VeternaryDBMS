@@ -8,6 +8,7 @@ from django.views.generic.edit import UpdateView
 from clinicalservices.models import ClinicalService
 from regulartreatedanimals.models import Prescription
 from parasitetreatment.models import ParasitePrescription
+from lab_exam.models import LabExam
 # Create your views here.
 
 class Index(LoginRequiredMixin,View):
@@ -18,13 +19,15 @@ class Index(LoginRequiredMixin,View):
         clinical_services = ClinicalService.objects.filter(paid=False)
         prescription = Prescription.objects.filter(paid = False)
         parasite_prescription = ParasitePrescription.objects.filter(paid = False)
+        lab_exam = LabExam.objects.filter(paid=False)
 
         print(f"Count: {prescription.count()}")
         #print(parasite_prescription[0].treatment)
 
         context={"services":clinical_services,
                 "parasite_prescriptions":parasite_prescription,
-                "prescriptions":prescription
+                "prescriptions":prescription,
+                "lab_exam":lab_exam
                 }
 
         return render(request,template_name=self.templateURL,context=context)
@@ -79,4 +82,21 @@ class DeleteParasitePrescription(LoginRequiredMixin,View):
 
     def post(self,request,pk):
         ParasitePrescription.objects.get(id = pk).delete()
+        return redirect("/cashier")
+
+class UpdateLabExam(LoginRequiredMixin,View):
+    def get(self,request):
+        return redirect("cashier/")
+
+    def post(self,request,pk):
+        LabExam.objects.filter(id = pk).update(paid=True)
+
+        return redirect("/cashier")
+
+class DeleteLabExam(LoginRequiredMixin,View):
+    def get(self,request):
+        return redirect("cashier/")
+
+    def post(self,request,pk):
+        LabExam.objects.get(id = pk).delete()
         return redirect("/cashier")

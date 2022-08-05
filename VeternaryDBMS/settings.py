@@ -26,7 +26,7 @@ SECRET_KEY = 'jfolbyob5sdjz#x_^!9r7_t0k*qv3u_yzyo3c9+enexx##n)u-'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1','172.21.0.20']
 
 
 # Application definition
@@ -45,6 +45,9 @@ INSTALLED_APPS = [
     'drug_in_out',
     'equipment_in_out',
     'vaccine_in_out',
+    'abattoir_exam',
+    'lab_exam',
+    'receipt_in_out',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

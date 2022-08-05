@@ -14,4 +14,7 @@ urlpatterns = [
 
     path('update_parasite_prescription/<int:pk>/',UpdateParasitePrescription.as_view(),name="update_parasite_prescription"),
     path('delete_parasite_prescription/<int:pk>/',DeleteParasitePrescription.as_view(),name="delete_parasite_prescription"),
+
+    path('update_lab_exam/<int:pk>/',UpdateLabExam.as_view(),name="update_lab_exam"),
+    path('delete_lab_exam/<int:pk>/',DeleteLabExam.as_view(),name="delete_lab_exam"),
 ]

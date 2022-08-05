@@ -6,7 +6,10 @@ from django.contrib.auth.models import User
 # for specifying Role of each user
 
 USER_ROLES = [('Admin', 'Adminstrator'),
-              ('Cashier', 'Cashier'), ('Vet', 'Veternarian'),('Pharmacist', 'Pharmacist')]
+              ('Cashier', 'Cashier'), 
+              ('Vet', 'Veternarian'),
+              ('Pharmacist', 'Pharmacist'),
+              ('Stock_Keeper', 'Stock Keeper')]
 
 
 class Profile(models.Model):

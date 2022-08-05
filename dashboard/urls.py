@@ -7,6 +7,7 @@ urlpatterns = [
     path('dashboard_data/',DashboardData.as_view(),name="dashboard_data"),
     path('regular_treatment_summary/',RegularTreatmentSummary.as_view(),name="regular_treatment_summary"),
     path('clinical_service_summary/',ClinicalServiceSummary.as_view(),name="clinical_service_summary"),
+    path('abattoir_exam_summary/',AbattoirExamSummary.as_view(),name="abattoir_exam_summary"), 
     path('clinical_service_types/',ClinicalServiceTypes.as_view(),name="clinical_service_types"),
     path('parasite_treatment_summary/',ParasiteTreatmentSummary.as_view(),name="parasite_treatment_summary"),
     path('parasite_treatment_types/',ParasiteTreatmentTypes.as_view(),name="parasite_treatment_types"),
@@ -19,4 +20,8 @@ urlpatterns = [
     path('equipmentout_summary/',EquipmentOutSummary.as_view(),name="equipment_out_summary"),
     path('vaccinein_summary/',VaccineInSummary.as_view(),name="vaccine_in_summary"),
     path('vaccineout_summary/',VaccineOutSummary.as_view(),name="vaccine_out_summary"),
+    path('receiptin_summary/',ReceiptInSummary.as_view(),name="receipt_in_summary"),
+    path('receiptout_summary/',ReceiptOutSummary.as_view(),name="receipt_out_summary"),
+    path('lab_exam_summary/',LabExamSummary.as_view(),name="lab_exam_summary"),
+    path('stock_summary/',StockSummary.as_view(),name="stock_summary"),
 ]

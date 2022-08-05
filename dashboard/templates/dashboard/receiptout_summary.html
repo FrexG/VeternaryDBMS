@@ -1,0 +1,63 @@
+<!--prettier-ignore-->
+{% extends 'dashboard/main.html' %}
+{% load static %} {% block title %} Dashboard {%endblock title %}
+{% block navstyle %}
+<style>
+	#sidebar-receiptout-summary {
+		background-color: tomato;
+		color: white;
+	}
+</style>
+{% endblock navstyle %} {% block customImport%}
+<script src="{% static 'dashboard/pt_dashboard.js'%}"></script>
+{% endblock customImport %} {% block content %}
+<!-- prettier-ignore-attribute -->
+
+<div class="row m-2">
+	<form action="" method="POST">
+		{%csrf_token%} {{dateForm}}{{kebeleForm}}
+		<input type="submit" value="Filter" class="btn btn-sm btn-primary" />
+	</form>
+</div>
+<hr />
+<div class="row overflow-auto m-2" id="summary">
+	<div class="col-md-12 card">
+		<table class="table table-striped">
+			<thead>
+				<tr class="table-dark">
+					<th scope="col">Receipt</th>
+					<th scope="col">Kebele</th>
+					<th scope="col">Unit</th>
+					<th scope="col">Quantity</th>
+					<th scope="col">Received_by</th>
+					<th scope="col">Serial</th>
+					<th scope="col">Date</th>
+				</tr>
+			</thead>
+			{% for row in out_receipt %}
+			<tr>
+				<td>{{row.receipt_type.receipt_type}}</td>
+				<td>{{row.kebele.name}}</td>
+				<td>{{row.unit}}</td>
+				<td>{{row.quantity}}</td>
+				<td>{{row.receiver_name}}</td>
+				<td>{{row.serial_num_init}} - {{row.serial_num_last}}</td>
+				<td>{{row.date}}</td>
+			</tr>
+			{% endfor %}
+		</table>
+	</div>
+</div>
+<div class="row overflow-auto m-2" id="summary-additional">
+	<div class="col-md-4 col-sm-12">
+		<div class="card">
+			<div class="card-header">
+				<h5 class="card-title">Total Quantity</h5>
+			</div>
+			<div class="card-body">
+				<p class="card-text">{{total_quantity}}</p>
+			</div>
+		</div>
+	</div>
+	{% endblock content %}
+</div>

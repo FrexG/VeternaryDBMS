@@ -1,28 +1,9 @@
 # create a django model form 
 from django import forms
-from .models import ClinicalEquipmentIn,ClinicalEquipmentOut,ClinicalEquipmentCashDeposit
+from .models import ClinicalEquipmentIn,ClinicalEquipmentOut
 from stock.models import ClinicalEquipmentStock
 # create a EquipmentIN form
 class ClinicalEquipmentInForm(forms.ModelForm):
-    # calcualte total from unit price and quantity
-    def clean_total(self):
-        print('clean_total')
-        unit_price = self.cleaned_data.get("unit_price")
-        quantity = self.cleaned_data.get("quantity")
-        if quantity is None:
-            quantity = 0
-        if unit_price is None:
-            unit_price = 0
-        
-        total = unit_price * quantity
-        return total
-    # update the drug stock
-    def clean_unit_price(self):
-        print('clean_unit_price')
-        unit_price = self.cleaned_data.get("unit_price")
-        if unit_price <= 0:
-            raise forms.ValidationError("Unit price cannot be negative or zero")
-        return unit_price
     # update the equipment stock
     def clean_quantity(self):
         quantity = self.cleaned_data.get("quantity")
@@ -47,10 +28,10 @@ class ClinicalEquipmentInForm(forms.ModelForm):
             'receiver' : forms.Select(attrs={'class': 'form-control'}),
             'dropped_by' : forms.TextInput(attrs={'class': 'form-control'}),
             'quantity' : forms.NumberInput(attrs={'class': 'form-control'}),
-            'unit_price' : forms.NumberInput(attrs={'class': 'form-control'}),
-            'total' : forms.NumberInput(attrs={'class': 'form-control','type':'hidden'}),
+            #'unit_price' : forms.NumberInput(attrs={'class': 'form-control'}),
+            #'total' : forms.NumberInput(attrs={'class': 'form-control','type':'hidden'}),
             'batch_number' : forms.TextInput(attrs={'class': 'form-control'}),
-            'expiration_data' : forms.SelectDateWidget(attrs={'class': 'form-control'}),
+            #'expiration_data' : forms.SelectDateWidget(attrs={'class': 'form-control'}),
             'remark' : forms.Textarea(attrs={'class': 'form-control'}),
         }
 # create a equipment out form
@@ -73,15 +54,6 @@ class ClinicalEquipmentOutForm(forms.ModelForm):
             equipment_stock.save()
         return quantity
 
-    def clean_total(self):
-        unit_price = self.cleaned_data.get("unit_price")
-        quantity = self.cleaned_data.get("quantity")
-        if quantity is None:
-            quantity = 0
-        print(unit_price,quantity)
-        total = unit_price * quantity
-        return total
-
     class Meta:
         model = ClinicalEquipmentOut
         exclude = ["date_received"]
@@ -93,17 +65,48 @@ class ClinicalEquipmentOutForm(forms.ModelForm):
             'approved_by' : forms.Select(attrs={'class': 'form-control'}),
             'store_man' : forms.TextInput(attrs={'class':'form-control'}),
             'quantity' : forms.NumberInput(attrs={'class': 'form-control'}),
-            'unit_price' : forms.NumberInput(attrs={'class': 'form-control'}),
-            'total' : forms.NumberInput(attrs={'class': 'form-control','type':'hidden'}),
+            #'unit_price' : forms.NumberInput(attrs={'class': 'form-control'}),
+            #'total' : forms.NumberInput(attrs={'class': 'form-control','type':'hidden'}),
             'batch_number' : forms.TextInput(attrs={'class': 'form-control'}),
             'remark' : forms.Textarea(attrs={'class': 'form-control'}),
         }
-# create a drugOutCashDeposit form
+""" # create a drugOutCashDeposit form
 class ClinicalEquipmentCashDepositForm(forms.ModelForm):
+    def clean_amount(self):
+        # all previous payments for this equipment
+        previous_payments = ClinicalEquipmentCashDeposit.objects.filter(payment_for=self.cleaned_data.get("payment_for"))
+        # total amount of previous payments
+        previous_deposited_amount = 0
+        for payment in previous_payments:
+            previous_deposited_amount = previous_deposited_amount + payment.amount
+        # current payment amount
+        current_payment_amount = self.cleaned_data.get("amount")
+        # Initial total amount of the equipment
+        total_amount = self.cleaned_data.get("payment_for").total
+        # check if the current payment amount is greater than the total amount of previous payments
+        if current_payment_amount + previous_deposited_amount > total_amount:
+            print(f"The amount you entered is greater than {total_amount - previous_deposited_amount} birr")
+            raise forms.ValidationError(f"The amount you entered is greater than {total_amount - previous_deposited_amount} birr")
+
+        if current_payment_amount <= 0:
+            raise forms.ValidationError("Amount cannot be negative or zero")
+        return current_payment_amount
+
     def clean_remaining_amount(self):
-        amount = self.cleaned_data.get("amount")
-        total_amount = self.cleaned_data.get("payment_for")
-        remaining_amount = total_amount - amount
+        # all previous payments for this equipment
+        previous_payments = ClinicalEquipmentCashDeposit.objects.filter(payment_for=self.cleaned_data.get("payment_for"))
+        # total amount of previous payments
+        previous_deposited_amount = 0
+        for payment in previous_payments:
+            previous_deposited_amount = previous_deposited_amount + payment.amount
+        # current payment amount
+        deposited_amount = self.cleaned_data.get("amount")
+        # Initial total amount of the equipment
+        total_amount = self.cleaned_data.get("payment_for").total
+   
+        if deposited_amount == None:
+            deposited_amount = 0
+        remaining_amount = (total_amount - previous_deposited_amount) - deposited_amount
         return remaining_amount
 
     class Meta:
@@ -117,4 +120,4 @@ class ClinicalEquipmentCashDepositForm(forms.ModelForm):
             'remaining_amount':forms.NumberInput(attrs={'class': 'form-control','type':'hidden'}),
             'confirmed_by':forms.Select(attrs={'class': 'form-control'}),
             'remark':forms.Textarea(attrs={'class': 'form-control'}),
-        }
+        } """

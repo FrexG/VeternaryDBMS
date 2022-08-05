@@ -28,9 +28,8 @@ class PrescriptionForm(ModelForm):
 
         widgets = {
             'rx': forms.Select(attrs={'class': 'form-control'}),
-            'unit': forms.Select(attrs={'class': 'form-control'}),
-            'quantity': forms.NumberInput(attrs={'class': 'form-control'}),
-            'duration': forms.NumberInput(attrs={'class': 'form-control'}),
+            'quantity': forms.NumberInput(attrs={'class': 'form-control','required':'True'}),
+            'duration': forms.NumberInput(attrs={'class': 'form-control','required':'True'}),
             'treatment': forms.Select(attrs={'class': 'form-control', 'type': 'hidden'}),
             'total': forms.NumberInput(attrs={'class': 'form-control', 'type': 'hidden'}),
         }
@@ -44,8 +43,12 @@ class PrescriptionForm(ModelForm):
 
     def clean_total(self):
         quantity = self.cleaned_data.get("quantity")
-        rx_price = self.cleaned_data.get("rx").price
+        rx_price = self.cleaned_data.get("rx").dis_price
+
+        print(f"RX price = {rx_price}")
+
         total = quantity * rx_price
+        print(f"Total = {total}")
         return total
     
 PrescriptionFormSet = formset_factory(form=PrescriptionForm,extra=0)

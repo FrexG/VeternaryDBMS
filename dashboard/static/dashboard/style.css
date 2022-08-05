@@ -18,9 +18,17 @@
 #summary {
 	height: 40vh;
 }
-#cntx_disease {
-	height: 40vh;
+#summary-additional {
+	height: 60vh;
 }
+thead th {
+	position: sticky;
+	top: 0;
+	z-index: 1;
+}
+/* #cntx_disease {
+	height: 40vh;
+} */
 a:hover {
 	font-style: italic;
 	color: tomato;
@@ -35,7 +43,7 @@ a:hover {
 }
 .card-body {
 	text-align: center;
-	font-size: 1rem;
+	font-size: 0.7rem;
 	font-family: monospace;
 }
 .card-header {
@@ -45,6 +53,11 @@ a:hover {
 }
 .card-footer {
 	text-align: center;
-	font-size: 0.8rem;
+	font-size: 0.7rem;
 	font-family: monospace;
+}
+.card-title {
+	font-size: 0.7rem;
+	font-family: monospace;
+	text-align: center;
 }

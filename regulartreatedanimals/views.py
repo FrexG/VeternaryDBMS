@@ -13,12 +13,13 @@ class index(LoginRequiredMixin, View):
 
     templateURL = 'regulartreatedanimals/regular.html'
     rx_formset = PrescriptionFormSet()
-    form = TreatedAnimalsForm()
+    
     search_form = SearchTreatmentHistoryForm()
 
     def get(self, request):  
+        form = TreatedAnimalsForm(initial={'case_holder': request.user})
         context = {'search_form': self.search_form,
-                    'form': self.form,
+                    'form': form,
                    'rx_formset': self.rx_formset}
 
         return render(request, self.templateURL, context)
@@ -48,6 +49,10 @@ class index(LoginRequiredMixin, View):
 
 class handlePrescription(LoginRequiredMixin, View):
     login_url = "/"
+    templateURL = 'regulartreatedanimals/regular.html'
+    rx_formset = PrescriptionFormSet()
+    form = TreatedAnimalsForm()
+    search_form = SearchTreatmentHistoryForm()
 
     def get(self,request):
         return redirect("/regular")
@@ -55,10 +60,17 @@ class handlePrescription(LoginRequiredMixin, View):
     def post(self, request):
         prescriptionFormSet = PrescriptionFormSet(data=request.POST)
 
-        for formset in prescriptionFormSet:
-            if formset.is_valid():
-                formset.save()
-                
+        for form in prescriptionFormSet:
+            if form.is_valid():
+                print("VALID!!!")
+                form.save()
+            else:
+                context = {'search_form':self.search_form,
+                            'form': self.form,
+                        'rx_formset': prescriptionFormSet
+                        } 
+                return render(request, self.templateURL, context)
+            
         return redirect("/regular")
         
 class SearchTreatmentHistory(LoginRequiredMixin,View):

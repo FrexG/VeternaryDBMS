@@ -35,8 +35,15 @@ class Species(models.Model):
 
 class Drug(models.Model):
     drug_type = models.CharField(max_length=100)
-    price = models.DecimalField(
-        max_digits=10, decimal_places=4, default=000000.0000)
+    stock_price = models.DecimalField(
+        max_digits=8, decimal_places=2, default=000000.00)
+        
+    dis_price = models.DecimalField(
+        max_digits=8, decimal_places=2, default=000000.00)
+
+    dis_unit = models.CharField(max_length=50,default="ML")
+
+    stock_unit = models.CharField(max_length=50,default="BOX")
 
     def __str__(self):
         return self.drug_type

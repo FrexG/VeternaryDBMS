@@ -23,7 +23,7 @@ Dashboard {%endblock title %}
 	<div class="col-md-12 card">
 		<table class="table table-striped">
 			<thead>
-				<tr>
+				<tr class="table-dark">
 					<th scope="col">Cust Name</th>
 					<th scope="col">T0</th>
 					<th scope="col">PR</th>
@@ -51,10 +51,10 @@ Dashboard {%endblock title %}
 		</table>
 	</div>
 </div>
-<div class="row m-2">
+<div class="row overflow-auto m-2" id="summary-additional">
 	{% if totalTreatedAnimals %}
-	<div class="col-md-6 col-sm-12">
-		<div class="card m-5">
+	<div class="col-md-4 col-sm-12">
+		<div class="card">
 			<div class="card-header">
 				<h5 class="card-title">Total</h5>
 			</div>
@@ -64,15 +64,22 @@ Dashboard {%endblock title %}
 		</div>
 	</div>
 	{% endif %}
-	<div class="col-md-6 col-sm-12 card">
-		<table class="table table-striped m-5">
-			{% for key,value in distByKebele.items %}
-			<tr>
-				<td>{{key}}</td>
-				<td>{{value}}</td>
-			</tr>
-			{%endfor%}
-		</table>
+	<div class="col-md-8 col-sm-12">
+		<div class="card">
+			<div class="card-header">
+				<h5 class="card-title">Kebele Distribution</h5>
+			</div>
+			<div class="card-body">
+				<table class="table table-striped">
+					{% for key,value in distByKebele.items %}
+					<tr>
+						<td>{{key}}</td>
+						<td>{{value}}</td>
+					</tr>
+					{%endfor%}
+				</table>
+			</div>
+		</div>
 	</div>
 </div>
 {% endblock content %}
