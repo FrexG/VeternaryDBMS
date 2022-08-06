@@ -36,7 +36,15 @@ getSummary = async () => {
 		"bar",
 		"Disease Prevalence",
 		{
-			indexAxis: "x",
+			indexAxis: "y",
+			plugins: {
+				legend: {
+					display: true,
+					labels: {
+						color: "rgb(255, 99, 132)",
+					},
+				},
+			},
 		}
 	);
 

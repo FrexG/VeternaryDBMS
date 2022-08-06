@@ -6,6 +6,7 @@ urlpatterns = [
     path('',Index.as_view(),name="index"),
     path('dashboard_data/',DashboardData.as_view(),name="dashboard_data"),
     path('regular_treatment_summary/',RegularTreatmentSummary.as_view(),name="regular_treatment_summary"),
+    path('regular_treatment_types/',RegularTreatmentTypes.as_view(),name="regular_treatment_types"),
     path('clinical_service_summary/',ClinicalServiceSummary.as_view(),name="clinical_service_summary"),
     path('abattoir_exam_summary/',AbattoirExamSummary.as_view(),name="abattoir_exam_summary"), 
     path('clinical_service_types/',ClinicalServiceTypes.as_view(),name="clinical_service_types"),

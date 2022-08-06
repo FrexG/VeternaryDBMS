@@ -6,7 +6,7 @@ from django.core import serializers
 from django.http import JsonResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from datetime import datetime
-# custom utility fucncs
+# custom utility funcs
 from utils.utils import getPrice,getExpiringItems,getItembyDestination
 # Import all models from all apps
 from clinicalservices.models import ClinicalService,AIService,Service
@@ -56,8 +56,8 @@ class DashboardData(LoginRequiredMixin,View):
                 "species_names":[species.getSpeciesName() for species in self.species],
                 "species_count":self.speciesCount(),
 
-                "service_names":["Clinical Service","AI Service","Parasite Treatment","Regular Treatment"],
-                "service_count":[ClinicalService.objects.count(),AIService.objects.count(),ParasiteTreatment.objects.count(),TreatedAnimal.objects.count()],
+                "service_names":["Clinical Service","AI Service","Parasite Treatment","Regular Treatment","Lab Exam","Abattoir Exam"],
+                "service_count":[ClinicalService.objects.count(),AIService.objects.count(),ParasiteTreatment.objects.count(),TreatedAnimal.objects.count(),LabExam.objects.count(),AbattoirExam.objects.count()],
 
                 "disease_names":disease_name,
                 "disease_count":count,
@@ -90,6 +90,7 @@ class DashboardData(LoginRequiredMixin,View):
             for x in [self.regular_treatment,self.parasite_treatment]:
                 for obj in x:
                     for dx in obj.dx.all():
+                        print(dx)
                         if dx == disease:
                             if disease.disease_name in disease_count:
                                 disease_count[disease.disease_name] += 1
@@ -101,6 +102,7 @@ class RegularTreatmentSummary(LoginRequiredMixin,View):
     login_url =  "/"
     templateUrl = "dashboard/regular_treatment_summary.html"
     dateForm = DateRangeFrom()
+    case_holder_form = CaseHolderForm()
 
     def get(self,request):
         treatedAnimalsObj = TreatedAnimal.objects.all()
@@ -109,6 +111,7 @@ class RegularTreatmentSummary(LoginRequiredMixin,View):
 
         context = {"treatedAnimalsObj":treatedAnimalsObj,
                     "dateForm":self.dateForm,
+                    "case_holder_form":self.case_holder_form,
                     "totalTreatedAnimals":totalTreatedAnimals,
                     "distByKebele":distByKebele}
 
@@ -116,16 +119,19 @@ class RegularTreatmentSummary(LoginRequiredMixin,View):
 
     def post(self,request):
         dateForm = DateRangeFrom(request.POST)
-       
+        case_holder_form = CaseHolderForm(request.POST)
+
         start_date = dateForm['start_date'].value()
         end_date = dateForm['end_date'].value()
+        case_holder = case_holder_form['case_holder'].value()
 
-        treatedAnimalsObj = TreatedAnimal.objects.filter(service_date__gte=start_date,service_date__lte=end_date)
+        treatedAnimalsObj = TreatedAnimal.objects.filter(service_date__gte=start_date,service_date__lte=end_date,case_holder=case_holder)
         totalTreatedAnimals = treatedAnimalsObj.count()
         distByKebele = self.getDistByKebele(Kebele.objects.all(),treatedAnimalsObj)
 
         context = {"treatedAnimalsObj":treatedAnimalsObj,
                     "dateForm":dateForm,
+                    "case_holder_form":case_holder_form,
                     "totalTreatedAnimals":totalTreatedAnimals,
                     "distByKebele":distByKebele}
 
@@ -141,6 +147,31 @@ class RegularTreatmentSummary(LoginRequiredMixin,View):
                     else:
                         distByKebele[kebele.name] = 1
         return distByKebele
+
+class RegularTreatmentTypes(LoginRequiredMixin,View):
+    diseases = Disease.objects.all()
+    regular_treatment = TreatedAnimal.objects.all()
+    def get(self,request):
+        disease_name,count = self.getDiseasePrevalence()
+        data = {
+            "disease_names":disease_name,
+            "disease_count":count,
+        }
+
+        return JsonResponse(data)
+
+    def getDiseasePrevalence(self):
+        disease_count = {}
+        for disease in self.diseases:
+            for x in self.regular_treatment:
+                for dx in x.dx.all():
+                    if dx == disease:
+                        if disease.disease_name in disease_count:
+                            disease_count[disease.disease_name] += 1
+                        else:
+                            disease_count[disease.disease_name] = 1
+        return list(disease_count.keys()),list(disease_count.values())
+
 class ClinicalServiceSummary(LoginRequiredMixin,View):
     login_url =  "/"
     templateUrl = "dashboard/clinical_service_summary.html"
@@ -150,15 +181,14 @@ class ClinicalServiceSummary(LoginRequiredMixin,View):
 
     def get(self,request):
         clinicalServicesObj = ClinicalService.objects.all()
-        totalClinicalServices = ClinicalService.objects.all()
         distByKebele = self.getDistByKebele(Kebele.objects.all(),clinicalServicesObj)
         print(ClinicalService.objects.aggregate(Sum('service_type__price')))
         context = {"clinicalServicesObj":clinicalServicesObj,
                     "dateForm":self.dateForm,
                     "caseHolderForm":self.caseHolderForm,
                     "serviceTypeForm":self.serviceTypeForm,
-                    "totalClinicalServices":totalClinicalServices.count(),
-                    "totalPrice":totalClinicalServices.aggregate(sum_price = Sum('service_type__price')),
+                    "totalClinicalServices":clinicalServicesObj.count(),
+                    "totalPrice":clinicalServicesObj.aggregate(sum_price = Sum('service_type__price')),
                     "distByKebele":distByKebele}
 
         return render(request,self.templateUrl,context)
@@ -174,15 +204,15 @@ class ClinicalServiceSummary(LoginRequiredMixin,View):
         end_date = dateForm['end_date'].value()
 
         clinicalServicesObj = ClinicalService.objects.filter(service_date__gte=start_date,service_date__lte=end_date ,case_holder=case_holder,service_type=serviceTypeForm['service_type'].value())
-        totalClinicalServices = clinicalServicesObj
+    
         distByKebele = self.getDistByKebele(Kebele.objects.all(),clinicalServicesObj)
 
         context = {"clinicalServicesObj":clinicalServicesObj,
                     "dateForm":dateForm,
                     "caseHolderForm":caseHolderForm,
                     "serviceTypeForm":serviceTypeForm,
-                    "totalClinicalServices":totalClinicalServices.count(),
-                    "totalPrice":totalClinicalServices.aggregate(sum_price = Sum('service_type__price')),
+                    "totalClinicalServices":clinicalServicesObj.count(),
+                    "totalPrice":clinicalServicesObj.aggregate(sum_price = Sum('service_type__price')),
                     "distByKebele":distByKebele}
 
         return render(request,self.templateUrl,context)
@@ -270,35 +300,6 @@ class ParasiteTreatmentSummary(LoginRequiredMixin,View):
                 if pp.treatment == p:
                     totalPrice += pp.getPrice()
         return totalPrice
-class AbattoirExamSummary(LoginRequiredMixin,View):
-    login_url = "/"
-    templateUrl = "dashboard/abattoir_exam_summary.html"
-    dateForm = DateRangeFrom()
-    
-    def get(self,request):
-        abattoir_exam_ojb = AbattoirExam.objects.all()
-        total = abattoir_exam_ojb.count()
-
-        context = {"abattoir_exam":abattoir_exam_ojb,
-                    "dateForm":self.dateForm,
-                    "total":total
-                    }
-        return render(request,self.templateUrl,context)
-
-    def post(self,request):
-        dateForm = DateRangeFrom(request.POST)
-        start_date = dateForm['start_date'].value()
-        end_date = dateForm['end_date'].value()
-
-        abattoir_exam_ojb = AbattoirExam.objects.filter(date__gte=start_date,date__lte=end_date)
-        total = abattoir_exam_ojb.count()
-
-        context = {"abattoir_exam":abattoir_exam_ojb,
-                    "dateForm":self.dateForm,
-                    "total":total
-                    }
-        return render(request,self.templateUrl,context)
-
 
 class ParasiteTreatmentTypes(LoginRequiredMixin,View):
     diseases = Disease.objects.all()
@@ -326,7 +327,36 @@ class ParasiteTreatmentTypes(LoginRequiredMixin,View):
                         else:
                             disease_count[disease.disease_name] = 1
         return list(disease_count.keys()),list(disease_count.values())
-        
+
+class AbattoirExamSummary(LoginRequiredMixin,View):
+    login_url = "/"
+    templateUrl = "dashboard/abattoir_exam_summary.html"
+    dateForm = DateRangeFrom()
+    
+    def get(self,request):
+        abattoir_exam_ojb = AbattoirExam.objects.all()
+        total = abattoir_exam_ojb.count()
+
+        context = {"abattoir_exam":abattoir_exam_ojb,
+                    "dateForm":self.dateForm,
+                    "total":total
+                    }
+        return render(request,self.templateUrl,context)
+
+    def post(self,request):
+        dateForm = DateRangeFrom(request.POST)
+        start_date = dateForm['start_date'].value()
+        end_date = dateForm['end_date'].value()
+
+        abattoir_exam_ojb = AbattoirExam.objects.filter(date__gte=start_date,date__lte=end_date)
+        total = abattoir_exam_ojb.count()
+
+        context = {"abattoir_exam":abattoir_exam_ojb,
+                    "dateForm":self.dateForm,
+                    "total":total
+                    }
+        return render(request,self.templateUrl,context)  
+
 class VaccinationSummary(LoginRequiredMixin,View):
     login_url =  "/"
     templateUrl = "dashboard/vaccination_summary.html"
@@ -409,11 +439,13 @@ class ArtificialInseminationSummary(LoginRequiredMixin,View):
    
     def get(self,request):
         dateForm = DateRangeFrom()
+        case_holder_form = CaseHolderForm()
         ai_services = AIService.objects.all()
         distByKebele = self.getDistByKebele(Kebele.objects.all(),ai_services)
 
         context = {"ai_services":ai_services,
                     "dateForm":dateForm,
+                    "case_holder_form":case_holder_form,
                     "totalAIServices":ai_services.count(),
                     "totalPrice":self.getPrice(ai_services),
                     "distByKebele":distByKebele}
@@ -421,13 +453,18 @@ class ArtificialInseminationSummary(LoginRequiredMixin,View):
 
     def post(self,request):
         dateForm = DateRangeFrom(request.POST)
+        case_holder_form = CaseHolderForm(request.POST)
+
         start_date = dateForm['start_date'].value()
         end_date = dateForm['end_date'].value()
-        ai_services = AIService.objects.filter(service_date__gte=start_date,service_date__lte=end_date)
+        case_holder = case_holder_form["case_holder"].value()
+
+        ai_services = AIService.objects.filter(service_date__gte=start_date,service_date__lte=end_date,case_holder=case_holder)
         distByKebele = self.getDistByKebele(Kebele.objects.all(),ai_services)
 
         context = {"ai_services":ai_services,
                     "dateForm":dateForm,
+                    "case_holder_form":case_holder_form,
                     "totalAIServices":ai_services.count(),
                     "totalPrice":self.getPrice(ai_services),
                     "distByKebele":distByKebele}
@@ -491,7 +528,6 @@ class DrugInSummary(LoginRequiredMixin,View):
             'expiringDrugs':getExpiringItems(in_drugs)
         }
         return render(request,self.templateUrl,context)
-
 class DrugOutSummary(LoginRequiredMixin,View):
     login_url =  "/"
     templateUrl = "dashboard/drugout_summary.html"
@@ -551,8 +587,7 @@ class DrugOutSummary(LoginRequiredMixin,View):
             'drug_receiverForm':drug_receiverForm,
             'drug_destinations':getItembyDestination(out_drugs)
         }
-        return render(request,self.templateUrl,context)
-       
+        return render(request,self.templateUrl,context)     
 class EquipmentInSummary(LoginRequiredMixin,View):
     login_url =  "/"
     templateUrl = "dashboard/equipmentin_summary.html"
@@ -561,42 +596,38 @@ class EquipmentInSummary(LoginRequiredMixin,View):
         equipment_typeForm = EquipmentTypeForm()
         equipment_sourceForm = EquipmentSourceForm()
         in_equipments = ClinicalEquipmentIn.objects.all()
-        # get total price for all in drugs
-        total = getPrice(in_equipments)
         # context
         context = {
             'in_equipments':in_equipments,
-            'total_price':total,
+            'total_quantity':in_equipments.count(),
             'dateForm':dateForm,
             'equipment_typeForm':equipment_typeForm,
             'equipment_sourceForm':equipment_sourceForm,
-            'expiring_equipment':getExpiringItems(in_equipments)
         }
         return render(request,self.templateUrl,context)
     def post(self,request):
         dateForm = DateRangeFrom(request.POST)
-        equipment_typeForm = EquipmentTypeForm()
-        equipment_sourceForm = EquipmentSourceForm()
+        equipment_typeForm = EquipmentTypeForm(request.POST)
+        equipment_sourceForm = EquipmentSourceForm(request.POST)
         # values
         start_date = dateForm['start_date'].value()
         end_date = dateForm['end_date'].value()
         equipment_type = equipment_typeForm["equipment"].value()
         equipment_source = equipment_sourceForm["source"].value()
+        print(equipment_source)
    
         in_equipments = ClinicalEquipmentIn.objects.filter(date_received__gte=start_date,date_received__lte=end_date,equipment=equipment_type,source=equipment_source)
-        # get total price for all in drugs
-        total = getPrice(in_equipments)
+      
         # context
         context = {
             'in_equipments':in_equipments,
-            'total_price':total,
+            'total_quantity':in_equipments.count(),
             'dateForm':dateForm,
             'equipment_typeForm':equipment_typeForm,
             'equipment_sourceForm':equipment_sourceForm,
-            'expiring_equipment':getExpiringItems(in_equipments)
+
         }
         return render(request,self.templateUrl,context)
-
 class EquipmentOutSummary(LoginRequiredMixin,View):
     login_url =  "/"
     templateUrl = "dashboard/equipmentout_summary.html"
@@ -605,22 +636,12 @@ class EquipmentOutSummary(LoginRequiredMixin,View):
         equipment_typeForm = EquipmentTypeForm()
         equipment_receiverForm = EquipmentReceiverForm()
         out_equipments = ClinicalEquipmentOut.objects.all()
-        deposited_cash = ClinicalEquipmentCashDeposit.objects.all()
-        # get total price for all in drugs
-        total = getPrice(out_equipments)
-        # get total deposited cash
-        total_deposit = deposited_cash.aggregate(amount_sum = Sum('amount')).get('amount_sum')
-        if total_deposit == None:
-            total_deposit = 0
-        remaining_cash = total- total_deposit
+        
         # context
         context = {
             'out_equipments':out_equipments,
-            'total_price':total,
-            'total_deposit':total_deposit,
-            'remaining_cash':remaining_cash,
+            'total_quantity':out_equipments.count(),
             'dateForm':dateForm,
-            'equipment_cash_deposit':deposited_cash,
             'equipment_typeForm':equipment_typeForm,
             'equipment_receiverForm':equipment_receiverForm,
             'equipment_destinations':getItembyDestination(out_equipments)
@@ -628,32 +649,20 @@ class EquipmentOutSummary(LoginRequiredMixin,View):
         return render(request,self.templateUrl,context)
     def post(self,request):
         dateForm = DateRangeFrom(request.POST)
-        equipment_typeForm = EquipmentTypeForm()
-        equipment_receiverForm = EquipmentReceiverForm()
+        equipment_typeForm = EquipmentTypeForm(request.POST)
+        equipment_receiverForm = EquipmentReceiverForm(request.POST)
         # values
         start_date = dateForm['start_date'].value()
         end_date = dateForm['end_date'].value()
         equipment_type = equipment_typeForm["equipment"].value()
         equipment_receiver= equipment_receiverForm["receiver"].value()
-        out_equipments = ClinicalEquipmentOut.objects.filter(date__gte=start_date,date__lte=end_date,drug=equipment_type,receiver=equipment_receiver)
-        # get total price for all in drugs
-        total = getPrice(out_equipments)
-
-        deposited_cash = ClinicalEquipmentCashDeposit.objects.filter(payment_for__receiver=equipment_receiver,payment_for__date__gte=start_date,payment_for__date__lte=end_date)
-        
-        # get total deposited cash
-        total_deposit = deposited_cash.aggregate(amount_sum = Sum('amount')).get('amount_sum')
-        if total_deposit == None:
-            total_deposit = 0
-        remaining_cash = total- total_deposit
-        # context
+        print(equipment_receiver)
+        out_equipments = ClinicalEquipmentOut.objects.filter(date__gte=start_date,date__lte=end_date,equipment=equipment_type,receiver=equipment_receiver)
+    
         context = {
             'out_equipments':out_equipments,
-            'total_price':total,
-            'total_deposit':total_deposit,
-            'remaining_cash':remaining_cash,
+            'total_quantity':out_equipments.count(),
             'dateForm':dateForm,
-            'equipment_cash_deposit':deposited_cash,
             'equipment_typeForm':equipment_typeForm,
             'equipment_receiverForm':equipment_receiverForm,
             'equipment_destinations':getItembyDestination(out_equipments)
@@ -768,15 +777,16 @@ class VaccineOutSummary(LoginRequiredMixin,View):
 class LabExamSummary(LoginRequiredMixin,View):
     login_url =  "/"
     templateUrl = "dashboard/lab_exam_summary.html"
-    dateForm = DateRangeFrom()
-
     def get(self,request):
+        dateForm = DateRangeFrom()
+        case_holder_form = CaseHolderForm()
         lab_exam_Obj = LabExam.objects.all()
       
         dist_by_exam_technique = self.getDistByTechnique(LabTechnique.objects.all(),lab_exam_Obj)
         print(f"Dist = {dist_by_exam_technique}")
         context = {"lab_exam_Obj":lab_exam_Obj ,
-                    "dateForm":self.dateForm,
+                    "dateForm":dateForm,
+                    "case_holder_form":case_holder_form,
                     "total_lab_exam":lab_exam_Obj.count(),
                     "totalPrice":lab_exam_Obj.aggregate(sum_price = Sum('lab_technique__price')),
                     "dist_by_exam_technique":dist_by_exam_technique }
@@ -785,15 +795,17 @@ class LabExamSummary(LoginRequiredMixin,View):
 
     def post(self,request):
         dateForm = DateRangeFrom(request.POST)
+        case_holder_form = CaseHolderForm(request.POST)
+
         start_date = dateForm['start_date'].value()
         end_date = dateForm['end_date'].value()
+        case_holder = case_holder_form["case_holder"].value()
 
-        lab_exam_Obj = LabExam.objects.filter(date__gte=start_date,date_lte=end_date)
+        lab_exam_Obj = LabExam.objects.filter(date__gte=start_date,date_lte=end_date,case_holder=case_holder)
         dist_by_exam_technique = self.getDistByTechnique(LabTechnique.objects.all(),lab_exam_Obj)
-        
 
         context = {"lab_exam_Obj":lab_exam_Obj,
-                    "dateForm":self.dateForm,
+                    "dateForm":dateForm,
                     "total_lab_exam":lab_exam_Obj.count(),
                     "totalPrice":lab_exam_Obj.aggregate(sum_price = Sum('lab_technique__price')),
                     "dist_by_exam_technique":dist_by_exam_technique }

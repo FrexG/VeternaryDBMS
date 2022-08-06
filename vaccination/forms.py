@@ -11,5 +11,13 @@ class VaccinationForm(ModelForm):
             'vaccine_id': forms.SelectMultiple(attrs={'class': 'form-control'}),
             'vaccine_batch_num': forms.TextInput(attrs={'class': 'form-control'}),
             'quantity': forms.NumberInput(attrs={'class': 'form-control'}),
+            'case_holder': forms.Select(attrs={'class': 'form-control'}),
             'dx': forms.SelectMultiple(attrs={'class': 'form-control'}),
+        }
+class SearchVaccinationHistoryForm(ModelForm):
+    class Meta:
+        model = Vaccination
+        fields = ["case_number"]
+        widgets = {
+            'case_number': forms.Select(attrs={'class': 'form-control'}),
         }

@@ -1,11 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import AbattoirExam
 from .forms import AbattoirExamForm
 from utils.printout import abattoir_printout
 # Create your views here.
-class Index(View):
+class Index(LoginRequiredMixin,View):
     login_url = "/"
     templateUrl = "abattoir_exam/index.html"
 
@@ -35,4 +35,5 @@ class Index(View):
                 'date':obj.date,
             }
             return abattoir_printout(request,printout_fields)
+        return redirect('abattoir_exam:index')
 

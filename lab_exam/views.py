@@ -10,7 +10,7 @@ class Index(LoginRequiredMixin,View):
     templateURL = "lab_exam/index.html"
 
     def get(self,request):
-        form = LabExamForm()
+        form = LabExamForm(initial={'case_holder': request.user})
         context = {
             'form':form
         }

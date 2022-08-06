@@ -32,7 +32,7 @@ class NewCustomerForm(ModelForm):
             'breed': forms.Select(attrs={'class': 'form-control'}),
             'number_of_animals': forms.NumberInput(attrs={'class': 'form-control'}),
             'sex': forms.Select(attrs={'class': 'form-control'}),
-            'treatment_history': forms.Textarea(attrs={'class': 'form-control', 'style': textAreaSize}),
+            'history': forms.Textarea(attrs={'class': 'form-control', 'style': textAreaSize}),
             'mobile_number': forms.NumberInput(attrs={'class': 'form-control'}),
         }
 # Search customer form

@@ -70,23 +70,26 @@ class handlePrescription(LoginRequiredMixin, View):
 class SearchParasiteTreatmentHistory(LoginRequiredMixin,View):
     login_url = "/"
     templateURL = 'parasitetreatment/treatment.html'
-    rx_formset = PrescriptionFormSet()
-    form = ParasiteTreatmentForm
-    search_form = SearchTreatmentHistoryForm()
+    
     
     def get(self,request):
         return redirect("/regular")
 
     def post(self,request):
+        print("Search Parasite Treatment History")
+        search_form = SearchTreatmentHistoryForm(request.POST)
+        rx_formset = PrescriptionFormSet()
+        form = ParasiteTreatmentForm()
         search_form = SearchTreatmentHistoryForm(request.POST)
         if search_form.is_valid():
             case_number = search_form["case_number"].value()
             treatment_history = ParasiteTreatment.objects.filter(case_number=case_number)
+            print(treatment_history)
       
             context = {'treatment_history': treatment_history,
-                        'search_form':self.search_form,
-                        'form': self.form,
-                        'rx_formset': self.rx_formset}
+                        'search_form':search_form,
+                        'form':form,
+                        'rx_formset':rx_formset}
 
             return render(request, self.templateURL, context)
         return redirect("/parasitetreatment")

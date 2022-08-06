@@ -24,7 +24,7 @@ class ParasiteTreatmentForm(ModelForm):
 class PrescriptionForm(ModelForm):       
     class Meta:
         model = ParasitePrescription
-        exclude = ["paid"]
+        exclude = ["paid","delivered"]
 
         widgets = {
             'rx': forms.Select(attrs={'class': 'form-control'}),

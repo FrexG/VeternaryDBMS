@@ -15,7 +15,7 @@
 
 <div class="row m-2">
 	<form action="" method="POST">
-		{%csrf_token%} {{dateForm}}{{equipmet_typeForm}}{{equipment_receiverForm}}
+		{%csrf_token%} {{dateForm}}{{equipment_typeForm}}{{equipment_receiverForm}}
 		<input type="submit" value="Filter" class="btn btn-sm btn-primary" />
 	</form>
 </div>
@@ -28,9 +28,7 @@
 					<th scope="col">Equipment</th>
 					<th scope="col">Destination</th>
 					<th scope="col">Receiver</th>
-					<th scope="col">Unit Price</th>
 					<th scope="col">Quantity</th>
-					<th scope="col">Total</th>
 					<th scope="col">Batch No.</th>
 					<th scope="col">Date</th>
 					<th scope="col">Approved by</th>
@@ -41,11 +39,9 @@
 				<td>{{row.equipment.name}}</td>
 				<td>{{row.destination}}</td>
 				<td>{{row.receiver}}</td>
-				<td>{{row.unit_price}}</td>
 				<td>{{row.quantity}}</td>
-				<td>{{row.total}}</td>
 				<td>{{row.batch_number}}</td>
-				<td>{{row.batch_number}}</td>
+				<td>{{row.date}}</td>
 				<td>{{row.approved_by}}</td>
 			</tr>
 			{% endfor %}
@@ -56,55 +52,10 @@
 	<div class="col-md-2 col-sm-12">
 		<div class="card">
 			<div class="card-header">
-				<h5 class="card-title">Total Amount</h5>
+				<h5 class="card-title">Total Quantity</h5>
 			</div>
 			<div class="card-body">
-				<p class="card-text">{{total_price}} Birr</p>
-			</div>
-		</div>
-	</div>
-	<div class="col-md-2 col-sm-12">
-		<div class="card">
-			<div class="card-header">
-				<h5 class="card-title">Deposited/Remaining</h5>
-			</div>
-			<div class="card-body">
-				<p class="card-text">{{total_deposit}}/{{remaining_cash}} Birr</p>
-			</div>
-		</div>
-	</div>
-	<div class="col-md-8 col-sm-12">
-		<div class="card">
-			<div class="card-header">
-				<h5 class="card-title">Audit</h5>
-			</div>
-			<div class="card-body">
-				<table class="table table-striped m-2">
-					<thead>
-						<tr class="table-dark">
-							<th scope="col">Equipment Id</th>
-							<th scope="col">Batch No.</th>
-							<th scope="col">Kebele</th>
-							<th scope="col">Date</th>
-							<th scope="col">Bank Slip No.</th>
-							<th scope="col">Deposited Amount</th>
-							<th scope="col">Remaining</th>
-							<th scope="col">Confirmed by.</th>
-						</tr>
-					</thead>
-					{% for deposit in equipment_cash_deposit %}
-					<tr>
-						<td>{{deposit.payment_for.equipment}}</td>
-						<td>{{deposit.payment_for.batch_number}}</td>
-						<td>{{deposit.payment_for.receiver}}</td>
-						<td>{{deposit.date_paid}}</td>
-						<td>{{deposit.bank_slip_number}}</td>
-						<td>{{deposit.amount}}</td>
-						<td>{{deposit.remaining_amount}}</td>
-						<td>{{deposit.confirmed_by}}</td>
-					</tr>
-					{%endfor%}
-				</table>
+				<p class="card-text">{{total_quantity}}</p>
 			</div>
 		</div>
 	</div>

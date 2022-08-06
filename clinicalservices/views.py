@@ -12,12 +12,12 @@ from .forms import ClinicalServiceForm, AIServiceForm,ClinicalServiceFormset
 class index(LoginRequiredMixin, View):
     login_url = "/"
     templateURL = 'clinicalservices/index.html'
-    ai_form = AIServiceForm()
-    form = ClinicalServiceFormset()
-
+    
     def get(self, request):
-        context = {'form': self.form,
-                   'ai_form': self.ai_form}
+        form = ClinicalServiceFormset()
+        ai_form = AIServiceForm(initial={'case_holder': request.user})
+        context = {'form': form,
+                   'ai_form': ai_form}
 
         return render(request, self.templateURL, context)
 
@@ -44,19 +44,18 @@ class index(LoginRequiredMixin, View):
         
 
 class AIServiceView(View):
-
     templateURL = 'clinicalservices/index.html'
 
-    form = ClinicalServiceForm()
-    ai_form = AIServiceForm()
-
     def get(self, request):
-        context = {'form': self.form,
-                   'ai_form': self.ai_form}
+        form = ClinicalServiceFormset()
+        ai_form = AIServiceForm(initial={'case_holder': request.user})
+        context = {'form': form,
+                   'ai_form': ai_form}
 
         return render(request, self.templateURL, context)
 
     def post(self, request):
+        form = ClinicalServiceFormset(initial={'case_holder': request.user})
         AIServiceFormRequest = AIServiceForm(data=request.POST)
         # Check for validity of form
         if AIServiceFormRequest.is_valid():
@@ -68,7 +67,7 @@ class AIServiceView(View):
 
             AIServiceFormRequest = AIServiceForm()
 
-        context = {'form': self.form,
+        context = {'form':form,
                    'ai_form': AIServiceFormRequest}
 
         return render(request, self.templateURL, context)

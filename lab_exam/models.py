@@ -1,5 +1,6 @@
 from django.db import models
 from registernewuser.models import Customer
+from django.contrib.auth.models import User
 # Create your models here.
 
 class LabSample(models.Model):
@@ -20,4 +21,5 @@ class LabExam(models.Model):
     lab_technique = models.ForeignKey(LabTechnique,on_delete=models.CASCADE)
     lab_result = models.CharField(max_length=100,null=False)
     paid = models.BooleanField(default=False)
+    case_holder = models.ForeignKey(User,on_delete=models.PROTECT,null=False)
     date = models.DateField(auto_now=False,auto_now_add=True)

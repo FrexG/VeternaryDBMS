@@ -27,6 +27,7 @@ class Vaccination(models.Model):
     vaccine_batch_num = models.CharField(max_length=100,null=False)
     quantity = models.IntegerField(default=0,null=False)
     dx = models.ManyToManyField(Disease,verbose_name="Dx",blank=True)
+    case_holder = models.ForeignKey(User,on_delete=models.PROTECT)
     service_date = models.DateField(auto_now_add=True)
 
     def __str__(self) -> str:

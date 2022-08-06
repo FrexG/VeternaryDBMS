@@ -4,13 +4,14 @@ from django import forms
 class LabExamForm(forms.ModelForm):
     class Meta:
         model = LabExam
-        exclude = ['date']
+        exclude = ['date','paid']
 
         widgets = {
             'customer':forms.Select(attrs={'class':'form-control'}),
             'lab_sample':forms.Select(attrs={'class':'form-control'}),
             'lab_technique':forms.Select(attrs={'class':'form-control'}),
-            'lab_result':forms.TextInput(attrs={'class':'form-control'})
+            'lab_result':forms.TextInput(attrs={'class':'form-control'}),
+            'case_holder':forms.Select(attrs={'class':'form-control'}),
         }
     
     def clean_lab_result(self):

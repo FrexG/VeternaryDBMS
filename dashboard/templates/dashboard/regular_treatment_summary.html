@@ -8,13 +8,14 @@ Dashboard {%endblock title %}
 		color: white;
 	}
 </style>
-{% endblock navstyle %} {% block customImport%} {% endblock customImport %}
-{%block content %}
+{% endblock navstyle %} {% block customImport%}
+<script src="{% static 'dashboard/rt_dashboard.js'%}"></script>
+{% endblock customImport %} {%block content %}
 <!-- prettier-ignore-attribute -->
 
 <div class="row m-2">
 	<form action="" method="POST">
-		{%csrf_token%} {{dateForm}}
+		{%csrf_token%} {{dateForm}}{{case_holder_form}}
 		<input type="submit" value="Filter" class="btn btn-sm btn-primary" />
 	</form>
 </div>
@@ -52,19 +53,10 @@ Dashboard {%endblock title %}
 	</div>
 </div>
 <div class="row overflow-auto m-2" id="summary-additional">
-	{% if totalTreatedAnimals %}
-	<div class="col-md-4 col-sm-12">
-		<div class="card">
-			<div class="card-header">
-				<h5 class="card-title">Total</h5>
-			</div>
-			<div class="card-body">
-				<p class="card-text">{{totalTreatedAnimals}}</p>
-			</div>
-		</div>
-	</div>
-	{% endif %}
 	<div class="col-md-8 col-sm-12">
+		<canvas class="chart_canvas card" id="cntx_disease_prevalence"></canvas>
+	</div>
+	<div class="col-md-2 col-sm-12">
 		<div class="card">
 			<div class="card-header">
 				<h5 class="card-title">Kebele Distribution</h5>

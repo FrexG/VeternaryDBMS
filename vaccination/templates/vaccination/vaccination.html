@@ -2,6 +2,50 @@
 Animals{%endblock title%} {%block imports%}
 <script src="{% static 'regulartreatedanimals/js/script_regular.js'%}"></script>
 {%endblock imports%} {%block content%}
+
+<div class="col col-md-6">
+	<div class="row mx-auto">
+		<form
+			action="{% url 'vaccination:search_vaccination_history' %}"
+			method="POST"
+		>
+			{%csrf_token%}{{search_form}}
+
+			<input
+				type="submit"
+				value="Search History"
+				class="btn btn-sm btn-primary mt-2 mb-2 form-control"
+			/>
+		</form>
+	</div>
+	<!--prettier-ignore-->
+	{% if vaccination_history %}
+	<div class="row mx-auto">
+		<table class="table table-striped">
+			<tr>
+				<th>Vaccination Date</th>
+				<th>DX</th>
+				<th>Vaccine</th>
+				<th>Case holder</th>
+			</tr>
+			{% for vaccination in vaccination_history %}
+			<tr>
+				<td>{{vaccination.service_date}}</td>
+				<td>
+					{% for dx in vaccination.dx.all %} {{dx.disease_name}} {%endfor%}
+				</td>
+				<td>
+					{% for vaccine in vaccination.vaccine_id.all %}
+					{{vaccine.vaccine_type}} {%endfor%}
+				</td>
+				<td>{{vaccination.case_holder.username}}</td>
+			</tr>
+			{% endfor %}
+		</table>
+	</div>
+	{% endif %}
+	<!-- prettier-ignore-attribute -->
+</div>
 <div class="col col-md-6 mx-auto">
 	<div class="card">
 		<div class="card-header bg-warning">

@@ -28,11 +28,8 @@
 					<th scope="col">Equipment</th>
 					<th scope="col">Source</th>
 					<th scope="col">Quantity</th>
-					<th scope="col">Unit Price</th>
-					<th scope="col">Total</th>
 					<th scope="col">Batch No.</th>
 					<th scope="col">In.date</th>
-					<th scope="col">Exp.date</th>
 				</tr>
 			</thead>
 			{% for row in in_equipments %}
@@ -40,11 +37,8 @@
 				<td>{{row.equipment.name}}</td>
 				<td>{{row.source}}</td>
 				<td>{{row.quantity}}</td>
-				<td>{{row.unit_price}}</td>
-				<td>{{row.total}}</td>
 				<td>{{row.batch_number}}</td>
 				<td>{{row.date_received}}</td>
-				<td>{{row.expiration_data}}</td>
 			</tr>
 			{% endfor %}
 		</table>
@@ -54,37 +48,10 @@
 	<div class="col-md-4 col-sm-12">
 		<div class="card">
 			<div class="card-header">
-				<h5 class="card-title">Total Amount</h5>
+				<h5 class="card-title">Total Quantity</h5>
 			</div>
 			<div class="card-body">
-				<p class="card-text">{{total_price}} Birr</p>
-			</div>
-		</div>
-	</div>
-	<div class="col-md-8 col-sm-12">
-		<div class="card">
-			<div class="card-header">
-				<h5 class="card-title">Expired/ring drugs</h5>
-			</div>
-			<div class="card-body">
-				<table class="table table-striped m-2">
-					<thead>
-						<tr class="table-dark">
-							<th scope="col">Equipment</th>
-							<th scope="col">Batch No.</th>
-							<th scope="col">In date</th>
-							<th scope="col">Remaining days</th>
-						</tr>
-					</thead>
-					{% for key,value in expiring_equipment.items %}
-					<tr>
-						<td>{{key.equipment}}</td>
-						<td>{{key.batch_number}}</td>
-						<td>{{key.date_received}}</td>
-						<td>{{value}}</td>
-					</tr>
-					{%endfor%}
-				</table>
+				<p class="card-text">{{total_quantity}}</p>
 			</div>
 		</div>
 	</div>

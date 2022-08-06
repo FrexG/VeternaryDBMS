@@ -68,6 +68,8 @@ class Customer(models.Model):
 
     sex = models.CharField(max_length=10, choices=SEX_CHOICES)
 
+    history = models.CharField(max_length=200,null=True)
+
     service_date = models.DateField(auto_now=False, auto_now_add=True)
 
     mobile_number = models.PositiveIntegerField()
