@@ -1,19 +1,27 @@
-from .models import LabExam
+from .models import LabExamRequest,LabResult
 from django import forms
 
-class LabExamForm(forms.ModelForm):
+class LabExamRequestForm(forms.ModelForm):
     class Meta:
-        model = LabExam
-        exclude = ['date','paid']
+        model = LabExamRequest
+        exclude = ['paid']
 
         widgets = {
-            'customer':forms.Select(attrs={'class':'form-control'}),
-            'lab_sample':forms.Select(attrs={'class':'form-control'}),
+            'treated_animal':forms.Select(attrs={'class':'form-control'}),
+            'lab_sample':forms.TextInput(attrs={'class':'form-control'}),
             'lab_technique':forms.Select(attrs={'class':'form-control'}),
-            'lab_result':forms.TextInput(attrs={'class':'form-control'}),
-            'case_holder':forms.Select(attrs={'class':'form-control'}),
         }
-    
+
+class LabResult(forms.ModelForm):
+    class Meta:
+        model = LabResult
+        exclude = ["date"]
+
+        widgets = {
+            'lab_exam_request':forms.Select(attrs={'class':'form-control'}),
+            'lab_result':forms.TextInput(attrs={'class':'form-control'}),
+            'case_holder':forms.Select(attrs={'class':'form-control'}), 
+        }
     def clean_lab_result(self):
         lab_result = self.cleaned_data.get("lab_result")
         if lab_result == "":

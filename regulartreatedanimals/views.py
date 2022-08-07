@@ -2,50 +2,57 @@ from encodings import search_function
 from django.shortcuts import render, redirect
 from django.views import View
 from .models import TreatedAnimal
-from .forms import TreatedAnimalsForm,PrescriptionFormSet,SearchTreatmentHistoryForm
+from .forms import *
+from lab_exam.forms import LabExamRequestForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 # Create your views here.
 
-
-class index(LoginRequiredMixin, View):
+class Index(LoginRequiredMixin, View):
     login_url = "/"
-
     templateURL = 'regulartreatedanimals/regular.html'
-    rx_formset = PrescriptionFormSet()
-    
-    search_form = SearchTreatmentHistoryForm()
-
     def get(self, request):  
-        form = TreatedAnimalsForm(initial={'case_holder': request.user})
-        context = {'search_form': self.search_form,
-                    'form': form,
-                   'rx_formset': self.rx_formset}
+        treated_animals_form = TreatedAnimalsForm(initial={'case_holder': request.user})
+        treatment_form = TreatmentForm()
+        rx_formset = PrescriptionFormSet()
+        lab_exam_request_form = LabExamRequestForm()
+        search_form = SearchTreatmentHistoryForm()
+
+        context = {'treated_animals_form':treated_animals_form,
+                    'lab_exam_request_form':lab_exam_request_form,
+                    'treatment_form':treatment_form,
+                    'search_form': search_form,
+                    'rx_formset': rx_formset}
 
         return render(request, self.templateURL, context)
 
     def post(self, request):
-        filledForm = TreatedAnimalsForm(request.POST)
+        treated_animals_form = TreatedAnimalsForm(request.POST)
+        rx_formset = PrescriptionFormSet()
+        treatment_form = TreatmentForm()
+        lab_exam_request_form = LabExamRequestForm()
+        search_form = SearchTreatmentHistoryForm()
 
-        if filledForm.is_valid():
-            treatmentID = filledForm.save()
+        if treated_animals_form.is_valid():
+            treatmentID = treated_animals_form.save()
 
-            initial_treatment = [{'treatment': treatmentID,"duration":10}]
+            treatment_form = TreatmentForm(initial={'treatment_id': treatmentID})
+            lab_exam_request_form = LabExamRequestForm(initial={'treatment_animal': treatmentID})
 
-            filled_rx_formset = PrescriptionFormSet(initial=initial_treatment)
-
-            context = {'search_form':self.search_form,
-                        'form': filledForm,
-                       'rx_formset': filled_rx_formset}
+            context = {'treated_animals_form':treated_animals_form,
+                    'lab_exam_request_form':lab_exam_request_form,
+                    'treatment_form':treatment_form,
+                    'search_form': search_form,
+                    'rx_formset': rx_formset}
 
             return render(request, self.templateURL, context)
 
         else:
-            context = {'search_form':self.search_form,
-                        'form': filledForm,
-                       'rx_formset': self.rx_formset}
+            context = {'treated_animals_form':treated_animals_form,
+                    'treatment_form':treatment_form,
+                    'search_form': search_form,
+                    'rx_formset': rx_formset}
             return render(request, self.templateURL, context)
-
 
 class handlePrescription(LoginRequiredMixin, View):
     login_url = "/"

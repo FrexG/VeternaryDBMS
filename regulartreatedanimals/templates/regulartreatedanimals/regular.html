@@ -3,52 +3,54 @@ Animals{%endblock title%} {%block imports%}
 <script src="{% static 'regulartreatedanimals/js/script_regular.js'%}"></script>
 {%endblock imports%} {%block content%}
 <div class="col col-md-4">
-	<div class="row mx-auto">
-		<form
-			action="{% url 'regulartreatedanimals:search_treatment_history' %}"
-			method="POST"
-		>
-			{%csrf_token%}{{search_form}}
-
-			<input
-				type="submit"
-				value="Search History"
-				class="btn btn-sm btn-primary mt-2 mb-2 form-control"
-			/>
-		</form>
+	<div class="row m-2">
+		<div class="card">
+			<div class="card-header bg-warning">
+				<h3>Treated Animals</h3>
+			</div>
+			<div class="card-body">
+				<div class="form-group">
+					<form action="{% url 'regulartreatedanimals:index' %}" method="POST">
+						{%csrf_token%} {{treated_animals_form}}
+						<input
+							type="submit"
+							value="Submit"
+							class="btn btn-primary form-control mt-2"
+						/>
+					</form>
+				</div>
+			</div>
+		</div>
 	</div>
-	<!--prettier-ignore-->
-	{% if treatment_history %}
-	<div class="row mx-auto">
-		<table class="table table-striped">
-			<tr>
-				<th>Treatment Date</th>
-				<th>Clinical Finding</th>
-				<th>DX</th>
-				<th>Case holder</th>
-			</tr>
-			{% for treatment in treatment_history %}
-			<tr>
-				<td>{{treatment.service_date}}</td>
-				<td>{{treatment.clinical_finding}}</td>
-				<td>{% for dx in treatment.dx.all %} {{dx.disease_name}} {%endfor%}</td>
-				<td>{{treatment.case_holder.username}}</td>
-			</tr>
-			{% endfor %}
-		</table>
+	<div class="row m-2">
+		<div class="card">
+			<div class="card-header bg-warning">
+				<h3>Request Lab Exam</h3>
+			</div>
+			<div class="card-body">
+				<div class="form-group">
+					<form action="{% url 'regulartreatedanimals:index' %}" method="POST">
+						{%csrf_token%} {{lab_exam_request_form}}
+						<input
+							type="submit"
+							value="Request"
+							class="btn btn-primary form-control mt-2"
+						/>
+					</form>
+				</div>
+			</div>
+		</div>
 	</div>
-	{% endif %}
-	<!-- prettier-ignore-attribute -->
 </div>
 <div class="col col-md-4">
 	<div class="card">
 		<div class="card-header bg-warning">
-			<h3>Regular Treatment</h3>
+			<h3>Treatment</h3>
 		</div>
 		<div class="card-body">
 			<div class="form-group">
 				<form action="{% url 'regulartreatedanimals:index' %}" method="POST">
-					{%csrf_token%} {{form}}
+					{%csrf_token%} {{treatment_form}}
 					<input
 						type="submit"
 						value="Submit"

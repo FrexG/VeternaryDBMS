@@ -7,8 +7,6 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 # Create your views here.
-
-
 class index(LoginRequiredMixin, View):
     login_url = '/'
     redirect_field_name = 'redirect_to'

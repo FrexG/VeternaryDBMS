@@ -3,9 +3,6 @@ from django.db import models
 from datetime import date
 # Create your models here.
 
-SEX_CHOICES = [('M', 'Male'), ('F', 'Female'), ]
-
-
 class Kebele(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
@@ -52,34 +49,27 @@ class Drug(models.Model):
 
 
 class Customer(models.Model):
+    case_number = models.AutoField(primary_key=True, null=False)
     customer_name = models.CharField(max_length=100)
-
     sub_kebele = models.CharField(max_length=100)
-
     kebele = models.ForeignKey(Kebele, on_delete=models.CASCADE)
 
-    case_number = models.AutoField(primary_key=True, null=False)
+    #species = models.ForeignKey(Species, on_delete=models.CASCADE)
 
-    species = models.ForeignKey(Species, on_delete=models.CASCADE)
+    #breed = models.ForeignKey(Breed, on_delete=models.CASCADE)
 
-    breed = models.ForeignKey(Breed, on_delete=models.CASCADE)
+    #number_of_animals = models.PositiveIntegerField()
 
-    number_of_animals = models.PositiveIntegerField()
+    #sex = models.CharField(max_length=10, choices=SEX_CHOICES)
 
-    sex = models.CharField(max_length=10, choices=SEX_CHOICES)
-
-    history = models.CharField(max_length=200,null=True)
+    #history = models.CharField(max_length=200,null=True)
 
     service_date = models.DateField(auto_now=False, auto_now_add=True)
-
-    mobile_number = models.PositiveIntegerField()
+    # make mobile number unique
+    mobile_number = models.PositiveIntegerField(unique=True)
 
     def __str__(self):
-        return str(f"{self.case_number}:{self.customer_name}")
-
-    def getCaseNumber(self): return self.case_number
-
-    def getSex(self): return self.sex
+        return str(f"{self.customer_name}({self.case_number})")
 
     def getServiceDate(self): return self.service_date
 

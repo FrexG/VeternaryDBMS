@@ -21,7 +21,7 @@ from drug_in_out.models import DrugIn,DrugOut, DrugOutCashDeposit
 from vaccine_in_out.models import VaccineIn,VaccineOut,VaccineOutCashDeposit
 from equipment_in_out.models import ClinicalEquipmentIn,ClinicalEquipmentOut
 # Import Lab exam models
-from lab_exam.models import LabExam,LabTechnique
+from lab_exam.models import LabExamRequest,LabTechnique
 from abattoir_exam.models import AbattoirExam
 # forms
 from .forms import *
