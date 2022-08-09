@@ -4,7 +4,7 @@ from django import forms
 class LabExamRequestForm(forms.ModelForm):
     class Meta:
         model = LabExamRequest
-        exclude = ['paid']
+        exclude = ['paid','lab_result_arrived']
 
         widgets = {
             'treated_animal':forms.Select(attrs={'class':'form-control'}),

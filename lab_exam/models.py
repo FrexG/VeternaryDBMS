@@ -26,6 +26,7 @@ class LabResult(models.Model):
     lab_exam_request = models.ForeignKey(LabExamRequest,on_delete=models.CASCADE)
     lab_result = models.CharField(max_length=100)
     case_holder = models.ForeignKey(User,on_delete=models.PROTECT,null=False)
+    treatment_delivered = models.BooleanField(default=False)
     date = models.DateField(auto_now=False,auto_now_add=True)
     def __str__(self) -> str:
         return self.lab_result
