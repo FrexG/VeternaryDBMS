@@ -20,6 +20,7 @@ class LabExamRequest(models.Model):
     lab_sample = models.ForeignKey(LabSample,on_delete=models.CASCADE)
     lab_technique = models.ForeignKey(LabTechnique,on_delete=models.CASCADE)
     paid = models.BooleanField(default=False)
+    lab_result_arrived = models.BooleanField(default=False)
 
 class LabResult(models.Model):
     lab_exam_request = models.ForeignKey(LabExamRequest,on_delete=models.CASCADE)

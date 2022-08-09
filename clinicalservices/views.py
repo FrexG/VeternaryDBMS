@@ -55,7 +55,7 @@ class AIServiceView(View):
         return render(request, self.templateURL, context)
 
     def post(self, request):
-        form = ClinicalServiceFormset(initial={'case_holder': request.user})
+        form = ClinicalServiceFormset()
         AIServiceFormRequest = AIServiceForm(data=request.POST)
         # Check for validity of form
         if AIServiceFormRequest.is_valid():
@@ -65,7 +65,7 @@ class AIServiceView(View):
             ai_form.case_holder = request.user
             ai_form.save()
 
-            AIServiceFormRequest = AIServiceForm()
+            AIServiceFormRequest = AIServiceForm(initial={'case_holder': request.user})
 
         context = {'form':form,
                    'ai_form': AIServiceFormRequest}

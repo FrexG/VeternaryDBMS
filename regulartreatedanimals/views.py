@@ -37,7 +37,7 @@ class Index(LoginRequiredMixin, View):
             treatmentID = treated_animals_form.save()
 
             treatment_form = TreatmentForm(initial={'treatment_id': treatmentID})
-            lab_exam_request_form = LabExamRequestForm(initial={'treatment_animal': treatmentID})
+            lab_exam_request_form = LabExamRequestForm(initial={'treated_animal': treatmentID})
 
             context = {'treated_animals_form':treated_animals_form,
                     'lab_exam_request_form':lab_exam_request_form,
@@ -53,6 +53,36 @@ class Index(LoginRequiredMixin, View):
                     'search_form': search_form,
                     'rx_formset': rx_formset}
             return render(request, self.templateURL, context)
+
+class LabRequestView(LoginRequiredMixin,View):
+    login_url = "/"
+    templateURL = 'regulartreatedanimals/regular.html'
+    def post(self, request):
+        treated_animals_form = TreatedAnimalsForm()
+        rx_formset = PrescriptionFormSet()
+        treatment_form = TreatmentForm()
+        lab_exam_request_form = LabExamRequestForm(request.POST)
+        search_form = SearchTreatmentHistoryForm()
+
+        if lab_exam_request_form.is_valid():
+            lab_request_id = lab_exam_request_form.save()
+            treatment_form = TreatmentForm(initial={'treatment_id': lab_request_id.treated_animal})
+            
+            context = {'treated_animals_form':treated_animals_form,
+                    'lab_exam_request_form':lab_exam_request_form,
+                    'treatment_form':treatment_form,
+                    'search_form': search_form,
+                    'rx_formset': rx_formset}
+
+            return render(request, self.templateURL, context)
+
+        else:
+            context = {'treated_animals_form':treated_animals_form,
+                    'treatment_form':treatment_form,
+                    'search_form': search_form,
+                    'rx_formset': rx_formset}
+            return render(request, self.templateURL, context)
+
 
 class handlePrescription(LoginRequiredMixin, View):
     login_url = "/"

@@ -1,34 +1,66 @@
-{% extends 'home/home.html' %} {%load static %}  {% block title %}Abattoir{% endblock title %}
-{% block content %}
-<div class="col-sm-8 mx-auto">
-  <div class="card ">
-    <div class="card-header bg-dark">
-      <h3 class="text-light">
-       Lab Exam
-      </h3>
-    </div>
-    <div class="card-body">
-      <div class="form-group font-weight-bold text-secondary text-capitalize">
-        <form action="" method="POST">
-          {% csrf_token %} 
-          {{form}}
-          <input
-            type="submit"
-            value="Submit"
-            class="btn btn-md btn-primary form-control"
-          />
-        </form>
-        <span class"form-control">
-          <i class="text-success">
-            {% for message in messages%}
-              {{message}}
-            {% endfor %}
-            </i>
-        </span>
+{% extends 'home/home.html' %} {%load static %} {% block title %} Abattoir
+{%endblock title %} {% block content %}
+<div class="row m-2">
+	<div class="col-sm-8 mx-auto">
+		<div class="card">
+			<div class="card-header bg-dark">
+				<h3 class="text-light">Lab Exam Requests</h3>
+			</div>
+			<div class="card-body">
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th scope="col">Cust Name</th>
+							<th scope="col">Lab Sample</th>
+							<th scope="col">lab Technique</th>
+							<th></th>
+						</tr>
+					</thead>
+					{% for request in lab_requests %}
+					<form method="post" action={% url 'lab_exam:get_result' request.id %}>
+						{% csrf_token %}
 
-      </div>
-    </div>
-  </div>
+						<tr>
+							<td>{{request.treated_animal.case_number.customer_name}}</td>
+							<td>{{request.lab_sample.lab_sample}}</td>
+							<td>{{request.lab_technique.lab_technique}}</td>
+							<td>
+								<input
+									class="btn btn-sm btn-success"
+									type="submit"
+									value="Lab Result"
+								/>
+							</td>
+						</tr>
+					</form>
+					{% endfor %}
+				</table>
+			</div>
+		</div>
+	</div>
 </div>
+{% if form%}
+<div class="row m-2">
+	<div class="col-sm-8 mx-auto">
+		<div class="card">
+			<div class="card-header bg-dark">
+				<h3 class="text-light">Lab Result</h3>
+			</div>
+			<div class="card-body">
+				<div class="form-group">
+					<form method="post" action="{% url 'lab_exam:submit_result' %}">
+						{% csrf_token %} {{form}}
+						<input
+							class="btn btn-sm btn-success"
+							type="submit"
+							value="Lab Result"
+						/>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endif %}
 
 {% endblock content %}

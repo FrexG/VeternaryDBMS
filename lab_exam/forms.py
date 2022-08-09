@@ -8,7 +8,7 @@ class LabExamRequestForm(forms.ModelForm):
 
         widgets = {
             'treated_animal':forms.Select(attrs={'class':'form-control'}),
-            'lab_sample':forms.TextInput(attrs={'class':'form-control'}),
+            'lab_sample':forms.Select(attrs={'class':'form-control'}),
             'lab_technique':forms.Select(attrs={'class':'form-control'}),
         }
 
