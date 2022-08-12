@@ -2,10 +2,13 @@ from django.db import models
 from registernewuser.models import Customer
 from regulartreatedanimals.models import Disease
 from django.contrib.auth.models import User
+from registernewuser.models import Breed,Species
 
 # Create your models here.
+SEX_CHOICES = [('M', 'Male'), ('F', 'Female'),]
 class Vaccine(models.Model):
     vaccine_type = models.CharField(max_length=100)
+
     dis_price = models.DecimalField(
         max_digits=8, decimal_places=2, default=000000.00)
         
@@ -23,6 +26,11 @@ class Vaccine(models.Model):
 
 class Vaccination(models.Model):
     case_number = models.ForeignKey(Customer,on_delete=models.PROTECT)
+    species = models.ForeignKey(Species, on_delete=models.CASCADE)
+    breed = models.ForeignKey(Breed, on_delete=models.CASCADE)
+    number_of_animals = models.PositiveIntegerField()
+    sex = models.CharField(max_length=10, choices=SEX_CHOICES)
+    history = models.CharField(max_length=200,null=True)
     vaccine_id = models.ManyToManyField(Vaccine)
     vaccine_batch_num = models.CharField(max_length=100,null=False)
     quantity = models.IntegerField(default=0,null=False)

@@ -4,7 +4,7 @@ from registernewuser.models import Customer,Drug,Breed,Species
 from django.contrib.auth.models import User
 
 # Model definition for regular treated animals app
-SEX_CHOICES = [('M', 'Male'), ('F', 'Female'), ]
+SEX_CHOICES = [('M', 'Male'), ('F', 'Female'),]
 
 class Disease(models.Model):
     disease_name = models.CharField(max_length=100,null=False)

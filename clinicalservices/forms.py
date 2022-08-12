@@ -63,11 +63,17 @@ class AIServiceForm(ModelForm):
         return color
 
     class Meta:
+        textAreaSize = "height: 100px;"
         model = AIService
         exclude = ["price"]
 
         widgets = {
             'case_number': forms.Select(attrs={'class': 'form-control'}),
+            'species': forms.Select(attrs={'class': 'form-control'}),
+            'breed': forms.Select(attrs={'class': 'form-control'}),
+            'sex': forms.Select(attrs={'class': 'form-control'}),
+            'number_of_animals':forms.NumberInput(attrs={'class':'form-control'}),
+            'history':forms.Textarea(attrs={'class':'form-control', 'style':textAreaSize}),
             'total':forms.NumberInput(attrs={'class':'form-control','type':'hidden'}),
             'last_calving_date': forms.SelectDateWidget(attrs={'class': 'form-control'}),
             'color': forms.TextInput(attrs={'class': 'form-control'}),

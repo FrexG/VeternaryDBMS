@@ -3,7 +3,7 @@ Animals{%endblock title%} {%block imports%}
 <script src="{% static 'regulartreatedanimals/js/script_regular.js'%}"></script>
 {%endblock imports%} {%block content%}
 <div class="row overflow-auto m-2">
-	<div class="col-sm-8 mx-auto">
+	<div class="col-sm-12 mx-auto">
 		<div class="card">
 			<div class="card-header bg-dark">
 				<h3 class="text-light">Lab Results</h3>
@@ -44,7 +44,7 @@ Animals{%endblock title%} {%block imports%}
 		</div>
 	</div>
 </div>
-<div class="row overflow-auto m-2">
+<div class="row overflow-auto m-2">	
 	<div class="col col-md-4">
 		<div class="row">
 			<div class="col">
@@ -102,7 +102,7 @@ Animals{%endblock title%} {%block imports%}
 			</div>
 			<div class="card-body">
 				<div class="form-group">
-					<form action="{% url 'regulartreatedanimals:index' %}" method="POST">
+					<form action="{% url 'regulartreatedanimals:treatment' %}" method="POST">
 						{%csrf_token%} {{treatment_form}}
 						<input
 							type="submit"

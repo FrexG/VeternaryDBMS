@@ -269,7 +269,7 @@ def receipt_printout(request,params_list):
     # Show the result to the user    
     return response
 
-def treatment_history_report(request,params_list):
+def history_report(request,params_list):
 
     # Create the HttpResponse object 
     response = HttpResponse(content_type='application/pdf') 

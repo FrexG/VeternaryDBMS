@@ -1,49 +1,7 @@
-{% extends 'home/home.html' %} {%load static %} {%block title%}Regular Treated
-Animals{%endblock title%} {%block imports%}
+{% extends 'home/home.html' %} {%load static %} {%block title%}Parasite Treatment{%endblock title%} {%block imports%}
 <script src="{% static 'regulartreatedanimals/js/script_regular.js'%}"></script>
 {%endblock imports%} {%block content%}
-<div class="col col-md-4">
-	<div class="row mx-auto">
-		<form
-			action="{% url 'parasitetreatment:search_treatment_history' %}"
-			method="POST"
-		>
-			{%csrf_token%}{{search_form}}
-
-			<input
-				type="submit"
-				value="Search History"
-				class="btn btn-sm btn-primary mt-2 mb-2 form-control"
-			/>
-		</form>
-	</div>
-	<!--prettier-ignore-->
-	{% if treatment_history %}
-	<div class="row mx-auto">
-		<table class="table table-striped">
-			<tr>
-				<th>Date</th>
-				<th>Type</th>
-				<th>DX</th>
-				<th>Case Holder</th>
-			</tr>
-			{% for treatment in treatment_history %}
-			<tr>
-				<td>{{treatment.service_date}}</td>
-				<td>{{treatment.treatment_type}}</td>
-				<td>
-					{% for disease in treatment.dx.all%} {{disease.disease_name}}
-					{%endfor%}
-				</td>
-				<td>{{treatment.case_holder.username}}</td>
-			</tr>
-			{% endfor %}
-		</table>
-	</div>
-	{% endif %}
-	<!-- prettier-ignore-attribute -->
-</div>
-<div class="col col-md-4">
+<div class="col col-md-6">
 	<div class="card">
 		<div class="card-header bg-warning">
 			<h3>Parasite Treatment</h3>
@@ -63,7 +21,7 @@ Animals{%endblock title%} {%block imports%}
 	</div>
 </div>
 
-<div class="col col-md-4">
+<div class="col col-md-6">
 	<div class="card">
 		<div class="card-header bg-warning">
 			<h3>Drug Prescripton</h3>

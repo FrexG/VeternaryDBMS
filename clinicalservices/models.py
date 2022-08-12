@@ -1,8 +1,10 @@
 from django.db import models
 from registernewuser.models import Customer
 from django.contrib.auth.models import User
+from registernewuser.models import Breed,Species
 
 # MODEL DEFINITION FOR CLINICAL SERVICES
+SEX_CHOICES = [('M', 'Male'), ('F', 'Female'),]
 
 class Service(models.Model):
 
@@ -47,6 +49,17 @@ class AIService(models.Model):
     case_number = models.ForeignKey(
         Customer, verbose_name="Case Number", on_delete=models.CASCADE,null=False)
     # Service type, this will be prefield by service type = AI
+
+    species = models.ForeignKey(Species, on_delete=models.CASCADE)
+
+    breed = models.ForeignKey(Breed, on_delete=models.CASCADE)
+
+    number_of_animals = models.PositiveIntegerField()
+
+    sex = models.CharField(max_length=10, choices=SEX_CHOICES)
+
+    history = models.CharField(max_length=200,null=True)
+
     price = models.DecimalField(
         max_digits=6, decimal_places=2, default=10.0000)
         
