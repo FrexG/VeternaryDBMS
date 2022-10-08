@@ -15,7 +15,7 @@
 
 <div class="row m-2">
 	<form action="" method="POST">
-		{%csrf_token%} {{dateForm}}
+		{%csrf_token%} {{dateForm}}{{case_holder_form}}
 		<input type="submit" value="Filter" class="btn btn-sm btn-primary" />
 	</form>
 </div>
@@ -29,8 +29,8 @@
 					<th scope="col">Vaccination type</th>
 					<th scope="col">Batch Num.</th>
 					<th scope="col">Qnty</th>
-					<th scope="col">Unit</th>
 					<th scope="col">Dx</th>
+					<th scope="col">Case Holder</th>
 					<th scope="col">Date</th>
 				</tr>
 			</thead>
@@ -40,13 +40,13 @@
 				<td>
 					<!--prettier-ignore-->
 					{%for vaccine in row.vaccine_id.all%}
-                    {{vaccine.vaccine_type}},
+                    {{vaccine.vaccine_type}}<br>
                     {%endfor%}
 				</td>
 				<td>{{row.vaccine_batch_num}}</td>
 				<td>{{row.quantity}}</td>
-				<td>{{row.unit}}</td>
 				<td>{%for dx in row.dx.all%}({{dx.disease_name}}){%endfor%}</td>
+				<td>{{row.case_holder}}</td>
 				<td>{{row.service_date}}</td>
 				<!-- prettier-ignore-attribute -->
 			</tr>

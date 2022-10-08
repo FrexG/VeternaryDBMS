@@ -6,7 +6,7 @@ class VaccinationForm(ModelForm):
     class Meta:
         textAreaSize = "height: 100px;"
         model = Vaccination
-        exclude = ['service_date']
+        exclude = ['service_date',"paid"]
         widgets = {
             'case_number': forms.Select(attrs={'class': 'form-control'}),
             'species': forms.Select(attrs={'class': 'form-control'}),
@@ -18,8 +18,25 @@ class VaccinationForm(ModelForm):
             'vaccine_batch_num': forms.TextInput(attrs={'class': 'form-control'}),
             'quantity': forms.NumberInput(attrs={'class': 'form-control'}),
             'case_holder': forms.Select(attrs={'class': 'form-control'}),
+            'total': forms.NumberInput(attrs={'class': 'form-control', 'type': 'hidden'}),
             'dx': forms.SelectMultiple(attrs={'class': 'form-control'}),
         }
+    def clean_quantity(self):
+        quantity = self.cleaned_data.get("quantity")
+        if quantity < 1:
+            raise forms.ValidationError(
+                "Quantity must be greater than 0!!")
+        return quantity
+
+    def clean_total(self):
+        quantity = self.cleaned_data.get("quantity")
+        vaccine_price = self.cleaned_data.get("vaccine_id")[0].dis_price
+        
+        total = quantity * vaccine_price
+        print(f"Total = {total}")
+        return total
+
+
 class SearchVaccinationHistoryForm(ModelForm):
     class Meta:
         model = Vaccination

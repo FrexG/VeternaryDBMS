@@ -11,7 +11,7 @@ from utils.utils import getPrice,getExpiringItems,getItembyDestination
 # Import all models from all apps
 from clinicalservices.models import ClinicalService,AIService,Service
 from parasitetreatment.models import ParasiteTreatment,ParasitePrescription
-from regulartreatedanimals.models import TreatedAnimal,Disease,Prescription
+from regulartreatedanimals.models import TreatedAnimal,Disease,Treatment,Prescription
 from registernewuser.models import Kebele,Species,Customer
 from vaccination.models import Vaccination,Vaccine
 from stock.models import ClinicalEquipmentStock,DrugStock,VaccineStock
@@ -21,7 +21,7 @@ from drug_in_out.models import DrugIn,DrugOut, DrugOutCashDeposit
 from vaccine_in_out.models import VaccineIn,VaccineOut,VaccineOutCashDeposit
 from equipment_in_out.models import ClinicalEquipmentIn,ClinicalEquipmentOut
 # Import Lab exam models
-from lab_exam.models import LabExamRequest,LabTechnique
+from lab_exam.models import LabExamRequest,LabTechnique,LabResult
 from abattoir_exam.models import AbattoirExam
 # forms
 from .forms import *
@@ -36,7 +36,6 @@ class Index(LoginRequiredMixin,View):
         print("Called")
         return render(request,self.templateURL)
 
-        return data
 class DashboardData(LoginRequiredMixin,View):
     diseases = Disease.objects.all()
     kebeles =Kebele.objects.all()
@@ -45,7 +44,9 @@ class DashboardData(LoginRequiredMixin,View):
     clinical_service = ClinicalService.objects.all()
     ai_service = AIService.objects.all()
     parasite_treatment = ParasiteTreatment.objects.all()
-    regular_treatment = TreatedAnimal.objects.all()
+    treated_animals = TreatedAnimal.objects.all()
+    regular_treatment = Treatment.objects.all()
+    vaccination = Vaccination.objects.all()
 
     def get(self,request):
         disease_name,count = self.getDiseasePrevalence()
@@ -57,7 +58,7 @@ class DashboardData(LoginRequiredMixin,View):
                 "species_count":self.speciesCount(),
 
                 "service_names":["Clinical Service","AI Service","Parasite Treatment","Regular Treatment","Lab Exam","Abattoir Exam"],
-                "service_count":[ClinicalService.objects.count(),AIService.objects.count(),ParasiteTreatment.objects.count(),TreatedAnimal.objects.count(),LabExam.objects.count(),AbattoirExam.objects.count()],
+                "service_count":[ClinicalService.objects.count(),AIService.objects.count(),ParasiteTreatment.objects.count(),TreatedAnimal.objects.count(),LabExamRequest.objects.count(),AbattoirExam.objects.count()],
 
                 "disease_names":disease_name,
                 "disease_count":count,
@@ -78,9 +79,10 @@ class DashboardData(LoginRequiredMixin,View):
         count = []
         for species in self.species:
             i = 0
-            for customer in self.customers:
-                if customer.species == species:
-                    i += 1
+            for x in [self.vaccination,self.ai_service,self.parasite_treatment,self.treated_animals]:
+                for obj in x:
+                    if obj.species == species:
+                        i += 1
             count.append(i)
         return count
 
@@ -90,14 +92,13 @@ class DashboardData(LoginRequiredMixin,View):
             for x in [self.regular_treatment,self.parasite_treatment]:
                 for obj in x:
                     for dx in obj.dx.all():
-                        print(dx)
                         if dx == disease:
                             if disease.disease_name in disease_count:
                                 disease_count[disease.disease_name] += 1
                             else:
                                 disease_count[disease.disease_name] = 1
-        print(disease_count)
         return list(disease_count.keys()),list(disease_count.values())
+
 class RegularTreatmentSummary(LoginRequiredMixin,View):
     login_url =  "/"
     templateUrl = "dashboard/regular_treatment_summary.html"
@@ -105,14 +106,15 @@ class RegularTreatmentSummary(LoginRequiredMixin,View):
     case_holder_form = CaseHolderForm()
 
     def get(self,request):
-        treatedAnimalsObj = TreatedAnimal.objects.all()
-        totalTreatedAnimals = TreatedAnimal.objects.all().count()
-        distByKebele = self.getDistByKebele(Kebele.objects.all(),treatedAnimalsObj)
+        treatmentObj = Treatment.objects.all()
+        treatedAnimals = TreatedAnimal.objects.all()
+        distByKebele = self.getDistByKebele(Kebele.objects.all(),treatedAnimals)
 
-        context = {"treatedAnimalsObj":treatedAnimalsObj,
+        context = {"treatmentObj":treatmentObj,
                     "dateForm":self.dateForm,
                     "case_holder_form":self.case_holder_form,
-                    "totalTreatedAnimals":totalTreatedAnimals,
+                    "totalTreatedAnimals":treatedAnimals.count(),
+                    "totalPrice":self.getPrice(treatmentObj),
                     "distByKebele":distByKebele}
 
         return render(request,self.templateUrl,context)
@@ -125,14 +127,15 @@ class RegularTreatmentSummary(LoginRequiredMixin,View):
         end_date = dateForm['end_date'].value()
         case_holder = case_holder_form['case_holder'].value()
 
-        treatedAnimalsObj = TreatedAnimal.objects.filter(service_date__gte=start_date,service_date__lte=end_date,case_holder=case_holder)
-        totalTreatedAnimals = treatedAnimalsObj.count()
-        distByKebele = self.getDistByKebele(Kebele.objects.all(),treatedAnimalsObj)
+        treatmentObj = Treatment.objects.filter(treatment_id__service_date__gte=start_date,treatment_id__service_date__lte=end_date,treatment_id__case_holder=case_holder)
+        treatedAnimals = TreatedAnimal.objects.all()
+        distByKebele = self.getDistByKebele(Kebele.objects.all(),treatedAnimals)
 
-        context = {"treatedAnimalsObj":treatedAnimalsObj,
-                    "dateForm":dateForm,
-                    "case_holder_form":case_holder_form,
-                    "totalTreatedAnimals":totalTreatedAnimals,
+        context = {"treatmentObj":treatmentObj,
+                    "dateForm":self.dateForm,
+                    "case_holder_form":self.case_holder_form,
+                    "totalTreatedAnimals":treatedAnimals.count(),
+                    "totalPrice":self.getPrice(treatmentObj),
                     "distByKebele":distByKebele}
 
         return render(request,self.templateUrl,context)
@@ -148,9 +151,19 @@ class RegularTreatmentSummary(LoginRequiredMixin,View):
                         distByKebele[kebele.name] = 1
         return distByKebele
 
+    def getPrice(self,treatmentObj):
+        totalPrice = 0
+        for prescription in Prescription.objects.filter():
+            for treatment in treatmentObj:
+                if prescription.treatment == treatment:
+                    print(prescription.getPrice())
+                    totalPrice += prescription.getPrice()
+        print(f"My price{totalPrice}")
+        return totalPrice
+
 class RegularTreatmentTypes(LoginRequiredMixin,View):
     diseases = Disease.objects.all()
-    regular_treatment = TreatedAnimal.objects.all()
+    treatment = Treatment.objects.all()
     def get(self,request):
         disease_name,count = self.getDiseasePrevalence()
         data = {
@@ -163,7 +176,7 @@ class RegularTreatmentTypes(LoginRequiredMixin,View):
     def getDiseasePrevalence(self):
         disease_count = {}
         for disease in self.diseases:
-            for x in self.regular_treatment:
+            for x in self.treatment:
                 for dx in x.dx.all():
                     if dx == disease:
                         if disease.disease_name in disease_count:
@@ -245,10 +258,13 @@ class ParasiteTreatmentSummary(LoginRequiredMixin,View):
     treatmentTypeForm = TreatmentTypeForm()
 
     def get(self,request):
-        parasiteTreatmentObj = ParasiteTreatment.objects.filter()
+        parasiteTreatmentObj = ParasiteTreatment.objects.all()
+        parasitePrescriptionObj = ParasitePrescription.objects.all()
+
         distByKebele = self.getDistByKebele(Kebele.objects.all(),parasiteTreatmentObj)
     
         context = {"parasiteTreatmentObj":parasiteTreatmentObj,
+                    "parasitePrescriptionObj":parasitePrescriptionObj,
                     "dateForm":self.dateForm,
                     "caseHolderForm":self.caseHolderForm,
                     "treatmentTypeForm":self.treatmentTypeForm,
@@ -268,11 +284,20 @@ class ParasiteTreatmentSummary(LoginRequiredMixin,View):
         start_date = dateForm['start_date'].value()
         end_date = dateForm['end_date'].value()
 
-        parasiteTreatmentObj = ParasiteTreatment.objects.filter(service_date__gte=start_date,service_date__lte=end_date ,case_holder=case_holder,treatment_type=treatmentTypeForm['treatment_type'].value())
+        parasiteTreatmentObj = ParasiteTreatment.objects.filter(service_date__gte=start_date,
+                                                                service_date__lte=end_date ,
+                                                                case_holder=case_holder,
+                                                                treatment_type=treatmentTypeForm['treatment_type'].value())
+
+        parasitePrescriptionObj = ParasitePrescription.objects.filter(treatment__service_date__gte=start_date,
+                                                                      treatment__service_date__lte=end_date ,
+                                                                      treatment__case_holder=case_holder,
+                                                                      treatment__treatment_type=treatmentTypeForm['treatment_type'].value())
 
         distByKebele = self.getDistByKebele(Kebele.objects.all(),parasiteTreatmentObj)
 
         context = {"parasiteTreatmentObj":parasiteTreatmentObj,
+                    "parasitePrescriptionObj":parasitePrescriptionObj,
                     "dateForm":dateForm,
                     "caseHolderForm":caseHolderForm,
                     "treatmentTypeForm":treatmentTypeForm,
@@ -295,12 +320,12 @@ class ParasiteTreatmentSummary(LoginRequiredMixin,View):
 
     def getPrice(self,parasiteTreatmentObj):
         totalPrice = 0
-        for pp in ParasitePrescription.objects.filter(delivered=True):
+        for pp in ParasitePrescription.objects.filter():
             for p in parasiteTreatmentObj:
                 if pp.treatment == p:
+                    print(pp.getPrice())
                     totalPrice += pp.getPrice()
         return totalPrice
-
 class ParasiteTreatmentTypes(LoginRequiredMixin,View):
     diseases = Disease.objects.all()
     parasite_treatment = ParasiteTreatment.objects.all()
@@ -327,11 +352,11 @@ class ParasiteTreatmentTypes(LoginRequiredMixin,View):
                         else:
                             disease_count[disease.disease_name] = 1
         return list(disease_count.keys()),list(disease_count.values())
-
 class AbattoirExamSummary(LoginRequiredMixin,View):
     login_url = "/"
     templateUrl = "dashboard/abattoir_exam_summary.html"
     dateForm = DateRangeFrom()
+    hotelForm = HotelSelectForm()
     
     def get(self,request):
         abattoir_exam_ojb = AbattoirExam.objects.all()
@@ -339,28 +364,33 @@ class AbattoirExamSummary(LoginRequiredMixin,View):
 
         context = {"abattoir_exam":abattoir_exam_ojb,
                     "dateForm":self.dateForm,
+                    "hotelForm":self.hotelForm,
                     "total":total
                     }
         return render(request,self.templateUrl,context)
 
     def post(self,request):
         dateForm = DateRangeFrom(request.POST)
+        hotelForm = HotelSelectForm(request.POST)
+
+        hotel = hotelForm['hotel'].value()
         start_date = dateForm['start_date'].value()
         end_date = dateForm['end_date'].value()
 
-        abattoir_exam_ojb = AbattoirExam.objects.filter(date__gte=start_date,date__lte=end_date)
+        abattoir_exam_ojb = AbattoirExam.objects.filter(date__gte=start_date,date__lte=end_date,hotel=hotel)
         total = abattoir_exam_ojb.count()
 
         context = {"abattoir_exam":abattoir_exam_ojb,
                     "dateForm":self.dateForm,
+                    "hotelForm":self.hotelForm,
                     "total":total
                     }
         return render(request,self.templateUrl,context)  
-
 class VaccinationSummary(LoginRequiredMixin,View):
     login_url =  "/"
     templateUrl = "dashboard/vaccination_summary.html"
     dateForm = DateRangeFrom()
+    case_holder_form = CaseHolderForm()
 
     def get(self,request):
         vaccinationObj = Vaccination.objects.all()
@@ -368,6 +398,7 @@ class VaccinationSummary(LoginRequiredMixin,View):
     
         context = {"vaccinationObj":vaccinationObj,
                     "dateForm":self.dateForm,
+                    "case_holder_form":self.case_holder_form,
                     "totalVaccinations":vaccinationObj.count(),
                     "totalPrice":self.getPrice(vaccinationObj),
                     "distByKebele":distByKebele}
@@ -375,16 +406,20 @@ class VaccinationSummary(LoginRequiredMixin,View):
         return render(request,self.templateUrl,context)
 
     def post(self,request):
+        case_holder_form = CaseHolderForm(request.POST)
         dateForm = DateRangeFrom(request.POST)
+
         start_date = dateForm['start_date'].value()
         end_date = dateForm['end_date'].value()
+        case_holder = case_holder_form['case_holder'].value()
 
-        vaccinationObj = Vaccination.objects.filter(service_date__gte=start_date,service_date__lte=end_date)
+        vaccinationObj = Vaccination.objects.filter(service_date__gte=start_date,service_date__lte=end_date,case_holder=case_holder)
 
         distByKebele = self.getDistByKebele(Kebele.objects.all(),vaccinationObj)
 
         context = {"vaccinationObj":vaccinationObj,
                     "dateForm":dateForm,
+                    "case_holder_form":self.case_holder_form,
                     "totalVaccination":vaccinationObj.count(),
                     "totalPrice":self.getPrice(vaccinationObj),
                     "distByKebele":distByKebele}
@@ -406,6 +441,7 @@ class VaccinationSummary(LoginRequiredMixin,View):
         totalPrice = 0
         for v in vaccinationObj:
             for vaccine in v.vaccine_id.all():
+                print(vaccine.getDispenceryPrice())
                 totalPrice += vaccine.getDispenceryPrice() * v.quantity
         return totalPrice
 class VaccinationTypes(LoginRequiredMixin,View):
@@ -448,6 +484,7 @@ class ArtificialInseminationSummary(LoginRequiredMixin,View):
                     "case_holder_form":case_holder_form,
                     "totalAIServices":ai_services.count(),
                     "totalPrice":self.getPrice(ai_services),
+                    "totalServices":ai_services.count(),
                     "distByKebele":distByKebele}
         return render(request,self.templateUrl,context)
 
@@ -467,6 +504,7 @@ class ArtificialInseminationSummary(LoginRequiredMixin,View):
                     "case_holder_form":case_holder_form,
                     "totalAIServices":ai_services.count(),
                     "totalPrice":self.getPrice(ai_services),
+                    "totalServices":ai_services.count(),
                     "distByKebele":distByKebele}
         return render(request,self.templateUrl,context)
 
@@ -780,11 +818,13 @@ class LabExamSummary(LoginRequiredMixin,View):
     def get(self,request):
         dateForm = DateRangeFrom()
         case_holder_form = CaseHolderForm()
-        lab_exam_Obj = LabExam.objects.all()
+        lab_exam_Obj = LabExamRequest.objects.filter(paid=True)
+        lab_results = LabResult.objects.all()
       
         dist_by_exam_technique = self.getDistByTechnique(LabTechnique.objects.all(),lab_exam_Obj)
         print(f"Dist = {dist_by_exam_technique}")
-        context = {"lab_exam_Obj":lab_exam_Obj ,
+        context = {
+                    "lab_results":lab_results,
                     "dateForm":dateForm,
                     "case_holder_form":case_holder_form,
                     "total_lab_exam":lab_exam_Obj.count(),
@@ -801,11 +841,14 @@ class LabExamSummary(LoginRequiredMixin,View):
         end_date = dateForm['end_date'].value()
         case_holder = case_holder_form["case_holder"].value()
 
-        lab_exam_Obj = LabExam.objects.filter(date__gte=start_date,date_lte=end_date,case_holder=case_holder)
+        lab_results = LabResult.objects.filter(date__gte=start_date,date__lte=end_date,case_holder=case_holder)
+        lab_exam_Obj = LabExamRequest.objects.filter(paid=True)
         dist_by_exam_technique = self.getDistByTechnique(LabTechnique.objects.all(),lab_exam_Obj)
 
-        context = {"lab_exam_Obj":lab_exam_Obj,
+        context = {
+                    "lab_results":lab_results,
                     "dateForm":dateForm,
+                    "case_holder_form":case_holder_form,
                     "total_lab_exam":lab_exam_Obj.count(),
                     "totalPrice":lab_exam_Obj.aggregate(sum_price = Sum('lab_technique__price')),
                     "dist_by_exam_technique":dist_by_exam_technique }
@@ -924,16 +967,17 @@ class StockSummary(LoginRequiredMixin,View):
 
         if stock_type == "Drug":
             stock = DrugStock.objects.all()
-            total_price = sum([s.quantity * s.drug.stock_price for s in stock])
+            total = sum([s.quantity * s.drug.stock_price for s in stock])
             stock_type = "Drug"
 
         elif stock_type == "Equipment":
             stock = ClinicalEquipmentStock.objects.all()
+            total = sum([s.quantity for s in stock])
             stock_type = "Equipment"
 
         elif stock_type == "Vaccine":
             stock = VaccineStock.objects.all()
-            total_price = sum([s.quantity * s.vaccine.stock_price for s in stock])
+            total = sum([s.quantity * s.vaccine.stock_price for s in stock])
             print(total_price)
             stock_type = "Vaccine"
 
@@ -941,7 +985,7 @@ class StockSummary(LoginRequiredMixin,View):
         context = {
             'stock_type':stock_type,
             'stock':stock,
-            'total':total_price,
+            'total':total,
             'stock_select_form':stock_select_form
         }
         return render(request,self.templateUrl,context)

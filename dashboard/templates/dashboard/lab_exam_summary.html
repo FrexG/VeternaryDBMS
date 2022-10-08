@@ -13,11 +13,11 @@ Dashboard {%endblock title %}
 
 <div class="row m-2">
 	<form action="" method="POST">
-		{%csrf_token%} {{dateForm}}
+		{%csrf_token%} {{dateForm}}{{case_holder_form}}
 		<input type="submit" value="Filter" class="btn btn-sm btn-primary" />
 	</form>
 </div>
-<hr />
+<hr/>
 <div class="row overflow-auto m-2" id="summary">
 	<div class="col-md-12 card">
 		<table class="table table-striped">
@@ -31,18 +31,20 @@ Dashboard {%endblock title %}
 					<th scope="col">Lab Result</th>
 					<th scope="col">Price</th>
 					<th scope="col">Date</th>
+					<th scope="col">Case Holder</th>
 				</tr>
 			</thead>
-			{% for row in lab_exam_Obj %}
+			{% for row in lab_results %}
 			<tr>
-				<td>{{row.customer.customer_name}}</td>
-				<td>{{row.customer.kebele.name}}</td>
-				<td>{{row.customer.species.species_type}}</td>
-				<td>{{row.lab_sample.lab_sample}}</td>
-				<td>{{row.lab_technique.lab_technique}}</td>
+				<td>{{row.lab_exam_request.treated_animal.case_number.customer_name}}</td>
+				<td>{{row.lab_exam_request.treated_animal.case_number.kebele.name}}</td>
+				<td>{{row.lab_exam_request.treated_animal.species.species_type}}</td>
+				<td>{{row.lab_exam_request.lab_sample.lab_sample}}</td>
+				<td>{{row.lab_exam_request.lab_technique.lab_technique}}</td>
 				<td>{{row.lab_result}}</td>
-				<td>{{row.lab_technique.price}}</td>
-				<td>{{row.date}}</td>
+				<td>{{row.lab_exam_request.lab_technique.price}}</td>
+				<td>{{row.lab_exam_request.treated_animal.service_date}}</td>
+				<td>{{row.lab_exam_request.treated_animal.case_holder}}</td>
 			</tr>
 			{% endfor %}
 		</table>
@@ -66,16 +68,20 @@ Dashboard {%endblock title %}
 		</div>
 	</div>
 	{% endif %}
-	<div class="col-md-4 col-sm-12 card">
-		<h5 class="text-center">Exam by Technique</h5>
-		<table class="table table-striped m-2">
-			{% for key,value in dist_by_exam_technique.items %}
-			<tr>
-				<td>{{key}}</td>
-				<td>{{value}}</td>
-			</tr>
-			{%endfor%}
-		</table>
+	<div class="col-md-8 col-sm-12 card">
+		<div class="card-header">
+			<h5 class="card-title">Exam by Technique</h5>
+		</div>
+		<div class="card-body">
+			<table class="table table-striped m-2">
+				{% for key,value in dist_by_exam_technique.items %}
+				<tr>
+					<td>{{key}}</td>
+					<td>{{value}}</td>
+				</tr>
+				{%endfor%}
+			</table>
+		</div>
 	</div>
 </div>
 {% endblock content %}

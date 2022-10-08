@@ -34,9 +34,12 @@ class Vaccination(models.Model):
     vaccine_id = models.ManyToManyField(Vaccine)
     vaccine_batch_num = models.CharField(max_length=100,null=False)
     quantity = models.IntegerField(default=0,null=False)
+    total = models.DecimalField(
+        max_digits=8, decimal_places=2, default=000000.00)
     dx = models.ManyToManyField(Disease,verbose_name="Dx",blank=True)
     case_holder = models.ForeignKey(User,on_delete=models.PROTECT)
     service_date = models.DateField(auto_now_add=True)
+    paid = models.BooleanField(null=False, default=False)
 
     def __str__(self) -> str:
         return str(self.case_number.customer_name)

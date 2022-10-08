@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Script and Style imports-->
+    {%load static %} {% block imports%} {%endblock imports%}
+
+    <title>{% block title %}{%endblock title%}</title>
+	<script src="{% static 'cashier/script.js' %}"></script>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'registernewuser/css/custom_style.css'%}"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'home/style.css'%}"
+    />
+    <link
+      rel="stylesheet"
+      href="{% static 'registernewuser/bootstrap-5.0.0/css/bootstrap.css'%}"
+    />
+   
+  </head>
+  <body id="body">
+    <style>
+		#body{
+			font-family: monospace;
+			font-size:medium;
+		}
+		.navbar-brand{
+		  font-family: monospace;
+		}
+		#username {
+		  color:coral;
+		  font-size: larger;
+		  font-family: Open Sans;
+		  font-weight: bold;
+		}
+	  </style>
+	  
+	  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+		<img src="{% static 'home/cattle_logo_2.png' %}" width="80" height="80" class="d-inline-block align-top navbar-brand" alt="">
+    	<h1 class="navbar-brand text-light">Cashier</h1>
+	
+		<span id="username" class="m2">Hello, {{request.user}}</span>
+		<span id="logout">
+		  <a href="{% url 'home:logout' %}">
+			<button class="btn btn-sm btn-warning m-2">Log out</button>
+		  </a>
+		</span>
+	  </nav>
+	  
+    <div class="container">
+      <div class="row m-2">
+		<div class="col">
+			<div class="card">
+				<div class="card-header bg-dark">
+					<div class="card-title text-light"><h5>Clinical Services</h5></div>
+				</div>	
+				<div class="card-body">
+					<table class="table table-striped">
+						<thead>
+							<tr>
+							  <th scope="col">Cust Name</th>
+							  <th scope="col">Service Type</th>
+							  <th scope="col">Price</th>
+							  <th></th>
+							</tr>
+						</thead>
+					{% for service in services %}
+						<form method="post" action={% url 'cashier:update_service' service.id %}>
+							{% csrf_token %}
+							
+								<tr>	
+									<td>
+										{{service.case_number.customer_name}}
+									</td>
+									<td>
+										{{service.service_type.service_type}}
+									</td>
+									<td>
+										{{service.service_type.price}} birr
+									</td>
+									<td>
+										<input class="btn btn-sm btn-success" type="submit" value="Confirm">
+									</td>
+									<td>
+										<input class="btn btn-sm btn-danger service-btn" type="button" value="Cancel" id="service_{{service.id}}">
+									</td>
+								</tr>
+						</form>
+					{% endfor %}
+						</table>	
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row m-2">
+			<div class="col">
+				<div class="card">
+					<div class="card-header bg-dark">
+						<div class="card-title text-light"><h5>AI Services</h5></div>
+					</div>	
+					<div class="card-body">
+						<table class="table table-striped">
+							<thead>
+								<tr>
+								  <th scope="col">Cust Name</th>
+								  <th scope="col">Service Type</th>
+								  <th scope="col">Price</th>
+								  <th></th>
+								</tr>
+							</thead>
+						{% for service in ai_services %}
+							<form method="post" action={% url 'cashier:update_ai_service' service.id %}>
+								{% csrf_token %}
+								
+									<tr>	
+										<td>
+											{{service.case_number.customer_name}}
+										</td>
+										<td>
+											{{service.service_type.service_type}}
+										</td>
+										<td>
+											{{service.total}} birr
+										</td>
+										<td>
+											<input class="btn btn-sm btn-success" type="submit" value="Confirm">
+										</td>
+										<td>
+											<input class="btn btn-sm btn-danger ai-btn" type="button" value="Cancel" id="ai_{{service.id}}">
+										</td>
+									</tr>
+							</form>
+						{% endfor %}
+						</table>	
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row m-2">
+			<div class="col">
+				<div class="card">
+					<div class="card-header bg-dark">
+						<div class="card-title text-light">Regular Treatment</div>
+					</div>	
+					<div class="card-body">
+						<table class="table table-striped">
+							<thead>
+								<tr>
+								  <th scope="col">Cust Name</th>
+								  <th scope="col">Drug Name</th>
+								  <th scope="col">Unit</th>
+								  <th scope="col">Unit Price (birr)</th>
+								  <th scope="col">Qnty</th>
+								  <th scope="col">Total (birr)</th>
+								  <th></th>
+								</tr>
+								</thead>
+						{% for treatment in regular_treatment %}
+							<form method="post" action={% url 'cashier:update_prescription' treatment.id %}>
+								{% csrf_token %}
+								<tr>	
+									<td>
+										{{treatment.treatment_id.case_number.customer_name}}
+									</td>
+									<td>
+										{% for prescription in prescriptions%}
+											{%if prescription.treatment.id == treatment.id%}
+												{{prescription.rx.drug_type}}<br>
+												{%endif%}
+											{%endfor%}
+									</td>
+									<td>
+										{% for prescription in prescriptions%}
+											{%if prescription.treatment.id == treatment.id%}
+												{{prescription.rx.dis_unit}}<br>
+											{%endif%}
+											{%endfor%}
+									</td>	
+									<td>
+										{% for prescription in prescriptions%}
+											{%if prescription.treatment.id == treatment.id%}
+												{{prescription.rx.dis_price}}<br>
+												{%endif%}
+											{%endfor%}
+									</td>
+									<td>
+										{% for prescription in prescriptions%}
+											{%if prescription.treatment.id == treatment.id%}
+												{{prescription.quantity}}<br>
+												{%endif%}
+											{%endfor%}
+									</td>
+									<td>
+										{% for prescription in prescriptions%}
+											{%if prescription.treatment.id == treatment.id%}
+												{{prescription.total}}<br>
+												{%endif%}
+											{%endfor%}
+									</td>
+									<td>
+										<input class="btn btn-sm btn-success" type="submit" value="Confirm">
+									</td>
+									<td>
+										<input class="btn btn-sm btn-danger prescription-btn" type="button" value="Cancel" id="prescription_{{treatment.id}}">
+									</td>
+								</tr>
+							</form>
+						{% endfor %}
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="row m-2">
+			<div class="col">
+				<div class="card">
+					<div class="card-header bg-dark">
+						<div class="card-title text-light">Parasite Treatment</div>
+					</div>	
+					<div class="card-body">
+						<table class="table table-striped">
+							<thead>
+								<tr>
+								  <th scope="col">Cust Name</th>
+								  <th scope="col">Drug Name</th>
+								  <th scope="col">Unit</th>
+								  <th scope="col">Unit Price (birr)</th>
+								  <th scope="col">Qnty</th>
+								  <th scope="col">Total (birr)</th>
+								  <th></th>
+								</tr>
+							</thead>
+		
+						{% for treatment in parasite_treatment %}
+							<form method="post" action={% url 'cashier:update_parasite_prescription' treatment.id %}>
+								{% csrf_token %}
+								<tr>	
+									<td>
+										{{treatment.case_number.customer_name}}
+									</td>
+									<td>
+										{% for prescription in parasite_prescriptions%}
+											{%if prescription.treatment.id == treatment.id%}
+												{{prescription.rx.drug_type}}<br>
+											{%endif%}
+										{%endfor%}
+									</td>
+									<td>
+										{% for prescription in parasite_prescriptions%}
+											{%if prescription.treatment.id == treatment.id%}
+												{{prescription.rx.dis_unit}}<br>
+											{%endif%}
+										{%endfor%}
+									</td>
+									<td>
+										{% for prescription in parasite_prescriptions%}
+											{%if prescription.treatment.id == treatment.id%}
+												{{prescription.rx.dis_price}}<br>
+											{%endif%}
+										{%endfor%}
+										
+									</td>
+									
+									<td>
+										{% for prescription in parasite_prescriptions%}
+											{%if prescription.treatment.id == treatment.id%}
+												{{prescription.quantity}}<br>
+											{%endif%}
+										{%endfor%}
+									</td>
+									<td>
+										{% for prescription in parasite_prescriptions%}
+											{%if prescription.treatment.id == treatment.id%}
+												{{prescription.total}}<br>
+											{%endif%}
+										{%endfor%}
+									</td>
+									<td>
+										<input class="btn btn-sm btn-success" type="submit" value="Confirm">
+									</td>
+
+									<td>
+										<input class="btn btn-sm btn-danger parasite-btn" type="button" value="Cancel" id="parasite_{{treatment.id}}">
+									</td>
+								</tr>
+							</form>
+						{% endfor %}
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row m-2">
+			<div class="col">
+				<div class="card">
+					<div class="card-header bg-dark">
+						<div class="card-title text-light">Lab Exam</div>
+					</div>	
+					<div class="card-body">
+						<table class="table table-striped">
+							<thead>
+								<tr>
+								  <th scope="col">Cust Name</th>
+								  <th scope="col">Lab Technique</th>
+								  <th scope="col">Unit Price (birr)</th>
+								  <th scope="col">Total (birr)</th>
+								  <th></th>
+								</tr>
+							</thead>
+		
+						{% for exam in lab_exam %}
+							<form method="post" action={% url 'cashier:update_lab_exam' exam.id %}>
+								{% csrf_token %}
+								<tr>	
+									<td>
+										{{exam.treated_animal.case_number.customer_name}}
+									</td>
+									<td>
+										{{exam.lab_technique.lab_technique}}
+									</td>
+									<td>
+										{{exam.lab_technique.price}}
+									</td>
+							
+									<td>
+										{{exam.lab_technique.price}}
+									</td>
+									<td>
+										<input class="btn btn-sm btn-success" type="submit" value="Confirm">
+									</td>
+
+									<td>
+										<input class="btn btn-sm btn-danger lab-exam-btn" type="button" value="Cancel" id="exam_{{exam.id}}">
+									</td>
+								</tr>
+							</form>
+						{% endfor %}
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+
+    </div>
+  </body>
+</html>
+
+
