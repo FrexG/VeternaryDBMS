@@ -9,7 +9,7 @@ class VaccinationForm(ModelForm):
         exclude = ['service_date',"paid"]
         widgets = {
             'case_number': forms.Select(attrs={'class': 'form-control'}),
-            'species': forms.Select(attrs={'class': 'form-control'}),
+            'species': forms.SelectMultiple(attrs={'class': 'form-control'}),
             'breed': forms.Select(attrs={'class': 'form-control'}),
             'sex': forms.Select(attrs={'class': 'form-control'}),
             'number_of_animals':forms.NumberInput(attrs={'class':'form-control'}),
@@ -19,7 +19,7 @@ class VaccinationForm(ModelForm):
             'quantity': forms.NumberInput(attrs={'class': 'form-control'}),
             'case_holder': forms.Select(attrs={'class': 'form-control'}),
             'total': forms.NumberInput(attrs={'class': 'form-control', 'type': 'hidden'}),
-            'dx': forms.SelectMultiple(attrs={'class': 'form-control'}),
+            #'dx': forms.SelectMultiple(attrs={'class': 'form-control'}),
         }
     def clean_quantity(self):
         quantity = self.cleaned_data.get("quantity")

@@ -710,7 +710,6 @@ class EquipmentOutSummary(LoginRequiredMixin,View):
             'equipment_destinations':getItembyDestination(out_equipments)
         }
         return render(request,self.templateUrl,context)
-
 class VaccineInSummary(LoginRequiredMixin,View):
     login_url =  "/"
     templateUrl = "dashboard/vaccinein_summary.html"
@@ -815,7 +814,6 @@ class VaccineOutSummary(LoginRequiredMixin,View):
             'vaccine_destinations':getItembyDestination(out_vaccines)
         }
         return render(request,self.templateUrl,context)
-
 class LabExamSummary(LoginRequiredMixin,View):
     login_url =  "/"
     templateUrl = "dashboard/lab_exam_summary.html"
@@ -905,7 +903,6 @@ class ReceiptInSummary(LoginRequiredMixin,View):
             'receipt_typeForm':receipt_typeForm,
         }
         return render(request,self.templateUrl,context) 
-
 class ReceiptOutSummary(LoginRequiredMixin,View):
     login_url =  "/"
     templateUrl = "dashboard/receiptout_summary.html"

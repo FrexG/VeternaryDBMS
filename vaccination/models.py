@@ -26,7 +26,8 @@ class Vaccine(models.Model):
 
 class Vaccination(models.Model):
     case_number = models.ForeignKey(Customer,on_delete=models.PROTECT)
-    species = models.ForeignKey(Species, on_delete=models.CASCADE)
+    #species = models.ForeignKey(Species, on_delete=models.CASCADE)
+    species = models.ManyToManyField(Species)
     breed = models.ForeignKey(Breed, on_delete=models.CASCADE)
     number_of_animals = models.PositiveIntegerField()
     sex = models.CharField(max_length=10, choices=SEX_CHOICES)

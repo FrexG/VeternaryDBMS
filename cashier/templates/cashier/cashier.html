@@ -404,7 +404,9 @@
 										{{v.case_number.customer_name}}
 									</td>
 									<td>
-										{{v.species}}
+										{% for species in v.species.all%}
+											{{species.species_type}}<br>
+										{%endfor%}
 									</td>
 									<td>
 										{% for vaccine in v.vaccine_id.all%}

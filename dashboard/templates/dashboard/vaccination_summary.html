@@ -27,9 +27,9 @@
 				<tr class="table-dark">
 					<th scope="col">Cust Name</th>
 					<th scope="col">Vaccination type</th>
+					<th scope="col">Breed</th>
 					<th scope="col">Batch Num.</th>
 					<th scope="col">Qnty</th>
-					<th scope="col">Dx</th>
 					<th scope="col">Case Holder</th>
 					<th scope="col">Date</th>
 				</tr>
@@ -43,9 +43,14 @@
                     {{vaccine.vaccine_type}}<br>
                     {%endfor%}
 				</td>
+				<td>
+					<!--prettier-ignore-->
+					{%for species in row.species.all%}
+                    {{species.species_type}}<br>
+                    {%endfor%}
+				</td>
 				<td>{{row.vaccine_batch_num}}</td>
 				<td>{{row.quantity}}</td>
-				<td>{%for dx in row.dx.all%}({{dx.disease_name}}){%endfor%}</td>
 				<td>{{row.case_holder}}</td>
 				<td>{{row.service_date}}</td>
 				<!-- prettier-ignore-attribute -->
