@@ -36,7 +36,7 @@ class Vaccination(models.Model):
     quantity = models.IntegerField(default=0,null=False)
     total = models.DecimalField(
         max_digits=8, decimal_places=2, default=000000.00)
-    dx = models.ManyToManyField(Disease,verbose_name="Dx",blank=True)
+    #dx = models.ManyToManyField(Disease,verbose_name="Dx",blank=True) # Remove dx from vaccination
     case_holder = models.ForeignKey(User,on_delete=models.PROTECT)
     service_date = models.DateField(auto_now_add=True)
     paid = models.BooleanField(null=False, default=False)
