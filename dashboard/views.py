@@ -108,9 +108,11 @@ class RegularTreatmentSummary(LoginRequiredMixin,View):
     def get(self,request):
         treatmentObj = Treatment.objects.all()
         treatedAnimals = TreatedAnimal.objects.all()
+        prescriptions = Prescription.objects.all()
         distByKebele = self.getDistByKebele(Kebele.objects.all(),treatedAnimals)
 
         context = {"treatmentObj":treatmentObj,
+                    "prescriptions":prescriptions,
                     "dateForm":self.dateForm,
                     "case_holder_form":self.case_holder_form,
                     "totalTreatedAnimals":treatedAnimals.count(),
@@ -128,11 +130,13 @@ class RegularTreatmentSummary(LoginRequiredMixin,View):
         case_holder = case_holder_form['case_holder'].value()
 
         treatmentObj = Treatment.objects.filter(treatment_id__service_date__gte=start_date,treatment_id__service_date__lte=end_date,treatment_id__case_holder=case_holder)
+        prescriptions = Prescription.objects.all()
         treatedAnimals = TreatedAnimal.objects.all()
         distByKebele = self.getDistByKebele(Kebele.objects.all(),treatedAnimals)
 
         context = {"treatmentObj":treatmentObj,
                     "dateForm":self.dateForm,
+                    "prescriptions":prescriptions,
                     "case_holder_form":self.case_holder_form,
                     "totalTreatedAnimals":treatedAnimals.count(),
                     "totalPrice":self.getPrice(treatmentObj),

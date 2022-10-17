@@ -31,8 +31,8 @@ Dashboard {%endblock title %}
 					<th scope="col">RR</th>
 					<th scope="col">Clinical Finding</th>
 					<th scope="col">DX</th>
-					<th scope="col">Diff.Diag</th>
-					<th scope="col">Rumen Motility</th>
+					<th scope="col">RX</th>
+					<th scope="col">History</th>
 					<th scope="col">Date</th>
 					<th scope="col">Case Holder.</th>
 				</tr>
@@ -45,8 +45,13 @@ Dashboard {%endblock title %}
 				<td>{{row.rr}}</td>
 				<td>{{row.clinical_finding}}</td>
 				<td>{%for dx in row.dx.all%}{{dx.disease_name}}<br>{%endfor%}</td>
-				<td>{{row.differential_diag}}</td>
-				<td>{{row.rumen_motility}}</td>
+				<td>{%for presc in prescriptions%}
+						{% if presc.treatment.id == row.id%}
+							{{presc.rx.drug_type}}<br>
+						{%endif%}
+					{%endfor%}
+				</td>
+				<td>{{row.treatment_id.history}}</td>
 				<td>{{row.treatment_id.service_date}}</td>
 				<td>{{row.treatment_id.case_holder}}</td>
 			</tr>

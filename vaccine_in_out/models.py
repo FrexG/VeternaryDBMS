@@ -52,7 +52,7 @@ class VaccineOut(models.Model):
     remark = models.CharField(max_length=200,null=True)
 
     def __str__(self):
-        return self.vaccine.vaccine_type + "-" + self.receiver.name + "-"+self.batch_number
+        return self.vaccine.vaccine_type + "-" + self.kebele.name + "-"+self.batch_number
 
 class VaccineOutCashDeposit(models.Model):
     payment_for = models.ForeignKey(VaccineOut,on_delete=models.PROTECT)
