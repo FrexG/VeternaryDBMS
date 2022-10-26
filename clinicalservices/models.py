@@ -1,4 +1,3 @@
-from email.policy import default
 from django.db import models
 from registernewuser.models import Customer
 from django.contrib.auth.models import User
@@ -30,7 +29,7 @@ class ClinicalService(models.Model):
         "Service Date", auto_now_add=True)
 
     # Service type
-    service_type = models.ForeignKey(Service,on_delete=models.PROTECT,null=False)
+    service_type = models.ForeignKey(Service,on_delete=models.CASCADE,null=True)
 
     # Number of services
     number_of_service = models.IntegerField(default = 1)
@@ -56,7 +55,7 @@ class AIService(models.Model):
     case_number = models.ForeignKey(
         Customer, verbose_name="Case Number", on_delete=models.CASCADE,null=False)
     # Service type, this will be prefield by service type = AI
-    service_type = models.ForeignKey(Service,on_delete=models.PROTECT,null=False)
+    service_type = models.ForeignKey(Service,on_delete=models.PROTECT)
 
     species = models.ForeignKey(Species, on_delete=models.CASCADE)
 

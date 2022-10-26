@@ -1,45 +1,61 @@
-{% extends 'home/home.html' %} {%load static %} {% block title %} Abattoir
-{%endblock title %} {% block content %}
-<div class="row m-2">
-	<div class="col-sm-8 mx-auto">
-		<div class="card">
-			<div class="card-header bg-dark">
-				<h3 class="text-light">Lab Exam Requests</h3>
-			</div>
-			<div class="card-body">
-				<table class="table table-striped">
-					<thead>
-						<tr>
-							<th scope="col">Cust Name</th>
-							<th scope="col">Lab Sample</th>
-							<th scope="col">lab Technique</th>
-							<th></th>
-						</tr>
-					</thead>
-					{% for request in lab_requests %}
-					<form method="post" action={% url 'lab_exam:get_result' request.id %}>
-						{% csrf_token %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Script and Style imports-->
+    {%load static %} {% block imports%} {%endblock imports%}
 
-						<tr>
-							<td>{{request.treated_animal.case_number.customer_name}}</td>
-							<td>{{request.lab_sample.lab_sample}}</td>
-							<td>{{request.lab_technique.lab_technique}}</td>
-							<td>
-								<input
-									class="btn btn-sm btn-success"
-									type="submit"
-									value="Result"
-								/>
-							</td>
-						</tr>
-					</form>
-					{% endfor %}
-				</table>
-			</div>
-		</div>
-	</div>
-</div>
-{% if form%}
+    <title>{% block title %}{%endblock title%}</title>
+	<script src="{% static 'cashier/script.js' %}"></script>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'registernewuser/css/custom_style.css'%}"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'home/style.css'%}"
+    />
+    <link
+      rel="stylesheet"
+      href="{% static 'registernewuser/bootstrap-5.0.0/css/bootstrap.css'%}"
+    />
+   
+  </head>
+  <body id="body">
+    <style>
+		#body{
+			font-family: monospace;
+			font-size:medium;
+		}
+		.navbar-brand{
+		  font-family: monospace;
+		}
+		#username {
+		  color:coral;
+		  font-size: larger;
+		  font-family: Open Sans;
+		  font-weight: bold;
+		}
+	  </style>
+	  
+	  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+		<img src="{% static 'home/cattle_logo_2.png' %}" width="80" height="80" class="d-inline-block align-top navbar-brand" alt="">
+    	<h1 class="navbar-brand text-light">Lab Portal</h1>
+	
+		<span id="username" class="m2">Hello, {{request.user}}</span>
+		<span id="logout">
+		  <a href="{% url 'home:logout' %}">
+			<button class="btn btn-sm btn-warning m-2">Log out</button>
+		  </a>
+		</span>
+	  </nav>
+	  
+<div class="container">
+{% if form %}
 <div class="row m-2">
 	<div class="col-sm-8 mx-auto">
 		<div class="card">
@@ -62,5 +78,3 @@
 	</div>
 </div>
 {% endif %}
-
-{% endblock content %}

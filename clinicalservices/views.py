@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 # Import Models and Form
-from .forms import AIServiceForm,ClinicalServiceFormset
+from .forms import AIServiceForm,ClinicalServiceFormset,ClinicalServiceForm
 
 # Clinical Service Home page
 

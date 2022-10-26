@@ -75,10 +75,12 @@
 							</tr>
 						</thead>
 					{% for service in services %}
+					
 						<form method="post" action={% url 'cashier:update_service' service.id %}>
 							{% csrf_token %}
 							
 								<tr>	
+
 									<td>
 										{{service.case_number.customer_name}}
 									</td>
