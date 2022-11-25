@@ -11,6 +11,7 @@ class Index(LoginRequiredMixin,View):
 
     def get(self,request):
         lab_requests = LabExamRequest.objects.filter(paid=True,lab_result_arrived=False)
+        print(lab_requests)
         context = {
             'lab_requests':lab_requests
         }

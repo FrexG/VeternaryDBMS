@@ -15,7 +15,7 @@ class LabExamRequestForm(forms.ModelForm):
 class LabResult(forms.ModelForm):
     class Meta:
         model = LabResult
-        exclude = ["date"]
+        exclude = ["date",'treatment_delivered']
 
         widgets = {
             'lab_exam_request':forms.Select(attrs={'class':'form-control'}),

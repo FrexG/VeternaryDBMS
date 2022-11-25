@@ -51,7 +51,7 @@ class ClinicalEquipmentOut(models.Model):
     remark = models.CharField(max_length=200,null=True)
 
     def __str__(self):
-        return self.equipment.name + "-" + self.receiver.name + "-" + self.batch_number
+        return self.equipment.name + "-" + self.kebele.name + "-" + self.batch_number
 
 """ class ClinicalEquipmentCashDeposit(models.Model):
     payment_for = models.ForeignKey(ClinicalEquipmentOut,on_delete=models.PROTECT)
