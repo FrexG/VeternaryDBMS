@@ -47,6 +47,12 @@ drawChart = (canvas, labels, data, type, chart_label) => {
 				},
 			],
 		},
-		options: {},
+		options: {
+			plugins:{
+				legend:{
+					display:false,
+				},
+			},	
+		},
 	});
 };

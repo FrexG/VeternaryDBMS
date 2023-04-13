@@ -33,13 +33,13 @@ getSummary = async () => {
 		disease_cntx,
 		disease_label,
 		disease_data,
-		"bar",
+		"doughnut",
 		"Disease Prevalence",
 		{
 			indexAxis: "y",
 			plugins: {
 				legend: {
-					display: true,
+					display: false,
 					labels: {
 						color: "rgb(255, 99, 132)",
 					},

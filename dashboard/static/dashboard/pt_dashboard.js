@@ -25,18 +25,26 @@ getSummary = async () => {
 		treatment_label,
 		treatment_count,
 		"doughnut",
-		"# by type"
+		"# by type",
+		{}
 	);
 	drawChart(
 		disease_prevalence_cntx,
 		disease_names,
 		disease_count,
-		"bar",
-		"Disease Prevalence"
+		"doughnut",
+		"Disease Prevalence",
+		{
+			plugins:{
+				legend:{
+					display:false,
+				},
+			},	
+		},
 	);
 };
 getSummary();
-drawChart = (canvas, labels, data, type, chart_label) => {
+drawChart = (canvas, labels, data, type, chart_label,options) => {
 	const myChart = new Chart(canvas, {
 		type: type,
 		data: {
@@ -61,6 +69,6 @@ drawChart = (canvas, labels, data, type, chart_label) => {
 				},
 			],
 		},
-		options: {},
+		options: options,
 	});
 };

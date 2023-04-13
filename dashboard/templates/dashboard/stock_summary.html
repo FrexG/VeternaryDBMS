@@ -4,8 +4,8 @@
 {% block navstyle %}
 <style>
 	#sidebar-stock-summary {
-		background-color: tomato;
-		color: white;
+		background-color: chartreuse;
+		color: tomato;
 	}
 </style>
 {% endblock navstyle %} {% block content %}
@@ -19,7 +19,7 @@
 </div>
 <hr />
 <div class="row overflow-auto m-2" id="summary">
-	<div class="col-md-10 card">
+	<div class="col-md-10">
 		<table class="table table-striped">
 			<thead>
 				{% if stock_type == "Equipment" %}
@@ -60,13 +60,17 @@
 </div>
 
 <div class="row overflow-auto m-2" id="summary">
-	<div class="col-md-10 card">
+	<div class="col-md-10">
 		{% if stock_type == "Equipment" %}
-		<div class="card-header">Total Quantity</div>
-		<div class="card-body">{{total}}</div>
+		<div class="card">
+			<div class="card-header bg-dark">Total Quantity</div>
+			<div class="card-body">{{total}}</div>
+		</div>
 		{%else%}
-		<div class="card-header">Total Amount</div>
-		<div class="card-body">{{total}}</div>
+		<div class="card">
+			<div class="card-header bg-dark">Total Amount</div>
+			<div class="card-body">{{total}}</div>
+		</div>
 		{% endif %}
 	</div>
 </div>

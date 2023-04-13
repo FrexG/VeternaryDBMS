@@ -31,7 +31,7 @@ thead th {
 } */
 a:hover {
 	font-style: italic;
-	color: tomato;
+	color:chartreuse;
 }
 
 .chart_canvas {
@@ -47,9 +47,11 @@ a:hover {
 	font-family: monospace;
 }
 .card-header {
-	font-size: 0.7rem;
+	font-size: medium;
 	font-family: monospace;
+	font-weight: bold;
 	text-align: center;
+	color: chartreuse;
 }
 .card-footer {
 	text-align: center;

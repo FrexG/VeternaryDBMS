@@ -18,7 +18,7 @@ getSummary = async () => {
 		vaccination_cntx,
 		vaccination_label,
 		vaccination_count,
-		"bar",
+		"doughnut",
 		"Vaccinations"
 	);
 };
@@ -48,6 +48,12 @@ drawChart = (canvas, labels, data, type, chart_label) => {
 				},
 			],
 		},
-		options: {},
+		options: {
+			plugins:{
+				legend:{
+					display:false,
+				},
+			},	
+		},
 	});
 };

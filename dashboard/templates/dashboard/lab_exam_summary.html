@@ -4,8 +4,8 @@ Dashboard {%endblock title %}
 {% block navstyle %}
 <style>
 	#sidebar-lab-exam-summary {
-		background-color: tomato;
-		color: white;
+		background-color: chartreuse;
+		color: tomato;
 	}
 </style>
 {% endblock navstyle %} {% block content %}
@@ -19,7 +19,7 @@ Dashboard {%endblock title %}
 </div>
 <hr/>
 <div class="row overflow-auto m-2" id="summary">
-	<div class="col-md-12 card">
+	<div class="col-md-12">
 		<table class="table table-striped">
 			<thead>
 				<tr class="table-dark">
@@ -54,8 +54,8 @@ Dashboard {%endblock title %}
 	{% if total_lab_exam %}
 	<div class="col-md-4 col-sm-12">
 		<div class="card m-5">
-			<div class="card-header">
-				<h5 class="card-title">Total Amount</h5>
+			<div class="card-header bg-dark">
+				Total Amount
 			</div>
 			<div class="card-body">
 				{%for key,value in totalPrice.items%}
@@ -63,14 +63,15 @@ Dashboard {%endblock title %}
 				{%endfor%}
 			</div>
 			<div class="card-footer">
-				<p class="card-text text-primary">No. of Exams:{{total_lab_exam}}</p>
+				<p class="card-text text-primary">No. of Exams: {{total_lab_exam}}</p>
 			</div>
 		</div>
 	</div>
 	{% endif %}
-	<div class="col-md-8 col-sm-12 card">
-		<div class="card-header">
-			<h5 class="card-title">Exam by Technique</h5>
+	<div class="col-md-8 col-sm-12">
+		<div class="card">
+		<div class="card-header bg-dark">
+			Exam by Technique
 		</div>
 		<div class="card-body">
 			<table class="table table-striped m-2">
@@ -82,6 +83,7 @@ Dashboard {%endblock title %}
 				{%endfor%}
 			</table>
 		</div>
+	</div>
 	</div>
 </div>
 {% endblock content %}
