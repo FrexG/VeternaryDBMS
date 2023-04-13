@@ -4,8 +4,8 @@
 {% block navstyle %}
 <style>
 	#sidebar-receiptin-summary {
-		background-color: tomato;
-		color: white;
+		background-color: chartreuse;
+		color: tomato;
 	}
 </style>
 {% endblock navstyle %} {% block customImport%}
@@ -21,7 +21,7 @@
 </div>
 <hr />
 <div class="row overflow-auto m-2" id="summary">
-	<div class="col-md-12 card">
+	<div class="col-md-12">
 		<table class="table table-striped">
 			<thead>
 				<tr class="table-dark">
@@ -51,8 +51,8 @@
 <div class="row overflow-auto m-2" id="summary-additional">
 	<div class="col-md-4 col-sm-12">
 		<div class="card">
-			<div class="card-header">
-				<h5 class="card-title">Total Quantity</h5>
+			<div class="card-header bg-dark">
+				Total Quantity
 			</div>
 			<div class="card-body">
 				<p class="card-text">{{total_quantity}}</p>

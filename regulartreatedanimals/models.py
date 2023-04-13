@@ -1,9 +1,10 @@
 from django.db import models
 # Import tables from registernewuser app
-from registernewuser.models import Customer,Drug
+from registernewuser.models import Customer,Drug,Breed,Species
 from django.contrib.auth.models import User
 
 # Model definition for regular treated animals app
+SEX_CHOICES = [('M', 'Male'), ('F', 'Female'),]
 
 class Disease(models.Model):
     disease_name = models.CharField(max_length=100,null=False)
@@ -13,6 +14,33 @@ class Disease(models.Model):
 class TreatedAnimal(models.Model):
     case_number = models.ForeignKey(
         Customer, verbose_name="Case Number", on_delete=models.CASCADE)
+    species = models.ForeignKey(Species, on_delete=models.CASCADE)
+
+    breed = models.ForeignKey(Breed, on_delete=models.CASCADE)
+
+    number_of_animals = models.PositiveIntegerField()
+
+    sex = models.CharField(max_length=10, choices=SEX_CHOICES)
+
+    history = models.CharField(max_length=200,null=True)
+
+    case_holder = models.ForeignKey(User,on_delete=models.PROTECT,null=False)
+
+    service_date = models.DateField("Service Date", auto_now=False, auto_now_add=True)
+
+    def __str__(self):
+        return str(f'Treatment for->{self.case_number}')
+
+    def getTreatmentID(self):
+        return self.id
+
+    def getKebele(self):
+        return self.case_number.kebele
+
+class Treatment(models.Model):
+    # Treatment for a treated animal
+    treatment_id = models.ForeignKey(TreatedAnimal, on_delete=models.CASCADE)
+  
     t0 = models.DecimalField(verbose_name="T0", max_digits=5,
                              decimal_places=2,)
 
@@ -27,33 +55,21 @@ class TreatedAnimal(models.Model):
 
     dx = models.ManyToManyField(Disease, verbose_name="Dx", blank=True)
 
-    differential_diag = models.TextField(
-        "Differential Diagnosis", max_length=100)
+    differential_diag = models.TextField(max_length=200, blank=True)
 
     rumen_motility = models.TextField("Rumen Motility", max_length=100)
 
-    service_date = models.DateField(
-        "Service Date", auto_now=False, auto_now_add=True)
-
-    case_holder = models.ForeignKey(User,on_delete=models.PROTECT,null=False)
-
-    def __str__(self):
-        return str(f'Treatment for->{self.case_number}')
-
-    def getTreatmentID(self):
-        return self.id
-
-    def getKebele(self):
-        return self.case_number.kebele
+    paid = models.BooleanField(default=False)
+    
+    delivered = models.BooleanField(default=False)
 
 class Prescription(models.Model):
-    # Prescrition for the corresponding treatment
-    # A Treatment can have multiple prescription
-    
-    rx = models.ForeignKey(Drug, verbose_name="RX", on_delete=models.CASCADE,null=False)
-
+    """ Prescrition for the corresponding treatment,
+        a treatment can have multiple prescription """
     treatment = models.ForeignKey(
-        TreatedAnimal, verbose_name="Treatment ID", on_delete=models.CASCADE,null=False)
+        Treatment, verbose_name="Treatment ID", on_delete=models.CASCADE,null=False)
+
+    rx = models.ForeignKey(Drug, verbose_name="RX", on_delete=models.CASCADE,null=False)
 
     quantity = models.PositiveIntegerField("Quantity",null=False)
 
@@ -61,13 +77,12 @@ class Prescription(models.Model):
 
     total = models.DecimalField(
         max_digits=8, decimal_places=2, default=000000.00)
-
-    paid = models.BooleanField(default=False)
-
-    delivered = models.BooleanField(default=False)
     
     date = models.DateField(auto_now_add=True)
 
 
     def __str__(self):
         return str(f'{self.rx} : {self.treatment}')
+    
+    def getPrice(self):
+        return self.total

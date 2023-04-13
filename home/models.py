@@ -9,7 +9,8 @@ USER_ROLES = [('Admin', 'Adminstrator'),
               ('Cashier', 'Cashier'), 
               ('Vet', 'Veternarian'),
               ('Pharmacist', 'Pharmacist'),
-              ('Stock_Keeper', 'Stock Keeper')]
+              ('Stock_Keeper', 'Stock Keeper'),
+              ("Lab","lab")]
 
 
 class Profile(models.Model):

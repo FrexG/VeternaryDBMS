@@ -48,6 +48,8 @@ INSTALLED_APPS = [
     'abattoir_exam',
     'lab_exam',
     'receipt_in_out',
+    'search',
+    'opd',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

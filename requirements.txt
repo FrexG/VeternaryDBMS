@@ -2,3 +2,4 @@ python==3.10.4
 django==4.0
 django-cors-headers==3.12.0
 reportlab==3.5.68
+django-import-export

@@ -93,7 +93,8 @@ class DrugOutForm(forms.ModelForm):
         widgets = {
             'drug' : forms.Select(attrs={'class': 'form-control'}),
             'destination' : forms.Select(attrs={'class': 'form-control'}),
-            'receiver' : forms.Select(attrs={'class': 'form-control'}),
+            'kebele' : forms.Select(attrs={'class': 'form-control'}),
+            'received_by':forms.TextInput(attrs={'class':'form-control'}),
             'approved_by' : forms.Select(attrs={'class': 'form-control'}),
             'store_man' : forms.TextInput(attrs={'class':'form-control'}),
             'quantity' : forms.NumberInput(attrs={'class': 'form-control'}),

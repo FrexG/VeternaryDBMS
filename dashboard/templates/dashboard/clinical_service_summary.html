@@ -4,8 +4,8 @@ Dashboard {%endblock title %}
 {% block navstyle %}
 <style>
 	#sidebar-clinical-service-summary {
-		background-color: tomato;
-		color: white;
+		background-color: chartreuse;
+		color: tomato;
 	}
 </style>
 {% endblock navstyle %} {% block customImport%}
@@ -21,7 +21,7 @@ Dashboard {%endblock title %}
 </div>
 <hr />
 <div class="row overflow-auto m-2" id="summary">
-	<div class="col-md-12 card">
+	<div class="col-md-12">
 		<table class="table table-striped">
 			<thead>
 				<tr class="table-dark">
@@ -48,8 +48,8 @@ Dashboard {%endblock title %}
 	{% if totalClinicalServices %}
 	<div class="col-md-4 col-sm-12">
 		<div class="card m-5">
-			<div class="card-header">
-				<h5 class="card-title">Total Amount</h5>
+			<div class="card-header bg-dark">
+			Total Amount
 			</div>
 			<div class="card-body">
 				{%for key,value in totalPrice.items%}
@@ -64,19 +64,30 @@ Dashboard {%endblock title %}
 		</div>
 	</div>
 	<div class="col-md-4 col-sm-12">
-		<canvas class="chart_canvas card" id="cntx_clinical_services"></canvas>
+		<div class="card">
+			<div class="card-header bg-dark">
+				Service Occurences
+			</div>
+			<canvas class="chart_canvas card" id="cntx_clinical_services"></canvas>
+		</div>
 	</div>
 	{% endif %}
-	<div class="col-md-4 col-sm-12 card">
-		<h5 class="text-center">Service by Kebele</h5>
-		<table class="table table-striped m-2">
-			{% for key,value in distByKebele.items %}
-			<tr>
-				<td>{{key}}</td>
-				<td>{{value}}</td>
-			</tr>
-			{%endfor%}
-		</table>
+	<div class="col-md-4 col-sm-12">
+		<div class="card">
+			<div class="card-header bg-dark">
+				Service by Kebele
+			</div>
+			<div clas="card-body">
+				<table class="table table-striped m-2">
+					{% for key,value in distByKebele.items %}
+					<tr>
+						<td>{{key}}</td>
+						<td>{{value}}</td>
+					</tr>
+					{%endfor%}
+				</table>
+			</div>
+	</div>
 	</div>
 </div>
 {% endblock content %}

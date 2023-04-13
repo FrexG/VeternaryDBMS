@@ -26,8 +26,8 @@ class SelectPrintOutForm(forms.Form):
 class SelectKebeleForm(forms.ModelForm):
     class Meta:
         model = DrugOut
-        fields = ["receiver"]
+        fields = ["kebele"]
 
         widgets = {
-            'receiver' : forms.Select(attrs={'id':'kebele','class': 'form-control'})
+            'kebele' : forms.Select(attrs={'id':'kebele','class': 'form-control'})
          } 

@@ -1,5 +1,5 @@
 # create a form for the dashboard
-from dataclasses import field
+from dataclasses import field, fields
 from django import forms
 from clinicalservices.models import ClinicalService
 from parasitetreatment.models import ParasiteTreatment
@@ -8,6 +8,8 @@ from equipment_in_out.models import ClinicalEquipmentIn,ClinicalEquipmentOut
 from vaccine_in_out.models import VaccineIn,VaccineOut
 from receipt_in_out.models import ReceiptIn,ReceiptOut
 from registernewuser.models import Kebele
+from abattoir_exam.models import AbattoirExam
+
 # Drug In Out forms
 class DrugTypeForm(forms.ModelForm):
     class Meta:
@@ -26,9 +28,9 @@ class DrugSourceForm(forms.ModelForm):
 class DrugReceiverForm(forms.ModelForm):
     class Meta:
         model = DrugOut
-        fields = ['receiver']
+        fields = ['kebele']
         widgets = {
-            'receiver': forms.Select(),
+            'kebele': forms.Select(),
         }
 # Equipment In Out forms
 class EquipmentTypeForm(forms.ModelForm):
@@ -48,9 +50,9 @@ class EquipmentSourceForm(forms.ModelForm):
 class EquipmentReceiverForm(forms.ModelForm):
     class Meta:
         model = ClinicalEquipmentOut
-        fields = ['receiver']
+        fields = ['kebele']
         widgets = {
-            'receiver': forms.Select(),
+            'kebele': forms.Select(),
         }
 # Vaccine In Out forms
 class VaccineTypeForm(forms.ModelForm):
@@ -70,9 +72,9 @@ class VaccineSourceForm(forms.ModelForm):
 class VaccineReceiverForm(forms.ModelForm):
     class Meta:
         model = VaccineOut
-        fields = ['receiver']
+        fields = ['kebele']
         widgets = {
-            'receiver': forms.Select(),
+            'kebele': forms.Select(),
         }
         
 class DateRangeFrom(forms.Form):
@@ -120,3 +122,11 @@ class KebeleTypeForm(forms.ModelForm):
 class StockSelectForm(forms.Form):
     stock_type = forms.ChoiceField(choices=[('Drug','Drug'),('Equipment','Equipment'),('Vaccine','Vaccine')],
                                     widget=forms.Select(attrs={'id':'stock_type'}))
+
+class HotelSelectForm(forms.ModelForm):
+    class Meta:
+        model = AbattoirExam
+        fields = ["hotel"]
+        widgets = {
+            'hotel' : forms.Select(attrs={'id':'hotel'})
+         } 

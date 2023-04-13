@@ -47,7 +47,8 @@ class VaccineInForm(forms.ModelForm):
         widgets = {
             'vaccine' : forms.Select(attrs={'class': 'form-control'}),
             'source' : forms.Select(attrs={'class': 'form-control'}),
-            'receiver' : forms.Select(attrs={'class': 'form-control'}),
+            'kebele' : forms.Select(attrs={'class': 'form-control'}),
+            'received_by':forms.TextInput(attrs={'class':'form-control'}),
             'dropped_by' : forms.TextInput(attrs={'class': 'form-control'}),
             'quantity' : forms.NumberInput(attrs={'class': 'form-control'}),
             'unit_price' : forms.NumberInput(attrs={'class': 'form-control'}),

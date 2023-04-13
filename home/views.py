@@ -37,11 +37,13 @@ class Login(View):
                 return redirect('/drug_in_out')
             elif Profile.objects.get(user=authenticated_user).role == 'Admin':
                 return redirect('/dashboard')
-
-            #return redirect('/register')
+            elif Profile.objects.get(user=authenticated_user).role == 'Lab':
+                return redirect('/lab_exam')
+            else:
+               messages.info(request, "Incorrect Username or Password")
+               return redirect('/') 
         else:
-            messages.info(request, "Incorrect Username or Password")
-
+            messages.info(request, "Please enter your Username or Password")
             return redirect('/')
 
 class Logout(View):

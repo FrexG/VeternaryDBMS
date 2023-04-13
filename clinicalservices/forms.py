@@ -14,6 +14,8 @@ class ClinicalServiceForm(ModelForm):
         widgets = {
             'case_number': forms.Select(attrs={'class':'form-control'}),
             'service_type': forms.Select(attrs={'class':'form-control'}),
+            'number_of_service':forms.NumberInput(attrs={'class':'form-control'}),
+            'total': forms.NumberInput(attrs={'class': 'form-control', 'type': 'hidden'}),
             'case_holder': forms.Select(attrs={'class':'form-control','type':'hidden'}),
         }
 
@@ -27,7 +29,13 @@ class ClinicalServiceForm(ModelForm):
             raise forms.ValidationError(
                 "Please select a service type!!")
         return self.cleaned_data
-        
+
+    def clean_total(self):
+        num_of_service = self.cleaned_data.get("number_of_service")
+        service_price = self.cleaned_data.get("service_type").price
+        total = num_of_service * service_price
+        print(f"Total = {total}")
+        return total
 
         
 ClinicalServiceFormset = formset_factory(ClinicalServiceForm,extra=1)
@@ -36,45 +44,46 @@ ClinicalServiceFormset = formset_factory(ClinicalServiceForm,extra=1)
 
 class AIServiceForm(ModelForm):
         # form validation
-    def clean_case_number(self):
-        case_number = self.cleaned_data.get("case_number")
-        print(f"Case num:{case_number}")
-
-        if str(case_number) == "":
-            raise forms.ValidationError("This field can't be empty!")
-        return case_number
+    def clean_qnty(self):
+        qnty = self.cleaned_data.get("qnty")
+        print(f"Qnty:{qnty}")
+        if qnty < 1:
+            raise forms.ValidationError(
+                "Quantity must be greater than 0!!")
+        return qnty
 
     def clean_total(self):
-        quantity = self.cleaned_data.get("qnty")
-        print(quantity)
-        total = 10
+        qnty = self.cleaned_data.get("qnty")
+        bull_num = self.cleaned_data.get("bull_number")
+        price = self.cleaned_data.get("service_type").price
+
+        print(f"Bull Num: {bull_num}")
+        print(f"AI price = {price}, {qnty}")
+
+        total = qnty * price
         return total
-
-    def clean_color(self):
-        color = self.cleaned_data.get("color")
-        # Color name should not contain any numbers
-        pattern = '[0-9#$@%]'
-        pattern = re.compile(pattern)
-        match = pattern.findall(str(color))
-
-        if len(match) > 0:
-            print(f'Length :{len(match)}')
-            raise forms.ValidationError("This can't be a valid color")
-        return color
+    
 
     class Meta:
+        textAreaSize = "height: 100px;"
         model = AIService
-        exclude = ["price"]
+        exclude = ["paid"]
 
         widgets = {
+            'service_type': forms.Select(attrs={'class':'form-control'}),
             'case_number': forms.Select(attrs={'class': 'form-control'}),
-            'total':forms.NumberInput(attrs={'class':'form-control','type':'hidden'}),
+            'species': forms.Select(attrs={'class': 'form-control'}),
+            'breed': forms.Select(attrs={'class': 'form-control'}),
+            'sex': forms.Select(attrs={'class': 'form-control'}),
+            'number_of_animals':forms.NumberInput(attrs={'class':'form-control'}),
+            'history':forms.Textarea(attrs={'class':'form-control', 'style':textAreaSize}),
             'last_calving_date': forms.SelectDateWidget(attrs={'class': 'form-control'}),
-            'color': forms.TextInput(attrs={'class': 'form-control'}),
+            'color': forms.Select(attrs={'class': 'form-control'}),
             'ai_frequency': forms.TextInput(attrs={'class': 'form-control'}),
             'bull_number': forms.NumberInput(attrs={'class': 'form-control'}),
             'pd_result': forms.TextInput(attrs={'class': 'form-control'}),
             'qnty': forms.NumberInput(attrs={'class': 'form-control'}),
+            'total':forms.NumberInput(attrs={'class':'form-control','type':'hidden'}),
             'case_holder': forms.Select(attrs={'class': 'form-control','type':'hidden'}),
         }
 

@@ -4,8 +4,8 @@
 {% block navstyle %}
 <style>
 	#sidebar-abattoir-exam-summary {
-		background-color: tomato;
-		color: white;
+		background-color: chartreuse;
+		color: tomato;
 	}
 </style>
 {% endblock navstyle %} {% block customImport%}
@@ -15,13 +15,13 @@
 
 <div class="row m-2">
 	<form action="" method="POST">
-		{%csrf_token%} {{dateForm}}{{receipt_typeForm}}
+		{%csrf_token%} {{dateForm}}{{hotelForm}}
 		<input type="submit" value="Filter" class="btn btn-sm btn-primary" />
 	</form>
 </div>
 <hr />
 <div class="row overflow-auto m-2" id="summary">
-	<div class="col-md-12 card">
+	<div class="col-md-12">
 		<table class="table table-striped">
 			<thead>
 				<tr class="table-dark">
@@ -57,8 +57,8 @@
 <div class="row overflow-auto m-2" id="summary-additional">
 	<div class="col-md-4 col-sm-12">
 		<div class="card">
-			<div class="card-header">
-				<h5 class="card-title">Total</h5>
+			<div class="card-header bg-dark">
+				Total
 			</div>
 			<div class="card-body">
 				<p class="card-text">{{total}}</p>

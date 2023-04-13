@@ -24,7 +24,11 @@
 .card-header {
 	font-family: monospace;
 	text-align: center;
+	font-weight: bold;
+	font-size: x-large;
+	color: chartreuse;
 }
+
 .helptext {
 	font-family: open sans;
 	font-size: smaller;

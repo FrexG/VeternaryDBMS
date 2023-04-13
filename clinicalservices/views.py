@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 # Import Models and Form
-from .forms import ClinicalServiceForm, AIServiceForm,ClinicalServiceFormset
+from .forms import AIServiceForm,ClinicalServiceFormset,ClinicalServiceForm
 
 # Clinical Service Home page
 
@@ -55,8 +55,8 @@ class AIServiceView(View):
         return render(request, self.templateURL, context)
 
     def post(self, request):
-        form = ClinicalServiceFormset(initial={'case_holder': request.user})
-        AIServiceFormRequest = AIServiceForm(data=request.POST)
+        form = ClinicalServiceFormset()
+        AIServiceFormRequest = AIServiceForm(request.POST)
         # Check for validity of form
         if AIServiceFormRequest.is_valid():
             print("Is valid called")
@@ -64,10 +64,10 @@ class AIServiceView(View):
             ai_form = AIServiceFormRequest.save(commit=False)
             ai_form.case_holder = request.user
             ai_form.save()
-
-            AIServiceFormRequest = AIServiceForm()
-
-        context = {'form':form,
+            return redirect("/clinicalservice")
+        else:
+            context = {'form':form,
                    'ai_form': AIServiceFormRequest}
+            return render(request, self.templateURL, context)
 
-        return render(request, self.templateURL, context)
+        

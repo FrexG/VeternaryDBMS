@@ -11,12 +11,17 @@ class ParasiteTreatmentForm(ModelForm):
      class Meta:
         textAreaSize = "height: 100px;"
         model = ParasiteTreatment
-        exclude = ['service_date','unit']
+        exclude = ['service_date','unit',"paid","delivered"]
 
         widgets = {
             'case_number': forms.Select(attrs={'class': 'form-control'}),
             'treatment_type': forms.Select(attrs={'class': 'form-control'}),
             'dx': forms.SelectMultiple(attrs={'class': 'form-control'}),
+            'species': forms.Select(attrs={'class': 'form-control'}),
+            'breed': forms.Select(attrs={'class': 'form-control'}),
+            'sex': forms.Select(attrs={'class': 'form-control'}),
+            'number_of_animals':forms.NumberInput(attrs={'class':'form-control'}),
+            'history':forms.Textarea(attrs={'class':'form-control', 'style':textAreaSize}),
             'case_holder': forms.Select(attrs={'class': 'form-control'}),
         }
 
@@ -24,7 +29,7 @@ class ParasiteTreatmentForm(ModelForm):
 class PrescriptionForm(ModelForm):       
     class Meta:
         model = ParasitePrescription
-        exclude = ["paid","delivered"]
+        fields = "__all__"
 
         widgets = {
             'rx': forms.Select(attrs={'class': 'form-control'}),
@@ -44,9 +49,6 @@ class PrescriptionForm(ModelForm):
     def clean_total(self):
         quantity = self.cleaned_data.get("quantity")
         rx_price = self.cleaned_data.get("rx").dis_price
-
-        print(f"RX price = {rx_price}")
-
         total = quantity * rx_price
         print(f"Total = {total}")
         return total

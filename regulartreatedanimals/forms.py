@@ -1,14 +1,12 @@
+from dataclasses import fields
 from django.forms import ModelForm
 from django import forms
 from django.forms import modelformset_factory, formset_factory
-from .models import TreatedAnimal, Prescription
+from .models import TreatedAnimal,Treatment,Prescription
 from registernewuser.models import Customer
-
 import re
 
-
 class TreatedAnimalsForm(ModelForm):
-
     class Meta:
         textAreaSize = "height: 100px;"
         model = TreatedAnimal
@@ -16,21 +14,34 @@ class TreatedAnimalsForm(ModelForm):
 
         widgets = {
             'case_number': forms.Select(attrs={'class': 'form-control'}),
+            'species': forms.Select(attrs={'class': 'form-control'}),
+            'breed': forms.Select(attrs={'class': 'form-control'}),
+            'number_of_animals': forms.NumberInput(attrs={'class': 'form-control'}),
+            'sex': forms.Select(attrs={'class': 'form-control'}),
+            'history': forms.Textarea(attrs={'class': 'form-control', 'style': textAreaSize}),
+            'case_holder': forms.Select(attrs={'class': 'form-control'}),
+        }
+
+class TreatmentForm(ModelForm):
+    class Meta:
+        textAreaSize = "height: 100px;"
+        model = Treatment
+        exclude = ["paid","delivered"]
+
+        widgets = {
+            'treatment_id': forms.Select(attrs={'class': 'form-control'}),
             't0': forms.NumberInput(attrs={'class': 'form-control'}),
             'pr': forms.NumberInput(attrs={'class': 'form-control'}),
             'rr': forms.NumberInput(attrs={'class': 'form-control'}),
-            'case_holder': forms.Select(attrs={'class': 'form-control'}),
             'clinical_finding': forms.Textarea(attrs={'class': 'form-control', 'style': textAreaSize}),
             'dx': forms.SelectMultiple(attrs={'class': 'form-control'}),
             'differential_diag': forms.Textarea(attrs={'class': 'form-control', 'style': textAreaSize}),
             'rumen_motility': forms.Textarea(attrs={'class': 'form-control', 'style': textAreaSize}),
         }
-
-    # Add form validation
 class PrescriptionForm(ModelForm):       
     class Meta:
         model = Prescription
-        exclude = ["paid","delivered"]
+        fields = "__all__"
 
         widgets = {
             'rx': forms.Select(attrs={'class': 'form-control'}),

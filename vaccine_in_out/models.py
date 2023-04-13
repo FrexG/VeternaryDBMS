@@ -40,7 +40,8 @@ class VaccineOut(models.Model):
     ]
     vaccine = models.ForeignKey(Vaccine,on_delete=models.PROTECT)
     destination = models.CharField(max_length=50,choices=DESTINATION)
-    receiver = models.ForeignKey(Kebele,on_delete=models.PROTECT)
+    kebele = models.ForeignKey(Kebele,on_delete=models.PROTECT)
+    received_by = models.CharField(max_length=100,null=True)
     approved_by = models.ForeignKey(User,on_delete=models.PROTECT,related_name="vaccine_approved_by")
     store_man = models.CharField(max_length=100)
     quantity = models.PositiveIntegerField()
@@ -51,7 +52,7 @@ class VaccineOut(models.Model):
     remark = models.CharField(max_length=200,null=True)
 
     def __str__(self):
-        return self.vaccine.vaccine_type + "-" + self.receiver.name + "-"+self.batch_number
+        return self.vaccine.vaccine_type + "-" + self.kebele.name + "-"+self.batch_number
 
 class VaccineOutCashDeposit(models.Model):
     payment_for = models.ForeignKey(VaccineOut,on_delete=models.PROTECT)

@@ -4,8 +4,8 @@
 {% block navstyle %}
 <style>
 	#sidebar-parasite-treatment-summary {
-		background-color: tomato;
-		color: white;
+		background-color: chartreuse;
+		color: tomato;
 	}
 </style>
 {% endblock navstyle %} {% block customImport%}
@@ -29,6 +29,7 @@
 					<th scope="col">Treatment type</th>
 					<th scope="col">Case holder</th>
 					<th scope="col">DX</th>
+					<th scope="col">RX</th>
 					<th scope="col">Date</th>
 				</tr>
 			</thead>
@@ -37,7 +38,13 @@
 				<td>{{row.case_number.customer_name}}</td>
 				<td>{{row.treatment_type}}</td>
 				<td>{{row.case_holder}}</td>
-				<td>{%for dx in row.dx.all%}({{dx.disease_name}}){%endfor%}</td>
+				<td>{%for dx in row.dx.all%}{{dx.disease_name}}<br>{%endfor%}</td>
+				<td>{% for prescription in parasitePrescriptionObj%}
+						{% if prescription.treatment.id == row.id%}
+							{{prescription.rx.drug_type}}<br>
+						{%endif%}
+					{%endfor%}
+				</td>
 				<td>{{row.service_date}}</td>
 			</tr>
 			{% endfor %}
@@ -45,8 +52,8 @@
 	</div>
 	<div class="col-md-2 col-sm-12">
 		<div class="card">
-			<div class="card-header">
-				<h5 class="card-title">Total Amount</h5>
+			<div class="card-header bg-dark">
+				Total Amount
 			</div>
 			<div class="card-body">
 				<p class="card-text">{{totalPrice}} Birr</p>
@@ -60,16 +67,26 @@
 	</div>
 </div>
 <div class="row overflow-auto m-2" id="summary-additional">
-	<div class="col-md-2 col-sm-12">
-		<canvas class="chart_canvas card" id="cntx_parasite_treatment"></canvas>
-	</div>
-	<div class="col-md-8 col-sm-12">
-		<canvas class="chart_canvas card" id="cntx_disease_prevalence"></canvas>
-	</div>
-	<div class="col-md-2 col-sm-12">
+	<div class="col-md-4 col-sm-12">
 		<div class="card">
-			<div class="card-header">
-				<h5 class="card-title">Kebele Distribution</h5>
+			<div class="card-header bg-dark">
+				Treatment Type Count
+			</div>
+			<canvas class="chart_canvas card" id="cntx_parasite_treatment"></canvas>
+		</div>
+	</div>
+	<div class="col-md-4 col-sm-12">
+		<div class="card">
+			<div class="card-header bg-dark">
+				Disease Prevalence
+			</div>
+			<canvas class="chart_canvas card" id="cntx_disease_prevalence"></canvas>
+		</div>
+	</div>
+	<div class="col-md-4 col-sm-12">
+		<div class="card">
+			<div class="card-header bg-dark">
+				Kebele Distribution
 			</div>
 			<div class="card-body">
 				<table class="table table-striped">

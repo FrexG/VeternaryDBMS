@@ -4,8 +4,8 @@ Service{% endblock title %} {%block imports%}
 {%endblock imports%} {% block content %}
 <div class="col-sm-6 mx-auto">
 	<div class="card">
-		<div class="card-header bg-warning">
-			<h3>Clinical Service</h3>
+		<div class="card-header bg-dark">
+			Clinical Service
 		</div>
 		<div class="card-body">
 			<form action="" method="POST">
@@ -14,7 +14,7 @@ Service{% endblock title %} {%block imports%}
 					id="service-group"
 				>
 					{%csrf_token%} {{form.management_form}} {% for form in form %}
-					<div class="card-header service-form">{{form}}</div>
+					<div class="card-title service-form">{{form}}</div>
 					{% endfor %}
 					<input
 						type="button"
@@ -31,8 +31,8 @@ Service{% endblock title %} {%block imports%}
 </div>
 <div class="col-sm-6 mx-auto">
 	<div class="card">
-		<div class="card-header bg-warning">
-			<h3>AI Service</h3>
+		<div class="card-header bg-dark">
+			AI Service
 		</div>
 		<div class="card-body">
 			<div class="form-group font-weight-bold text-secondary text-capitalize">

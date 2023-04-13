@@ -3,12 +3,14 @@ from django.http import HttpResponse
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import UpdateView
+from datetime import datetime
 
 # import models
-from clinicalservices.models import ClinicalService
-from regulartreatedanimals.models import Prescription
-from parasitetreatment.models import ParasitePrescription
-from lab_exam.models import LabExam
+from clinicalservices.models import ClinicalService,AIService
+from regulartreatedanimals.models import Treatment,Prescription
+from parasitetreatment.models import ParasitePrescription,ParasiteTreatment
+from lab_exam.models import LabExamRequest
+from vaccination.models import Vaccination
 # Create your views here.
 
 class Index(LoginRequiredMixin,View):
@@ -17,17 +19,26 @@ class Index(LoginRequiredMixin,View):
 
     def get(self,request):
         clinical_services = ClinicalService.objects.filter(paid=False)
-        prescription = Prescription.objects.filter(paid = False)
-        parasite_prescription = ParasitePrescription.objects.filter(paid = False)
-        lab_exam = LabExam.objects.filter(paid=False)
+        ai_services = AIService.objects.filter(paid=False)
 
-        print(f"Count: {prescription.count()}")
-        #print(parasite_prescription[0].treatment)
+        prescription = Prescription.objects.filter(treatment__treatment_id__service_date = datetime.now().date())
+        regular_treatment = Treatment.objects.filter(treatment_id__service_date = datetime.now().date(),paid = False)
+
+        parasite_prescription = ParasitePrescription.objects.filter(treatment__service_date = datetime.now().date())
+        parasite_treatment = ParasiteTreatment.objects.filter(service_date = datetime.now().date(),paid = False)
+
+        lab_exam = LabExamRequest.objects.filter(paid=False)
+
+        vaccination = Vaccination.objects.filter(paid=False)
 
         context={"services":clinical_services,
+                "ai_services":ai_services,
                 "parasite_prescriptions":parasite_prescription,
+                "regular_treatment":regular_treatment,
                 "prescriptions":prescription,
-                "lab_exam":lab_exam
+                "parasite_treatment":parasite_treatment,
+                "lab_exam":lab_exam,
+                "vaccination":vaccination
                 }
 
         return render(request,template_name=self.templateURL,context=context)
@@ -49,12 +60,30 @@ class DeleteService(LoginRequiredMixin,View):
         ClinicalService.objects.get(id = pk).delete()
         return redirect("/cashier")
 
+class UpdateAIService(LoginRequiredMixin,View):
+    def get(self,request):
+        return redirect("cashier/")
+
+    def post(self,request,pk):
+        AIService.objects.filter(id = pk).update(paid=True)
+
+        return redirect("/cashier")
+
+class DeleteAIService(LoginRequiredMixin,View):
+    def get(self,request):
+        return redirect("cashier/")
+
+    def post(self,request,pk):
+        AIService.objects.get(id = pk).delete()
+        return redirect("/cashier")
+
 class UpdatePrescription(LoginRequiredMixin,View):
     def get(self,request):
         return redirect("cashier/")
 
     def post(self,request,pk):
-        Prescription.objects.filter(id = pk).update(paid=True)
+        # pk is the treatment id
+        Treatment.objects.filter(id = pk).update(paid=True)
 
         return redirect("/cashier")
 
@@ -63,7 +92,7 @@ class DeletePrescription(LoginRequiredMixin,View):
         return redirect("cashier/")
 
     def post(self,request,pk):
-        Prescription.objects.get(id = pk).delete()
+        Treatment.objects.get(id = pk).delete()
         return redirect("/cashier")
 
 
@@ -72,7 +101,7 @@ class UpdateParasitePrescription(LoginRequiredMixin,View):
         return redirect("cashier/")
 
     def post(self,request,pk):
-        ParasitePrescription.objects.filter(id = pk).update(paid=True)
+        ParasiteTreatment.objects.filter(id = pk).update(paid=True)
 
         return redirect("/cashier")
         
@@ -81,7 +110,7 @@ class DeleteParasitePrescription(LoginRequiredMixin,View):
         return redirect("cashier/")
 
     def post(self,request,pk):
-        ParasitePrescription.objects.get(id = pk).delete()
+        ParasiteTreatment.objects.get(id = pk).delete()
         return redirect("/cashier")
 
 class UpdateLabExam(LoginRequiredMixin,View):
@@ -89,7 +118,7 @@ class UpdateLabExam(LoginRequiredMixin,View):
         return redirect("cashier/")
 
     def post(self,request,pk):
-        LabExam.objects.filter(id = pk).update(paid=True)
+        LabExamRequest.objects.filter(id = pk).update(paid=True)
 
         return redirect("/cashier")
 
@@ -98,5 +127,22 @@ class DeleteLabExam(LoginRequiredMixin,View):
         return redirect("cashier/")
 
     def post(self,request,pk):
-        LabExam.objects.get(id = pk).delete()
+        LabExamRequest.objects.get(id = pk).delete()
+        return redirect("/cashier")
+
+class UpdateVaccination(LoginRequiredMixin,View):
+    def get(self,request):
+        return redirect("cashier/")
+
+    def post(self,request,pk):
+        Vaccination.objects.filter(id = pk).update(paid=True)
+
+        return redirect("/cashier")
+
+class DeleteVaccination(LoginRequiredMixin,View):
+    def get(self,request):
+        return redirect("cashier/")
+
+    def post(self,request,pk):
+        Vaccination.objects.get(id = pk).delete()
         return redirect("/cashier")

@@ -4,8 +4,8 @@
 {% block navstyle %}
 <style>
 	#sidebar-drugout-summary {
-		background-color: tomato;
-		color: white;
+		background-color: chartreuse;
+		color: tomato;
 	}
 </style>
 {% endblock navstyle %} {% block customImport%} {% endblock customImport %}
@@ -20,13 +20,13 @@
 </div>
 <hr />
 <div class="row overflow-auto m-2" id="summary">
-	<div class="col-md-12 card">
+	<div class="col-md-12">
 		<table class="table table-striped">
 			<thead>
 				<tr class="table-dark">
 					<th scope="col">Drug</th>
 					<th scope="col">Destination</th>
-					<th scope="col">Receiver</th>
+					<th scope="col">Kebele</th>
 					<th scope="col">Unit Price</th>
 					<th scope="col">Quantity</th>
 					<th scope="col">Total</th>
@@ -39,8 +39,8 @@
 			<tr>
 				<td>{{row.drug.drug_type}}</td>
 				<td>{{row.destination}}</td>
-				<td>{{row.receiver}}</td>
-				<td>{{row.unit_price}}</td>
+				<td>{{row.kebele}}</td>
+				<td>{{row.drug.stock_price}}</td>
 				<td>{{row.quantity}}</td>
 				<td>{{row.total}}</td>
 				<td>{{row.batch_number}}</td>
@@ -54,8 +54,8 @@
 <div class="row overflow-auto m-2" id="summary">
 	<div class="col-md-2 col-sm-12">
 		<div class="card">
-			<div class="card-header">
-				<h5 class="card-title">Total Amount</h5>
+			<div class="card-header bg-dark">
+				Total Amount
 			</div>
 			<div class="card-body">
 				<p class="card-text">{{total_price}} Birr</p>
@@ -64,8 +64,8 @@
 	</div>
 	<div class="col-md-2 col-sm-12">
 		<div class="card">
-			<div class="card-header">
-				<h5 class="card-title">Deposited/Remaining</h5>
+			<div class="card-header bg-dark">
+				Deposited/Remaining
 			</div>
 			<div class="card-body">
 				<p class="card-text">{{total_deposit}}/{{remaining_cash}} Birr</p>
@@ -74,8 +74,8 @@
 	</div>
 	<div class="col-md-8 col-sm-12">
 		<div class="card">
-			<div class="card-header">
-				<h5 class="card-title">Audit</h5>
+			<div class="card-header bg-dark">
+				Audit
 			</div>
 			<div class="card-body">
 				<table class="table table-striped m-2">
@@ -95,7 +95,7 @@
 					<tr>
 						<td>{{deposit.payment_for.drug}}</td>
 						<td>{{deposit.payment_for.batch_number}}</td>
-						<td>{{deposit.payment_for.receiver}}</td>
+						<td>{{deposit.payment_for.kebele}}</td>
 						<td>{{deposit.date_paid}}</td>
 						<td>{{deposit.bank_slip_number}}</td>
 						<td>{{deposit.amount}}</td>
