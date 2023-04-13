@@ -134,7 +134,9 @@ class RegularTreatmentSummary(LoginRequiredMixin, View):
     def get(self, request):
         treatmentObj = Treatment.objects.all()
         treatedAnimals = TreatedAnimal.objects.all()
+
         prescriptions = Prescription.objects.all()
+
         distByKebele = self.getDistByKebele(Kebele.objects.all(), treatedAnimals)
 
         context = {
@@ -180,23 +182,22 @@ class RegularTreatmentSummary(LoginRequiredMixin, View):
 
     def getDistByKebele(self, kebeles=None, TreatedAnimalsObj=None):
         distByKebele = {}
-        for kebele in kebeles:
-            for t in TreatedAnimalsObj:
-                if t.getKebele() == kebele:
-                    if kebele.name in distByKebele:
-                        distByKebele[kebele.name] += 1
-                    else:
-                        distByKebele[kebele.name] = 1
+
+        for t in TreatedAnimalsObj:
+            if t.getKebele().name in distByKebele:
+                distByKebele[t.getKebele().name] += 1
+            else:
+                distByKebele[t.getKebele().name] = 1
+
         return distByKebele
 
     def getPrice(self, treatmentObj):
         totalPrice = 0
-        for prescription in Prescription.objects.filter():
-            for treatment in treatmentObj:
-                if prescription.treatment == treatment:
-                    print(prescription.getPrice())
-                    totalPrice += prescription.getPrice()
-        print(f"My price{totalPrice}")
+
+        for treatment in treatmentObj:
+            for prescription in Prescription.objects.filter(treatment=treatment):
+                totalPrice += prescription.getPrice()
+
         return totalPrice
 
 
