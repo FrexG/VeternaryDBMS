@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Script and Style imports-->
+    {%load static %} {% block imports%} {%endblock imports%}
+
+    <title>{% block title %}{%endblock title%}</title>
+	<script src="{% static 'pharmacy/script.js' %}"></script>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'registernewuser/css/custom_style.css'%}"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'home/style.css'%}"
+    />
+    <link
+      rel="stylesheet"
+      href="{% static 'registernewuser/bootstrap-5.0.0/css/bootstrap.css'%}"
+    />
+   
+  </head>
+  <body id="body">
+    <style>
+		#body{
+			font-family: monospace;
+			font-size:medium;
+		}
+		.navbar-brand{
+		  font-family: monospace;
+		}
+		#username {
+		  color:coral;
+		  font-size: larger;
+		  font-family: Open Sans;
+		  font-weight: bold;
+		}
+	  </style>
+	  
+	  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+		<img src="{% static 'home/cattle_logo_2.png' %}" width="80" height="80" class="d-inline-block align-top navbar-brand" alt="">
+    	<h1 class="navbar-brand text-light">Pharmacist</h1>
+	
+		<span id="username" class="m2">Hello, {{request.user}}</span>
+		<span class="m2">
+			<a href={% url 'pharmacy:index'%}
+			<button class="btn btn-sm btn-info m-2">Dispencary</button>
+		</a>
+		</span>
+		<span id="logout">
+		  <a href="{% url 'home:logout' %}">
+			<button class="btn btn-sm btn-warning m-2">Log out</button>
+		  </a>
+		</span>
+	  </nav>
+	  
+    <div class="container">
+		<div class="row m-2">
+			<div class="form-group font-weight-bold text-secondary text-capitalize">
+				<form action="" method="POST">
+				  {% csrf_token %} 
+				  {{case_num_form}}
+				  <input
+					type="submit"
+					value="Search OPD"
+					class="btn btn-md btn-primary form-control"
+				  />
+				</form>
+				<span class"form-control">
+				  <i class="text-success">
+					{% for message in messages%}
+					  {{message}}
+					{% endfor %}
+					</i>
+				</span>
+			  </div>
+		</div>
+		<div class="row m-2">
+			<div class="col">
+				<div class="card">
+				<h3 class="card-header"> Regular Treatment OPD</h3>
+				<table class="table table-striped">
+					<thead>
+						<tr>
+						  <th scope="col">Cust Name</th>
+						  <th scope="col">Drug Name</th>
+						  <th scope="col">Quantity</th>
+						  <th scope="col">Unit</th>
+						  <th scope="col">Remaining Days</th>
+						  <th></th>
+						</tr>
+					</thead>
+
+				{% for opd in regular_opd %}
+					<form method="post" action={% url 'opd:opd_regular_prescription' opd.id %}>
+						{% csrf_token %}
+						<tr>	
+							<td>
+								{{opd.treatment.treatment_id.case_number.customer_name}}
+							</td>
+							<td>	
+								{{opd.rx.drug_type}}
+							</td>
+							<td>	
+								{{opd.quantity}}
+							</td>
+							<td>	
+								{{opd.rx.dis_unit}}
+							</td>
+							<td>
+								{{opd.duration}}
+							</td>
+							<td>
+								<input class="btn btn-sm btn-success" type="submit" value="Confirm">
+							</td>
+						</tr>
+					</form>
+				{% endfor %}
+				</table>
+			</div>
+			</div>
+		</div>
+		<div class="row m-2">
+			<div class="col">
+				<div class="card">
+					<h3 class="card-header"> Parasite Treatment OPD</h3>
+				<table class="table table-striped">
+					<thead>
+						<tr>
+						  <th scope="col">Cust Name</th>
+						  <th scope="col">Drug Name</th>
+						  <th scope="col">Quantity</th>
+						  <th scope="col">Unit</th>
+						  <th scope="col">Remaining Days</th>
+						  <th></th>
+						</tr>
+					</thead>
+
+				{% for opd in parasite_opd %}
+					<form method="post" action={% url 'opd:opd_parasite_prescription' opd.id %}>
+						{% csrf_token %}
+						<tr>	
+							<td>
+								{{opd.treatment.case_number.customer_name}}
+							</td>
+							<td>	
+								{{opd.rx.drug_type}}
+							</td>
+							<td>	
+								{{opd.quantity}}
+							</td>
+							<td>	
+								{{opd.rx.dis_unit}}
+							</td>
+							<td>
+								{{opd.duration}}
+							</td>
+							<td>
+								<input class="btn btn-sm btn-success" type="submit" value="Confirm">
+							</td>
+						</tr>
+					</form>
+				{% endfor %}
+				</table>
+			</div>
+			</div>
+		</div>
+    </div>
+  </body>
+</html>
+
+

@@ -1,6 +1,6 @@
 # Veternary Database Management System 
 
-_Re-writing our Veternary Database Management System that was written in core **PHP** into **Python (Django)** _
+Re-writing our Veternary Database Management System that was written in core **PHP** into **Python (Django)**
 
 ## March 27, 2021
   

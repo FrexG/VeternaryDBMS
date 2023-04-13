@@ -47,6 +47,11 @@
     	<h1 class="navbar-brand text-light">Pharmacist</h1>
 	
 		<span id="username" class="m2">Hello, {{request.user}}</span>
+		<span class="m2">
+			<a href={% url 'opd:index'%}
+			<button class="btn btn-sm btn-info m-2">OPD</button>
+		</a>
+		</span>
 		<span id="logout">
 		  <a href="{% url 'home:logout' %}">
 			<button class="btn btn-sm btn-warning m-2">Log out</button>

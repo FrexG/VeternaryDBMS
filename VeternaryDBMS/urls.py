@@ -34,5 +34,6 @@ urlpatterns = [
     path('receipt_in_out/',include('receipt_in_out.urls')),
     path('stock/',include('stock.urls')),
     path('search/',include('search.urls')),
+    path('opd/',include('opd.urls')),
     path('admin/', admin.site.urls),
 ]
