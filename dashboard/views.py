@@ -943,13 +943,13 @@ class VaccineOutSummary(LoginRequiredMixin, View):
         start_date = dateForm["start_date"].value()
         end_date = dateForm["end_date"].value()
         # vaccine_type = vaccine_typeForm["vaccine"].value()
-        vaccine_receiver = vaccine_receiverForm["receiver"].value()
+        vaccine_receiver = vaccine_receiverForm["kebele"].value()
 
         out_vaccines = VaccineOut.objects.filter(
-            date__gte=start_date, date__lte=end_date, receiver=vaccine_receiver
+            date__gte=start_date, date__lte=end_date, kebele=vaccine_receiver
         )
         deposited_cash = VaccineOutCashDeposit.objects.filter(
-            payment_for__receiver=vaccine_receiver,
+            payment_for__kebele=vaccine_receiver,
             payment_for__date__gte=start_date,
             payment_for__date__lte=end_date,
         )
