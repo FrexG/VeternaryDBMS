@@ -720,12 +720,12 @@ class DrugOutSummary(LoginRequiredMixin, View):
         start_date = dateForm["start_date"].value()
         end_date = dateForm["end_date"].value()
         # drug_type = drug_typeForm["drug"].value()
-        drug_receiver = drug_receiverForm["receiver"].value()
+        drug_receiver = drug_receiverForm["kebele"].value()
         out_drugs = DrugOut.objects.filter(
-            date__gte=start_date, date__lte=end_date, receiver=drug_receiver
+            date__gte=start_date, date__lte=end_date, kebele=drug_receiver
         )
         deposited_cash = DrugOutCashDeposit.objects.filter(
-            payment_for__receiver=drug_receiver,
+            payment_for__kebele=drug_receiver,
             payment_for__date__gte=start_date,
             payment_for__date__lte=end_date,
         )
