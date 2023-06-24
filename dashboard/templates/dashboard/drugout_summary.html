@@ -81,9 +81,6 @@
 				<table class="table table-striped m-2">
 					<thead>
 						<tr class="table-dark">
-							<th scope="col">Drug Id</th>
-							<th scope="col">Batch No.</th>
-							<th scope="col">Kebele</th>
 							<th scope="col">Date</th>
 							<th scope="col">Bank Slip No.</th>
 							<th scope="col">Deposited Amount</th>
@@ -93,9 +90,6 @@
 					</thead>
 					{% for deposit in drug_cash_deposit %}
 					<tr>
-						<td>{{deposit.payment_for.drug}}</td>
-						<td>{{deposit.payment_for.batch_number}}</td>
-						<td>{{deposit.payment_for.kebele}}</td>
 						<td>{{deposit.date_paid}}</td>
 						<td>{{deposit.bank_slip_number}}</td>
 						<td>{{deposit.amount}}</td>
