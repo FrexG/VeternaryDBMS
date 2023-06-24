@@ -830,13 +830,13 @@ class EquipmentOutSummary(LoginRequiredMixin, View):
         start_date = dateForm["start_date"].value()
         end_date = dateForm["end_date"].value()
         equipment_type = equipment_typeForm["equipment"].value()
-        equipment_receiver = equipment_receiverForm["receiver"].value()
+        equipment_receiver = equipment_receiverForm["kebele"].value()
         print(equipment_receiver)
         out_equipments = ClinicalEquipmentOut.objects.filter(
             date__gte=start_date,
             date__lte=end_date,
             equipment=equipment_type,
-            receiver=equipment_receiver,
+            kebele=equipment_receiver,
         )
 
         context = {
