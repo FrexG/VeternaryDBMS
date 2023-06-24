@@ -720,12 +720,12 @@ class DrugOutSummary(LoginRequiredMixin, View):
         start_date = dateForm["start_date"].value()
         end_date = dateForm["end_date"].value()
         # drug_type = drug_typeForm["drug"].value()
-        drug_receiver = drug_receiverForm["receiver"].value()
+        drug_receiver = drug_receiverForm["kebele"].value()
         out_drugs = DrugOut.objects.filter(
-            date__gte=start_date, date__lte=end_date, receiver=drug_receiver
+            date__gte=start_date, date__lte=end_date, kebele=drug_receiver
         )
         deposited_cash = DrugOutCashDeposit.objects.filter(
-            payment_for__receiver=drug_receiver,
+            payment_for__kebele=drug_receiver,
             payment_for__date__gte=start_date,
             payment_for__date__lte=end_date,
         )
@@ -830,13 +830,13 @@ class EquipmentOutSummary(LoginRequiredMixin, View):
         start_date = dateForm["start_date"].value()
         end_date = dateForm["end_date"].value()
         equipment_type = equipment_typeForm["equipment"].value()
-        equipment_receiver = equipment_receiverForm["receiver"].value()
+        equipment_receiver = equipment_receiverForm["kebele"].value()
         print(equipment_receiver)
         out_equipments = ClinicalEquipmentOut.objects.filter(
             date__gte=start_date,
             date__lte=end_date,
             equipment=equipment_type,
-            receiver=equipment_receiver,
+            kebele=equipment_receiver,
         )
 
         context = {
@@ -943,13 +943,13 @@ class VaccineOutSummary(LoginRequiredMixin, View):
         start_date = dateForm["start_date"].value()
         end_date = dateForm["end_date"].value()
         # vaccine_type = vaccine_typeForm["vaccine"].value()
-        vaccine_receiver = vaccine_receiverForm["receiver"].value()
+        vaccine_receiver = vaccine_receiverForm["kebele"].value()
 
         out_vaccines = VaccineOut.objects.filter(
-            date__gte=start_date, date__lte=end_date, receiver=vaccine_receiver
+            date__gte=start_date, date__lte=end_date, kebele=vaccine_receiver
         )
         deposited_cash = VaccineOutCashDeposit.objects.filter(
-            payment_for__receiver=vaccine_receiver,
+            payment_for__kebele=vaccine_receiver,
             payment_for__date__gte=start_date,
             payment_for__date__lte=end_date,
         )
