@@ -1,31 +1,33 @@
-# create a django model form 
+# create a django model form
 from django import forms
-from .models import DrugIn,DrugOut,DrugOutCashDeposit
+from .models import DrugIn, DrugOut, DrugOutCashDeposit
 from stock.models import DrugStock
+
 
 class DrugInForm(forms.ModelForm):
     # calcualte total from unit price and quantity
     def clean_total(self):
-        print('clean_total')
+        print("clean_total")
         unit_price = self.cleaned_data.get("unit_price")
         quantity = self.cleaned_data.get("quantity")
         if quantity is None:
             quantity = 0
         if unit_price is None:
             unit_price = 0
-        
+
         total = unit_price * quantity
         return total
+
     # update the drug stock
     def clean_unit_price(self):
-        print('clean_unit_price')
+        print("clean_unit_price")
         unit_price = self.cleaned_data.get("unit_price")
         if unit_price <= 0:
             raise forms.ValidationError("Unit price cannot be negative or zero")
         return unit_price
 
     def clean_quantity(self):
-        print('clean_quantity')
+        print("clean_quantity")
         quantity = self.cleaned_data.get("quantity")
 
         if quantity < 0:
@@ -44,17 +46,21 @@ class DrugInForm(forms.ModelForm):
         exclude = ["date_received"]
 
         widgets = {
-            'drug' : forms.Select(attrs={'class': 'form-control'}),
-            'source' : forms.Select(attrs={'class': 'form-control'}),
-            'receiver' : forms.Select(attrs={'class': 'form-control'}),
-            'dropped_by' : forms.TextInput(attrs={'class': 'form-control'}),
-            'quantity' : forms.NumberInput(attrs={'class': 'form-control'}),
-            'total' : forms.NumberInput(attrs={'class': 'form-control','type':'hidden'}),
-            'unit_price' : forms.NumberInput(attrs={'class': 'form-control'}),
-            'batch_number' : forms.TextInput(attrs={'class': 'form-control'}),
-            'expiration_data' : forms.SelectDateWidget(attrs={'class': 'form-control'}),
-            'remark' : forms.Textarea(attrs={'class': 'form-control'}),
+            "drug": forms.Select(attrs={"class": "form-control"}),
+            "source": forms.Select(attrs={"class": "form-control"}),
+            "receiver": forms.Select(attrs={"class": "form-control"}),
+            "dropped_by": forms.TextInput(attrs={"class": "form-control"}),
+            "quantity": forms.NumberInput(attrs={"class": "form-control"}),
+            "total": forms.NumberInput(
+                attrs={"class": "form-control", "type": "hidden"}
+            ),
+            "unit_price": forms.NumberInput(attrs={"class": "form-control"}),
+            "batch_number": forms.TextInput(attrs={"class": "form-control"}),
+            "expiration_data": forms.SelectDateWidget(attrs={"class": "form-control"}),
+            "remark": forms.Textarea(attrs={"class": "form-control"}),
         }
+
+
 # create a drugOut form
 class DrugOutForm(forms.ModelForm):
     # calcualte total from unit price and quantity
@@ -63,17 +69,21 @@ class DrugOutForm(forms.ModelForm):
         quantity = self.cleaned_data.get("quantity")
         if quantity is None:
             quantity = 0
-        print(unit_price,quantity)
+        print(unit_price, quantity)
         total = unit_price * quantity
         return total
 
     def clean_quantity(self):
         quantity = self.cleaned_data.get("quantity")
-        quantity_in_stock = DrugStock.objects.get(drug=self.cleaned_data.get("drug")).quantity
+        quantity_in_stock = DrugStock.objects.get(
+            drug=self.cleaned_data.get("drug")
+        ).quantity
         print(f"Quantity in stock: {quantity_in_stock}")
-        
+
         if quantity > quantity_in_stock:
-            raise forms.ValidationError("The quantity you entered is greater than the quantity in stock")  
+            raise forms.ValidationError(
+                "The quantity you entered is greater than the quantity in stock"
+            )
         elif quantity < 0:
             raise forms.ValidationError("Quantity cannot be negative")
         elif quantity == 0:
@@ -83,7 +93,7 @@ class DrugOutForm(forms.ModelForm):
             drug_stock = DrugStock.objects.get(drug=self.cleaned_data.get("drug"))
             drug_stock.quantity = drug_stock.quantity - quantity
             drug_stock.save()
-        print("final quantity: ",quantity)
+        print("final quantity: ", quantity)
         return quantity
 
     class Meta:
@@ -91,23 +101,27 @@ class DrugOutForm(forms.ModelForm):
         exclude = ["date_received"]
 
         widgets = {
-            'drug' : forms.Select(attrs={'class': 'form-control'}),
-            'destination' : forms.Select(attrs={'class': 'form-control'}),
-            'kebele' : forms.Select(attrs={'class': 'form-control'}),
-            'received_by':forms.TextInput(attrs={'class':'form-control'}),
-            'approved_by' : forms.Select(attrs={'class': 'form-control'}),
-            'store_man' : forms.TextInput(attrs={'class':'form-control'}),
-            'quantity' : forms.NumberInput(attrs={'class': 'form-control'}),
-             'total' : forms.NumberInput(attrs={'class': 'form-control','type':'hidden'}),
+            "drug": forms.Select(attrs={"class": "form-control"}),
+            "destination": forms.Select(attrs={"class": "form-control"}),
+            "kebele": forms.Select(attrs={"class": "form-control"}),
+            "received_by": forms.TextInput(attrs={"class": "form-control"}),
+            "approved_by": forms.Select(attrs={"class": "form-control"}),
+            "store_man": forms.TextInput(attrs={"class": "form-control"}),
+            "quantity": forms.NumberInput(attrs={"class": "form-control"}),
+            "total": forms.NumberInput(
+                attrs={"class": "form-control", "type": "hidden"}
+            ),
             #'unit_price' : forms.NumberInput(attrs={'class': 'form-control'}),
-            'batch_number' : forms.TextInput(attrs={'class': 'form-control'}),
-            'remark' : forms.Textarea(attrs={'class': 'form-control'}),
+            "batch_number": forms.TextInput(attrs={"class": "form-control"}),
+            "remark": forms.Textarea(attrs={"class": "form-control"}),
         }
+
+
 # create a drugOutCashDeposit form
 class DrugOutCashDepositForm(forms.ModelForm):
     def clean_amount(self):
         # all previous payments for this equipment
-        previous_payments = DrugOutCashDeposit.objects.filter(payment_for=self.cleaned_data.get("payment_for"))
+        previous_payments = DrugOutCashDeposit.objects.all()
         # total amount of previous payments
         previous_deposited_amount = 0
         for payment in previous_payments:
@@ -115,11 +129,17 @@ class DrugOutCashDepositForm(forms.ModelForm):
         # current payment amount
         current_payment_amount = self.cleaned_data.get("amount")
         # Initial total amount of the equipment
-        total_amount = self.cleaned_data.get("payment_for").total
+        total_amount = 0
+        for obj in DrugOut.objects.all():
+            total_amount += obj.total
         # check if the current payment amount is greater than the total amount of previous payments
         if current_payment_amount + previous_deposited_amount > total_amount:
-            print(f"The amount you entered is greater than {total_amount - previous_deposited_amount} birr")
-            raise forms.ValidationError(f"The amount you entered is greater than {total_amount - previous_deposited_amount} birr")
+            print(
+                f"The amount you entered is greater than {total_amount - previous_deposited_amount} birr"
+            )
+            raise forms.ValidationError(
+                f"The amount you entered is greater than {total_amount - previous_deposited_amount} birr"
+            )
 
         if current_payment_amount <= 0:
             raise forms.ValidationError("Amount cannot be negative or zero")
@@ -127,7 +147,7 @@ class DrugOutCashDepositForm(forms.ModelForm):
 
     def clean_remaining_amount(self):
         # all previous payments for this equipment
-        previous_payments = DrugOutCashDeposit.objects.filter(payment_for=self.cleaned_data.get("payment_for"))
+        previous_payments = DrugOutCashDeposit.objects.all()
         # total amount of previous payments
         previous_deposited_amount = 0
         for payment in previous_payments:
@@ -135,8 +155,10 @@ class DrugOutCashDepositForm(forms.ModelForm):
         # current payment amount
         deposited_amount = self.cleaned_data.get("amount")
         # Initial total amount of the equipment
-        total_amount = self.cleaned_data.get("payment_for").total
-   
+        total_amount = 0
+        for obj in DrugOut.objects.all():
+            total_amount += obj.total
+
         if deposited_amount == None:
             deposited_amount = 0
         remaining_amount = (total_amount - previous_deposited_amount) - deposited_amount
@@ -147,10 +169,11 @@ class DrugOutCashDepositForm(forms.ModelForm):
         exclude = ["date_paid"]
 
         widgets = {
-            'payment_for':forms.Select(attrs={'class': 'form-control'}),
-            'amount':forms.NumberInput(attrs={'class': 'form-control'}),
-            'bank_slip_number':forms.TextInput(attrs={'class': 'form-control'}),
-            'remaining_amount':forms.NumberInput(attrs={'class': 'form-control','type':'hidden'}),
-            'confirmed_by':forms.Select(attrs={'class': 'form-control'}),
-            'remark':forms.Textarea(attrs={'class': 'form-control'}),
+            "amount": forms.NumberInput(attrs={"class": "form-control"}),
+            "bank_slip_number": forms.TextInput(attrs={"class": "form-control"}),
+            "remaining_amount": forms.NumberInput(
+                attrs={"class": "form-control", "type": "hidden"}
+            ),
+            "confirmed_by": forms.Select(attrs={"class": "form-control"}),
+            "remark": forms.Textarea(attrs={"class": "form-control"}),
         }

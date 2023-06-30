@@ -82,9 +82,6 @@
 				<table class="table table-striped m-2">
 					<thead>
 						<tr class="table-dark">
-							<th scope="col">Vaccine Id</th>
-							<th scope="col">Batch No.</th>
-							<th scope="col">Kebele</th>
 							<th scope="col">Date</th>
 							<th scope="col">Bank Slip No.</th>
 							<th scope="col">Deposited Amount</th>
@@ -94,9 +91,6 @@
 					</thead>
 					{% for vaccine_deposit in vaccine_cash_deposit %}
 					<tr>
-						<td>{{vaccine_deposit.payment_for.vaccine}}</td>
-						<td>{{vaccine_deposit.payment_for.batch_number}}</td>
-						<td>{{vaccine_deposit.payment_for.receiver}}</td>
 						<td>{{vaccine_deposit.date_paid}}</td>
 						<td>{{vaccine_deposit.bank_slip_number}}</td>
 						<td>{{vaccine_deposit.amount}}</td>
