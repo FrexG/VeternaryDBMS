@@ -171,6 +171,7 @@ class DrugOutCashDepositForm(forms.ModelForm):
         widgets = {
             "amount": forms.NumberInput(attrs={"class": "form-control"}),
             "bank_slip_number": forms.TextInput(attrs={"class": "form-control"}),
+            "deposited_by": forms.TextInput(attrs={"class": "form-control"}),
             "remaining_amount": forms.NumberInput(
                 attrs={"class": "form-control", "type": "hidden"}
             ),

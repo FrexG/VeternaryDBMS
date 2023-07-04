@@ -67,6 +67,7 @@ class DrugOutCashDeposit(models.Model):
     # payment_for = models.ForeignKey(DrugOut,on_delete=models.PROTECT)
     amount = models.DecimalField(max_digits=8, decimal_places=2, default=000000.00)
     bank_slip_number = models.CharField(max_length=100, null=False)
+    deposited_by = models.CharField(max_length=100, null=False, default="Not Given")
     date_paid = models.DateField(auto_now=False, auto_now_add=True)
     remaining_amount = models.DecimalField(
         max_digits=8, decimal_places=2, default=000000.00
