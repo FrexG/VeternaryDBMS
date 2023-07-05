@@ -5,9 +5,8 @@ from django.contrib.auth.models import User
 from registernewuser.models import Kebele
 from vaccination.models import Vaccine
 
+
 # Create your models here.
-
-
 class VaccineIn(models.Model):
     # source options
     SOURCE = [
@@ -71,6 +70,7 @@ class VaccineOutCashDeposit(models.Model):
     amount = models.DecimalField(max_digits=8, decimal_places=2, default=000000.00)
     bank_slip_number = models.CharField(max_length=100, null=False)
     date_paid = models.DateField(auto_now=False, auto_now_add=True)
+    deposited_by = models.CharField(max_length=100, default="NOT PROVIDED")
     remaining_amount = models.DecimalField(
         max_digits=8, decimal_places=2, default=000000.00
     )
