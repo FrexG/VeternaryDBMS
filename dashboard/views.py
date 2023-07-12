@@ -725,9 +725,8 @@ class DrugOutSummary(LoginRequiredMixin, View):
             date__gte=start_date, date__lte=end_date, kebele=drug_receiver
         )
         deposited_cash = DrugOutCashDeposit.objects.filter(
-            payment_for__kebele=drug_receiver,
-            payment_for__date__gte=start_date,
-            payment_for__date__lte=end_date,
+            date_paid__gte=start_date,
+            date_paid__lte=end_date,
         )
         # get total price for all in drugs
         total = getPrice(out_drugs)
@@ -949,9 +948,8 @@ class VaccineOutSummary(LoginRequiredMixin, View):
             date__gte=start_date, date__lte=end_date, kebele=vaccine_receiver
         )
         deposited_cash = VaccineOutCashDeposit.objects.filter(
-            payment_for__kebele=vaccine_receiver,
-            payment_for__date__gte=start_date,
-            payment_for__date__lte=end_date,
+            date_paid__gte=start_date,
+            date_paid__lte=end_date,
         )
         # get total price for all in drugs
         total = getPrice(out_vaccines)
