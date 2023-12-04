@@ -194,7 +194,7 @@ class StockPrintOutView(LoginRequiredMixin, View):
                         "serial_last": obj.serial_num_last,
                     }
                     in_receipts_list.append(params)
-                return receipt_printout(request, in_receipts_list, "receiptin")
+                return receipt_printout(request, in_receipts_list)
         else:
             out_receipts = ReceiptOut.objects.filter(
                 date=selected_date, kebele=selected_kebele
@@ -214,7 +214,7 @@ class StockPrintOutView(LoginRequiredMixin, View):
                         "serial_last": obj.serial_num_last,
                     }
                     out_receipts_list.append(params)
-                return receipt_printout(request, out_receipts_list, "receiptout")
+                return receipt_printout(request, out_receipts_list)
 
         context = {
             "date_form": date_form,
